@@ -32,7 +32,12 @@ public class Voorraad {
         geheleVoorraad.get(index1).set(index2, product);
     }
 
+    public void removeRijElement(int index1, int index2){
+        getGeheleVoorraad().get(index1).set(index2, null);
+    }
+
     public Product getRijElement(int index1, int index2){
+
         return geheleVoorraad.get(index1).get(index2);
     }
     public ArrayList<ArrayList<Product>> getGeheleVoorraad() {

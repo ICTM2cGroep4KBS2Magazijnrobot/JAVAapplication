@@ -5,6 +5,8 @@ public class OrderPickVolgorde extends JPanel {
     OrderPickVolgorde(){ //in constructor object met waardes van dialoog meegeven
         setPreferredSize(new Dimension(1900, 780));
         setBackground(Color.WHITE);
+
+        System.out.println("haal deze zin weg");
     }
 
     @Override

@@ -26,6 +26,7 @@ public class Voorraad {
             geheleVoorraad.set(3, rij4);
             geheleVoorraad.set(4, rij5);
         }
+        System.out.println("haal deze zin weg");
     }
 
     public void setRijElement(int index1, int index2, Product product){

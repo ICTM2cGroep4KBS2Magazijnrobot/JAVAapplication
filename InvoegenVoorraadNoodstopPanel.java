@@ -7,7 +7,7 @@ public class InvoegenVoorraadNoodstopPanel extends JPanel{
         setPreferredSize(new Dimension(400, 400));
         setBackground(Color.RED);
         setLayout(new GridLayout(3,1));
-        System.out.println("haal deze zin weg");
+
 
         jbOrderInvoeren = new JButton("Order Invoeren");
         add(jbOrderInvoeren);

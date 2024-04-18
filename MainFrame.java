@@ -21,7 +21,6 @@ public class MainFrame extends JFrame implements ActionListener {
         voorraad.setRijElement(0, 1, new Product("rood", 5));
         voorraad.setRijElement(2, 0, new Product("groen", 5));
 
-        System.out.println("eten");
         System.out.println(voorraad.getRijElement(0, 0));
         System.out.println(voorraad.getRijElement(0, 1));
         System.out.println(voorraad.getRijElement(2, 0));

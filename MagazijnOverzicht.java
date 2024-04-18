@@ -8,7 +8,6 @@ public class MagazijnOverzicht extends JPanel{
         setPreferredSize(new Dimension(1900, 780));
         setBackground(Color.BLACK);
         this.voorraad = voorraad;
-        System.out.println("haal deze zin weg");
     }
 
     @Override

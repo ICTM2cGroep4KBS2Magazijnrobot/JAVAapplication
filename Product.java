@@ -5,7 +5,6 @@ public class Product {
     public Product(String kleur, int gewicht) {
         setKleur(kleur);
         setGewicht(gewicht);
-        System.out.println("haal deze zin weg");
     }
 
     public void setKleur(String kleur) {

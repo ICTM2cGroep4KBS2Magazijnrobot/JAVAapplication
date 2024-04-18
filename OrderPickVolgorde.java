@@ -6,7 +6,6 @@ public class OrderPickVolgorde extends JPanel {
         setPreferredSize(new Dimension(1900, 780));
         setBackground(Color.WHITE);
 
-        System.out.println("haal deze zin weg");
     }
 
     @Override

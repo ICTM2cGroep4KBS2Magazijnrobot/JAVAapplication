@@ -15,7 +15,6 @@ public class OrderDialoog extends JDialog implements ActionListener {
     OrderDialoog(JFrame frame, boolean modal, String ordernaam){
         super(frame, modal);
         setTitle(ordernaam);
-        System.out.println("haal deze zin weg");
         setSize(500,250);
         setLayout(new GridLayout(3,2));
 

@@ -1,13 +1,24 @@
-
-import Tijdelijk.*;
+import java.sql.*;
 
 public class Main {
-    public static void main(String[] args) {
-        String[] letters = { "a", "b", "c", "d", "e", "f", "g", "h", "i", "j" };
+    public static void main(String[] args) throws SQLException {
+        String url = "jdbc:mysql://localhost:3306/nerdygadgetskbs2";
+        String username = "root";
+        String password = "mysql";
 
-        System.out.println( letters.length );
+        Connection connection = DriverManager.getConnection(url, username, password);
 
-        for( int i = 0; i < letters.length; i++ ) {
-            System.out.println(letters[i]);
+        PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM stockitems WHERE StockItemID = ?");
+        preparedStatement.setInt(1, 4);
+        ResultSet rs = preparedStatement.executeQuery();
+        while (rs.next()){
+            String ID = rs.getString(1);
+            String naam = rs.getString(2);
+            String prijs = rs.getString(14);
+
+            System.out.println("ID: " + ID + ", Naam: " + naam + ", Prijs: €" + prijs);
         }
-    }}
+
+        connection.close();
+    }
+}

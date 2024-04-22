@@ -2,6 +2,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class MainFrame extends JFrame implements ActionListener {
@@ -9,24 +10,17 @@ public class MainFrame extends JFrame implements ActionListener {
     private ArrayList<JButton> orderButtons = new ArrayList<>(); // index van deze lijst moet overeenkomen met daadwerkelijke orders
     private Voorraad voorraad;
     private JButton testknop;
-    MainFrame(){
+    MainFrame() {
         setTitle("Magazijnrobot");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLayout(new GridLayout(2, 2)); //gridlayout voor aantal panels etc.
         setSize(1320,800);   //Grootte van hoofdscherm
 
         voorraad = new Voorraad();
-        voorraad.setRijElement(0, 0, new Product("rood", 5)); // test producten toegevoegd
-        voorraad.setRijElement(0, 1, new Product("blauw", 5));
-        voorraad.setRijElement(0, 2, new Product("rood", 5));
-        voorraad.setRijElement(0, 3, new Product("geel", 5));
-        voorraad.setRijElement(0, 4, new Product("rood", 5));
-        voorraad.setRijElement(1, 0, new Product("rood", 10));
-        voorraad.setRijElement(2, 0, new Product("rood", 5));
-        voorraad.setRijElement(3, 0, new Product("rood", 5));
-        voorraad.setRijElement(4, 4, new Product("geel", 5));
-        voorraad.setRijElement(2, 3, new Product("blauw", 20));
-        voorraad.setRijElement(2, 2, new Product("blauw", 15));
+
+        DB_connectie.updateMagazijn(voorraad);
+
+
 
 
         MagazijnOverzicht panel = new MagazijnOverzicht(voorraad); //object met waardes meegeven naar panel indien nodig

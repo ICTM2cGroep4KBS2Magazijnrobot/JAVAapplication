@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 public class MainFrame extends JFrame implements ActionListener {
 
-    private ArrayList<JButton> orderButtons = new ArrayList<>(); // index van deze lijst moet overeenkomen met daadwerkelijke orders
+    private ArrayList<OrderButton> orderButtons = new ArrayList<>(); // index van deze lijst moet overeenkomen met daadwerkelijke orders
     private Voorraad voorraad;
     private JButton testknop;
     MainFrame() {
@@ -18,7 +18,7 @@ public class MainFrame extends JFrame implements ActionListener {
         voorraad = new Voorraad();
 
         DB_connectie.updateMagazijn(voorraad);
-
+        DB_connectie.updateOrders(orderButtons);
 
 
 
@@ -26,10 +26,10 @@ public class MainFrame extends JFrame implements ActionListener {
         add(panel);
 
 
-        orderButtons.add(new JButton("Order 1"));     //test orders
-        orderButtons.add(new JButton("Order 2"));
-        orderButtons.add(new JButton("Order 3"));
-        orderButtons.add(new JButton("Order Teun"));
+//        orderButtons.add(new JButton("Order 1"));     //test orders
+//        orderButtons.add(new JButton("Order 2"));
+//        orderButtons.add(new JButton("Order 3"));
+//        orderButtons.add(new JButton("Order Teun"));
 
         JPanel jp = new JPanel(); //panel om knoppen in te doen, later voeg je dit aan de scrollbar toe
         jp.setLayout(new GridLayout(15, 0)); //grid layout voor de knoppen: lange rij van boven naar beneden.
@@ -64,7 +64,7 @@ public class MainFrame extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
             for (int i = 0; i < orderButtons.size(); i++) {
                 if (e.getSource() == orderButtons.get(i)){
-                    OrderDialoog dialoog = new OrderDialoog(this, true, "Order: " + (i + 1));
+                    OrderDialoog dialoog = new OrderDialoog(this, true, "Order: " + (orderButtons.get(i).getOrderID()), orderButtons.get(i).getCustomerID(), orderButtons.get(i).getOrderID());
 
                 }
             }

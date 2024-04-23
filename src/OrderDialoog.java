@@ -2,6 +2,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 public class OrderDialoog extends JDialog implements ActionListener {
 
@@ -9,16 +10,32 @@ public class OrderDialoog extends JDialog implements ActionListener {
 
     private JButton jbOrderUitvoeren, jbOrderAanpassen, jbOrderVerwijderen, jbAnnuleren;
 
+    private ArrayList<Integer> stockitemids = new ArrayList<>();
     private boolean isOK = false;
 
 
-    OrderDialoog(JFrame frame, boolean modal, String ordernaam){
+    OrderDialoog(JFrame frame, boolean modal, String ordernaam, int CustomerID, int OrderID){
         super(frame, modal);
         setTitle(ordernaam);
         setSize(500,250);
         setLayout(new GridLayout(3,2));
 
+        String picklist = "Te pakken artikelnummer(s): ";
+        DB_connectie.getOrderlines(stockitemids, OrderID);
+
+        for (Integer stockitem: stockitemids){
+            if (stockitem != stockitemids.getLast()){
+                picklist += stockitem + " - ";
+
+            }
+            else{
+                picklist += stockitem;
+
+            }
+        }
         add(new JLabel(ordernaam));
+        add(new JLabel(picklist));
+
         jbOrderUitvoeren = new JButton("Order Uitvoeren");
         add(jbOrderUitvoeren);
         jbOrderUitvoeren.addActionListener(this);
@@ -34,6 +51,7 @@ public class OrderDialoog extends JDialog implements ActionListener {
         jbAnnuleren = new JButton("Annuleren");
         add(jbAnnuleren);
         jbAnnuleren.addActionListener(this);
+
 //
 //
 //

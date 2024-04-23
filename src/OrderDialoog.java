@@ -7,11 +7,12 @@ import java.util.ArrayList;
 public class OrderDialoog extends JDialog implements ActionListener {
 
     private JTextField jtfAantal, jtfTekst;
+    String picklist = "Te pakken artikelnummer(s): ";
 
     private JButton jbOrderUitvoeren, jbOrderAanpassen, jbOrderVerwijderen, jbAnnuleren;
 
     private ArrayList<Integer> stockitemids = new ArrayList<>();
-    private boolean isOK = false;
+    private boolean isUitvoerenOK = false;
 
 
     OrderDialoog(JFrame frame, boolean modal, String ordernaam, int CustomerID, int OrderID){
@@ -20,7 +21,6 @@ public class OrderDialoog extends JDialog implements ActionListener {
         setSize(500,250);
         setLayout(new GridLayout(3,2));
 
-        String picklist = "Te pakken artikelnummer(s): ";
         DB_connectie.getOrderlines(stockitemids, OrderID);
 
         for (Integer stockitem: stockitemids){
@@ -67,8 +67,12 @@ public class OrderDialoog extends JDialog implements ActionListener {
         setVisible(true);
     }
 
-    public boolean isOK() {
-        return isOK;
+    public boolean isUitvoerenOK() {
+        return isUitvoerenOK;
+    }
+
+    public String getPicklist() {
+        return picklist;
     }
 
     //getters maken voor invoer ophalen, bij invoer een getal moet je integer.parseint gebruiken
@@ -83,6 +87,10 @@ public class OrderDialoog extends JDialog implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         try{
             if(e.getSource() == jbAnnuleren){
+                setVisible(false);
+            }
+            if(e.getSource() == jbOrderUitvoeren){
+                isUitvoerenOK = true;
                 setVisible(false);
             }
         }

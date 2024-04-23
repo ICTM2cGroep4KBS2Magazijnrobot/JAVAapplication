@@ -8,6 +8,8 @@ public class MainFrame extends JFrame implements ActionListener {
 
     private ArrayList<OrderButton> orderButtons = new ArrayList<>(); // index van deze lijst moet overeenkomen met daadwerkelijke orders
     private Voorraad voorraad;
+
+    private OrderPickVolgorde panel3;
     private JButton testknop;
     MainFrame() {
         setTitle("Magazijnrobot");
@@ -47,7 +49,7 @@ public class MainFrame extends JFrame implements ActionListener {
         scrollPane.getVerticalScrollBar().setUnitIncrement(25); //bepaald scrollsnelheid van de scrollbar
         add(scrollPane);
 
-        OrderPickVolgorde panel3 = new OrderPickVolgorde();
+        panel3 = new OrderPickVolgorde();
         add(panel3);
 
 //        testknop = new JButton("Test"); //knop om verwijderen van voorraad te testen
@@ -65,7 +67,10 @@ public class MainFrame extends JFrame implements ActionListener {
             for (int i = 0; i < orderButtons.size(); i++) {
                 if (e.getSource() == orderButtons.get(i)){
                     OrderDialoog dialoog = new OrderDialoog(this, true, "Order: " + (orderButtons.get(i).getOrderID()), orderButtons.get(i).getCustomerID(), orderButtons.get(i).getOrderID());
-
+                    if(dialoog.isUitvoerenOK()){
+                        panel3.setPickvolgordeHeader("Pickvolgorde Order " + orderButtons.get(i).getOrderID());
+                        panel3.setPickvolgorde(dialoog.getPicklist());
+                    }
                 }
             }
             if (e.getSource() == testknop){ // deze is alleen voor het testen van verwijderen van product

@@ -60,8 +60,8 @@ public class DB_connectie {
 
             Statement statement = connection.createStatement();
 
-            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM orders WHERE OrderID <= ?");
-            preparedStatement.setInt(1, 25); // Eerste getal is de index van de vraagteken, tweede getal is de waarde die je wilt invullen.
+            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM orders");
+//            preparedStatement.setInt(1, 25); // Eerste getal is de index van de vraagteken, tweede getal is de waarde die je wilt invullen.
             ResultSet rs = preparedStatement.executeQuery();
             while (rs.next()) {
                 orderButtons.add(new OrderButton("Order: " + rs.getInt(1), rs.getInt(1), rs.getInt(2)));

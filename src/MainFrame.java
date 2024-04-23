@@ -32,8 +32,8 @@ public class MainFrame extends JFrame implements ActionListener {
 //        orderButtons.add(new JButton("Order Teun"));
 
         JPanel jp = new JPanel(); //panel om knoppen in te doen, later voeg je dit aan de scrollbar toe
-        jp.setLayout(new GridLayout(15, 0)); //grid layout voor de knoppen: lange rij van boven naar beneden.
-        jp.setPreferredSize(new Dimension(600, 800)); //grootte van van de panel
+        jp.setLayout(new GridLayout(orderButtons.size(), 0)); //grid layout voor de knoppen: lange rij van boven naar beneden.
+        jp.setPreferredSize(new Dimension(600, orderButtons.size() * 160)); //grootte van van de panel
 
         for (int i = 0; i < orderButtons.size(); i++) { //for loop om elke knop toe te voegen aan de panel
             jp.add(orderButtons.get(i));

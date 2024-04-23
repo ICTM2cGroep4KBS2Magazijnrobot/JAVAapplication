@@ -50,16 +50,25 @@ public class MagazijnOverzicht extends JPanel{
         }
     }
 
-    private void tekenBlokje(Graphics g, int startX, int startY, int eindX, int eindY, String kleur){
+    private void tekenBlokje(Graphics g, int startX, int startY, int eindX, int eindY, String kleur, int voorraadArtikel, String artikelID){
         if (kleur.equals("rood")){
             g.setColor(Color.RED);
             g.fillRect(startX, startY, eindX, eindY);
+            g.setColor(Color.WHITE);
+            g.drawString("ArtikelID: " + artikelID, startX, startY+28);
+            g.drawString("Voorraad: " + voorraadArtikel, startX, startY+42);
         } else if (kleur.equals("geel")) {
-            g.setColor(Color.YELLOW);
+            g.setColor(Color.ORANGE);
             g.fillRect(startX, startY, eindX, eindY);
+            g.setColor(Color.WHITE);
+            g.drawString("ArtikelID: " + artikelID, startX, startY+28);
+            g.drawString("Voorraad: " + voorraadArtikel, startX, startY+42);
         } else if (kleur.equals("blauw")) {
             g.setColor(Color.BLUE);
             g.fillRect(startX, startY, eindX, eindY);
+            g.setColor(Color.WHITE);
+            g.drawString("ArtikelID: " + artikelID, startX, startY+28);
+            g.drawString("Voorraad: " + voorraadArtikel, startX, startY+42);
         }
     }
     private void tekenMagazijnInhoud(Graphics g){
@@ -74,7 +83,7 @@ public class MagazijnOverzicht extends JPanel{
             for (int j = 0; j < 5; j++) {
                 if (voorraad.getRijElement(i, j) != null){
                     String kleur = voorraad.getRijElement(i, j).getKleur();
-                    tekenBlokje(g, startX, startY, eindX, eindY, kleur);
+                    tekenBlokje(g, startX, startY, eindX, eindY, kleur, voorraad.getRijElement(i, j).getVoorraadArtikel(), voorraad.getRijElement(i, j).getArtikelID());
                 }
                 startX += 127;
             }

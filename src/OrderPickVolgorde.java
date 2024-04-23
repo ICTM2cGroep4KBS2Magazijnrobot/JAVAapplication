@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class OrderPickVolgorde extends JPanel {
 
-    private String pickvolgordeHeader = "Pickvolgorde ";
+    private String pickvolgordeHeader = "Geen order geselecteerd";
     private String pickvolgorde = "";
     private ArrayList<Integer> stockitemids = new ArrayList<>();
 
@@ -21,9 +21,9 @@ public class OrderPickVolgorde extends JPanel {
         super.paintComponent(g);
         g.setFont(new Font("default", Font.PLAIN, 30));
 
-        g.drawString(pickvolgordeHeader, getWidth() / 2 - 160, 40);
+        g.drawString(pickvolgordeHeader, getWidth() / 2 - 170, 40);
 
-        g.drawString(pickvolgorde, getWidth() / 2 - 240, 80);
+        g.drawString(pickvolgorde, getWidth() / 2 - 310, 80);
     }
 
     public void setPickvolgorde(String pickvolgorde) {

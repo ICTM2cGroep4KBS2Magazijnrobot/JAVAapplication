@@ -68,9 +68,13 @@ public class MainFrame extends JFrame implements ActionListener {
                 if (e.getSource() == orderButtons.get(i)){
                     OrderDialoog dialoog = new OrderDialoog(this, true, "Order: " + (orderButtons.get(i).getOrderID()), orderButtons.get(i).getCustomerID(), orderButtons.get(i).getOrderID());
                     if(dialoog.isUitvoerenOK()){
-                        panel3.setPickvolgordeHeader("Pickvolgorde Order " + orderButtons.get(i).getOrderID());
+                        panel3.setPickvolgordeHeader("Pickvolgorde Order: " + orderButtons.get(i).getOrderID());
                         panel3.setPickvolgorde(dialoog.getPicklist());
+
                     }
+//                    else {
+//                        panel3.setPickvolgordeHeader("Geen Order geselecteerd");
+//                    }
                 }
             }
             if (e.getSource() == testknop){ // deze is alleen voor het testen van verwijderen van product

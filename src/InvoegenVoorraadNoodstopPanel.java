@@ -6,14 +6,11 @@ public class InvoegenVoorraadNoodstopPanel extends JPanel{
     InvoegenVoorraadNoodstopPanel(){ //in constructor object met waardes van dialoog meegeven
         setPreferredSize(new Dimension(400, 400));
         setBackground(Color.RED);
-        setLayout(new GridLayout(3,1));
+        setLayout(new GridLayout(2,1));
 
 
         jbOrderInvoeren = new JButton("Order Invoeren");
         add(jbOrderInvoeren);
-
-        jbVoorraadWeergeven = new JButton("Voorraad Weergeven");
-        add(jbVoorraadWeergeven);
 
         jbNoodstop = new JButton("Noodstop");
         jbNoodstop.setBackground(Color.RED);

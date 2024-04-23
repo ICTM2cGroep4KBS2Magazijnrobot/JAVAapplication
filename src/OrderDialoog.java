@@ -95,7 +95,9 @@ public class OrderDialoog extends JDialog implements ActionListener {
             }
         }
         catch(Exception ignored){
-
+        }
+        if (e.getSource() == jbOrderUitvoeren){
+            setVisible(false);
         }
     }
 }

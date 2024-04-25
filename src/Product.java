@@ -4,7 +4,7 @@ public class Product {
     private int voorraadArtikel;
     private String artikelID;
 
-    public Product(String kleur, int gewicht, int voorraadArtikel, String artikelID) {
+    public Product(String kleur, int gewicht, int voorraadArtikel, String artikelID, String naam) {
         setKleur(kleur);
         setGewicht(gewicht);
         setVoorraadArtikel(voorraadArtikel);

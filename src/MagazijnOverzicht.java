@@ -57,19 +57,19 @@ public class MagazijnOverzicht extends JPanel{
                 g.fillRect(startX, startY, eindX, eindY);
                 g.setColor(Color.WHITE);
                 g.drawString("ArtikelID: " + artikelID, startX, startY + 28);
-                g.drawString("Voorraad: " + voorraadArtikel, startX, startY + 42);
+                g.drawString("Voorraad: " + voorraadArtikel, startX-25, startY + 42);
             } else if (kleur.equals("geel")) {
                 g.setColor(Color.ORANGE);
                 g.fillRect(startX, startY, eindX, eindY);
                 g.setColor(Color.WHITE);
                 g.drawString("ArtikelID: " + artikelID, startX, startY + 28);
-                g.drawString("Voorraad: " + voorraadArtikel, startX, startY + 42);
+                g.drawString("Voorraad: " + voorraadArtikel, startX-25, startY + 42);
             } else if (kleur.equals("blauw")) {
                 g.setColor(Color.BLUE);
                 g.fillRect(startX, startY, eindX, eindY);
                 g.setColor(Color.WHITE);
                 g.drawString("ArtikelID: " + artikelID, startX, startY + 28);
-                g.drawString("Voorraad: " + voorraadArtikel, startX, startY + 42);
+                g.drawString("Voorraad: " + voorraadArtikel, startX-25, startY + 42);
             }
         }
     }

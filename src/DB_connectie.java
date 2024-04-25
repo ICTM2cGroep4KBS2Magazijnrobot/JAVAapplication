@@ -12,8 +12,6 @@ public class DB_connectie {
 
     public static Voorraad updateMagazijn(Voorraad voorraad){
         try {
-
-
             Connection connection = DriverManager.getConnection(url, username, password);
 
             Statement statement = connection.createStatement();
@@ -21,29 +19,29 @@ public class DB_connectie {
             PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM stockitems WHERE StockItemID <= ?");
             preparedStatement.setInt(1, 25); // Eerste getal is de index van de vraagteken, tweede getal is de waarde die je wilt invullen.
             ResultSet rs = preparedStatement.executeQuery();
-            while (rs.next()) {
+
+            PreparedStatement preparedStatement1 = connection.prepareStatement("SELECT * FROM stockitemholdings WHERE StockItemID <= ?");
+            preparedStatement1.setInt(1, 25); // Eerste getal is de index van de vraagteken, tweede getal is de waarde die je wilt invullen.
+            ResultSet rs1 = preparedStatement1.executeQuery();
+
+            while (rs.next() && rs1.next()) {
                 int xwaarde = rs.getInt(26);
                 int ywaarde = rs.getInt(27);
                 int kleurID = rs.getInt(4);
                 int gewicht = rs.getInt(28);
-                int voorraadArtikel = rs.getInt(29);
+                int voorraadArtikel = rs1.getInt(2);
                 String artikelID = rs.getString(1);
-
-                String ID = rs.getString(1);
                 String naam = rs.getString(2);
-                String prijs = rs.getString(14);
 
                 if (xwaarde >= 0 && ywaarde >= 0) {
                     if (kleurID == 1) {
-                        voorraad.setRijElement(ywaarde, xwaarde, new Product("rood", gewicht, voorraadArtikel, artikelID));
+                        voorraad.setRijElement(ywaarde, xwaarde, new Product("rood", gewicht, voorraadArtikel, artikelID, naam));
                     } else if (kleurID == 2) {
-                        voorraad.setRijElement(ywaarde, xwaarde, new Product("geel", gewicht, voorraadArtikel, artikelID));
+                        voorraad.setRijElement(ywaarde, xwaarde, new Product("geel", gewicht, voorraadArtikel, artikelID, naam));
                     } else if (kleurID == 3) {
-                        voorraad.setRijElement(ywaarde, xwaarde, new Product("blauw", gewicht, voorraadArtikel, artikelID));
+                        voorraad.setRijElement(ywaarde, xwaarde, new Product("blauw", gewicht, voorraadArtikel, artikelID, naam));
                     }
                 }
-//                System.out.println("ID: " + artikelID + ", Naam: " + naam + ", Prijs: €" + prijs + " Opslagplek is: " + xwaarde + ", " + ywaarde + "Voorraad is: " + voorraadArtikel);
-
             }
             return voorraad;
         }

@@ -22,7 +22,9 @@ public class OrderPickVolgorde extends JPanel {
         g.setFont(new Font("default", Font.PLAIN, 30));
 
         g.drawString(pickvolgordeHeader, getWidth() / 2 - 170, 40);
-
+//        for (elke product in order){
+//            g.drawString();
+//        }
         g.drawString(pickvolgorde, getWidth() / 2 - 310, 80);
     }
 

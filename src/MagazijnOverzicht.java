@@ -74,6 +74,7 @@ public class MagazijnOverzicht extends JPanel{
             }
         }
     }
+
     private void tekenMagazijnInhoud(Graphics g){
         int startX = 45;
         int startY = 35;

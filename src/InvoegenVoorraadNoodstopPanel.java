@@ -14,7 +14,6 @@ public class InvoegenVoorraadNoodstopPanel extends JPanel implements ActionListe
         setBackground(Color.RED);
         setLayout(new GridLayout(2,1));
 
-
         jbOrderInvoeren = new JButton("Order Invoeren");
         add(jbOrderInvoeren);
 
@@ -22,38 +21,22 @@ public class InvoegenVoorraadNoodstopPanel extends JPanel implements ActionListe
         jbNoodstop.setBackground(Color.RED);
         add(jbNoodstop);
         jbNoodstop.addActionListener(this);
-
-
     }
 
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         g.setFont(new Font("default", Font.PLAIN, 14));
-//        tekenNoodstop(g);
-
-//        tekenRechthoek1(g);
-//        tekenRechthoek2(g);
     }
 
-    private void tekenRechthoek1(Graphics g){
-        g.setColor(Color.YELLOW);
-        g.fillRect(0, 200, getWidth(), 50);
-    }
-    private void tekenRechthoek2(Graphics g){
-        g.setColor(Color.BLUE);
-        g.fillRect(0, 250, getWidth(), getHeight());
-    }
-//    private void tekenNoodstop(Graphics g){
-//        if (isNoodstop()){
-//            g.setColor(Color.RED);
-//            g.fillRect(0, 0, getWidth(), 50);
-//        }
+//    private void tekenRechthoek1(Graphics g){
+//        g.setColor(Color.YELLOW);
+//        g.fillRect(0, 200, getWidth(), 50);
 //    }
-
-    public boolean isNoodstop() {
-        return noodstop;
-    }
+//    private void tekenRechthoek2(Graphics g){
+//        g.setColor(Color.BLUE);
+//        g.fillRect(0, 250, getWidth(), getHeight());
+//    }
 
     @Override
     public void actionPerformed(ActionEvent e) {

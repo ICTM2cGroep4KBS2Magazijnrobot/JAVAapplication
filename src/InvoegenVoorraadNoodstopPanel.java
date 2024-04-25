@@ -6,8 +6,6 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
 public class InvoegenVoorraadNoodstopPanel extends JPanel implements ActionListener{
-    private boolean noodstop = false;
-
     JButton jbOrderInvoeren, jbVoorraadWeergeven, jbNoodstop;
     InvoegenVoorraadNoodstopPanel(){ //in constructor object met waardes van dialoog meegeven
         setPreferredSize(new Dimension(400, 400));

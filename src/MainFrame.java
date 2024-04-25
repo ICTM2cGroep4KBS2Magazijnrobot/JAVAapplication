@@ -12,15 +12,15 @@ public class MainFrame extends JFrame implements ActionListener {
     private OrderPickVolgorde panel3;
     private JButton testknop;
     MainFrame() {
-        setTitle("Magazijnrobot");
+        setTitle("HMI Magazijnrobot");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLayout(new GridLayout(2, 2)); //gridlayout voor aantal panels etc.
         setSize(1320,800);   //Grootte van hoofdscherm
 
         voorraad = new Voorraad();
 
-        DB_connectie.updateMagazijn(voorraad);
-        DB_connectie.updateOrders(orderButtons);
+        DB_connectie.updateMagazijn(voorraad); //update voorraad vanuit database
+        DB_connectie.updateOrders(orderButtons); //update orders vanuit database
 
 
 

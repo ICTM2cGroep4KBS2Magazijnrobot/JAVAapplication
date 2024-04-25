@@ -3,12 +3,14 @@ public class Product {
     private int gewicht;
     private int voorraadArtikel;
     private String artikelID;
+    private String naam;
 
     public Product(String kleur, int gewicht, int voorraadArtikel, String artikelID, String naam) {
         setKleur(kleur);
         setGewicht(gewicht);
         setVoorraadArtikel(voorraadArtikel);
         setArtikelID(artikelID);
+        setNaam(naam);
     }
 
     public void setKleur(String kleur) {
@@ -27,6 +29,10 @@ public class Product {
         this.artikelID = artikelID;
     }
 
+    public void setNaam(String naam) {
+        this.naam = naam;
+    }
+
 
     public String getKleur() {
         return kleur;
@@ -42,6 +48,9 @@ public class Product {
 
     public String getArtikelID() {
         return artikelID;
+    }
+    public String getNaam() {
+        return naam;
     }
 
     @Override

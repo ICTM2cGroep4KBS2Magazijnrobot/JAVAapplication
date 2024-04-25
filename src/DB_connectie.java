@@ -10,7 +10,7 @@ public class DB_connectie {
 
     }
 
-    public static Voorraad updateMagazijn(Voorraad voorraad){
+    public static Voorraad updateMagazijn(Voorraad voorraad){// Functie voor het updaten van de voorraad en het koppelen van een kleurID
         try {
             Connection connection = DriverManager.getConnection(url, username, password);
 
@@ -51,7 +51,7 @@ public class DB_connectie {
         }
     }
 
-    public static ArrayList<OrderButton> updateOrders(ArrayList<OrderButton> orderButtons){
+    public static ArrayList<OrderButton> updateOrders(ArrayList<OrderButton> orderButtons){// Functie voor het updaten van de orderlijst
         try {
 
             Connection connection = DriverManager.getConnection(url, username, password);

@@ -50,6 +50,7 @@ public class MagazijnOverzicht extends JPanel{
         }
     }
 
+    // tekenBlokje tekent een blokje in het magazijn met de kleur, voorraad en artikelID
     private void tekenBlokje(Graphics g, int startX, int startY, int eindX, int eindY, String kleur, int voorraadArtikel, String artikelID){
         if (voorraadArtikel > 0) {
             if (kleur.equals("rood")) {

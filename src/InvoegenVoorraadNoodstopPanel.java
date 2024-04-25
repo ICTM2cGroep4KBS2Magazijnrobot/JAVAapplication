@@ -64,7 +64,7 @@ public class InvoegenVoorraadNoodstopPanel extends JPanel implements ActionListe
             Component frame = null;
             JOptionPane.showMessageDialog(frame, "Druk op OK om het systeem vrij te geven", "Noodstop geactiveerd", JOptionPane.WARNING_MESSAGE);
             System.out.println("Noodstop geactiveerd");
-            int num = JOptionPane.OK_OPTION;
+            int num = JOptionPane.OK_OPTION; // Omweg om de noodstop te deactiveren.
             boolean bool = num == 0;
             if (bool) {
                 System.out.println("Noodstop gedeactiveerd");

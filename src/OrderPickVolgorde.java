@@ -32,13 +32,18 @@ public class OrderPickVolgorde extends JPanel {
         if (huidigeOrder > 0){ //hier alle orderlines printen van een order.
             g.setFont(new Font("default", Font.PLAIN,15));
             DB_connectie.getOrderlines(stockitemids, huidigeOrder);
+            //HIER NU Bin Packing Problem toepassen met gebruik van stockitemids
+            //HIER NU Bin Packing Problem toepassen met gebruik van stockitemids
+            //Hierna wordt namelijk elk product uit stockitemids geprint op het scherm
+
+
             int startX = 10;
             int startY = 70;
 
-
-
             for (int i = 0; i < stockitemids.size(); i++) {
-                g.drawString("--------------------------------------------------------------------------------", startX, startY + 10);
+                g.drawString("--------------------------------------------------------------------------------",
+                        startX, startY + 10);
+
                 Product product = voorraad.getArtikel(stockitemids.get(i));
                 g.drawString(product.getArtikelID() + ": " + product.getNaam(), startX, startY);
 
@@ -46,7 +51,6 @@ public class OrderPickVolgorde extends JPanel {
             }
         }
     }
-
     public void setPickvolgordeHeader(String pickvolgordeHeader) {
         this.pickvolgordeHeader = pickvolgordeHeader;
     }

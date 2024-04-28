@@ -2,10 +2,10 @@ public class Product {
     private String kleur;
     private int gewicht;
     private int voorraadArtikel;
-    private String artikelID;
+    private int artikelID;
     private String naam;
 
-    public Product(String kleur, int gewicht, int voorraadArtikel, String artikelID, String naam) {
+    public Product(String kleur, int gewicht, int voorraadArtikel, int artikelID, String naam) {
         setKleur(kleur);
         setGewicht(gewicht);
         setVoorraadArtikel(voorraadArtikel);
@@ -25,7 +25,7 @@ public class Product {
         this.voorraadArtikel = voorraadArtikel;
     }
 
-    public void setArtikelID(String artikelID) {
+    public void setArtikelID(int artikelID) {
         this.artikelID = artikelID;
     }
 
@@ -46,7 +46,7 @@ public class Product {
         return voorraadArtikel;
     }
 
-    public String getArtikelID() {
+    public int getArtikelID() {
         return artikelID;
     }
     public String getNaam() {

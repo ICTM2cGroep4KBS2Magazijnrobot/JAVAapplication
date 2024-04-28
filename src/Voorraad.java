@@ -40,6 +40,17 @@ public class Voorraad {
 
         return geheleVoorraad.get(index1).get(index2);
     }
+
+    public Product getArtikel(int artikelID){
+        for (int i = 0; i < geheleVoorraad.size(); i++) {
+            for (int j = 0; j < 5; j++) {
+                if(geheleVoorraad.get(i).get(j).getArtikelID() == artikelID){
+                    return geheleVoorraad.get(i).get(j);
+                }
+            }
+        }
+        return null;
+    }
     public ArrayList<ArrayList<Product>> getGeheleVoorraad() {
         return geheleVoorraad;
     }

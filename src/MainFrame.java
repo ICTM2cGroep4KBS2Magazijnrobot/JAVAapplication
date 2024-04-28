@@ -10,7 +10,7 @@ public class MainFrame extends JFrame implements ActionListener {
     private Voorraad voorraad;
 
     private OrderPickVolgorde panel3;
-    private JButton testknop;
+
     MainFrame() {
         setTitle("HMI Magazijnrobot");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -28,11 +28,6 @@ public class MainFrame extends JFrame implements ActionListener {
         add(panel);
 
 
-//        orderButtons.add(new JButton("Order 1"));     //test orders
-//        orderButtons.add(new JButton("Order 2"));
-//        orderButtons.add(new JButton("Order 3"));
-//        orderButtons.add(new JButton("Order Teun"));
-
         JPanel jp = new JPanel(); //panel om knoppen in te doen, later voeg je dit aan de scrollbar toe
         jp.setLayout(new GridLayout(orderButtons.size(), 0)); //grid layout voor de knoppen: lange rij van boven naar beneden.
         jp.setPreferredSize(new Dimension(600, orderButtons.size() * 160)); //grootte van van de panel
@@ -49,12 +44,10 @@ public class MainFrame extends JFrame implements ActionListener {
         scrollPane.getVerticalScrollBar().setUnitIncrement(25); //bepaald scrollsnelheid van de scrollbar
         add(scrollPane);
 
-        panel3 = new OrderPickVolgorde();
+        panel3 = new OrderPickVolgorde(voorraad);
         add(panel3);
 
-//        testknop = new JButton("Test"); //knop om verwijderen van voorraad te testen
-//        add(testknop);
-//        testknop.addActionListener(this);
+
 
         InvoegenVoorraadNoodstopPanel panel2 = new InvoegenVoorraadNoodstopPanel();
 
@@ -68,19 +61,22 @@ public class MainFrame extends JFrame implements ActionListener {
                 if (e.getSource() == orderButtons.get(i)){
                     OrderDialoog dialoog = new OrderDialoog(this, true, "Order: " + (orderButtons.get(i).getOrderID()), orderButtons.get(i).getCustomerID(), orderButtons.get(i).getOrderID());
                     if(dialoog.isUitvoerenOK()){
-                        panel3.setPickvolgordeHeader("Pickvolgorde Order: " + orderButtons.get(i).getOrderID());
-                        panel3.setPickvolgorde(dialoog.getPicklist());
+                        panel3.setHuidigeOrder(orderButtons.get(i).getOrderID());
+//                        panel3.setPickvolgordeHeader("Pickvolgorde Order: " + orderButtons.get(i).getOrderID());
+//                        panel3.setPickvolgorde(dialoog.getPicklist());
 
                     }
-//                    else {
-//                        panel3.setPickvolgordeHeader("Geen Order geselecteerd");
-//                    }
+                    else {
+                        panel3.setHuidigeOrder(0);
+                        panel3.setPickvolgordeHeader("Geen Order geselecteerd");
+                    }
+
                 }
             }
-            if (e.getSource() == testknop){ // deze is alleen voor het testen van verwijderen van product
-                voorraad.removeRijElement(0,3);
-                System.out.println("knop ingedrukt");
-            }
+
             repaint();
+
     }
+
+
 }

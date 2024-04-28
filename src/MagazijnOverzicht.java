@@ -87,7 +87,7 @@ public class MagazijnOverzicht extends JPanel{
             for (int j = 0; j < 5; j++) {
                 if (voorraad.getRijElement(i, j) != null){
                     String kleur = voorraad.getRijElement(i, j).getKleur();
-                    tekenBlokje(g, startX, startY, eindX, eindY, kleur, voorraad.getRijElement(i, j).getVoorraadArtikel(), voorraad.getRijElement(i, j).getArtikelID());
+                    tekenBlokje(g, startX, startY, eindX, eindY, kleur, voorraad.getRijElement(i, j).getVoorraadArtikel(), Integer.toString(voorraad.getRijElement(i, j).getArtikelID()));
                 }
                 startX += 127;
             }

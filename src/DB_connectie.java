@@ -4,9 +4,9 @@ import java.util.ArrayList;
 public class DB_connectie {
     public static String url = "jdbc:mysql://localhost:3306/nerdygadgetskbs2"; // Change this to your own database
     public static String username = "root"; // Change this to your own username
-    public static String password = "mysql"; // Change this to your own password
+    public static String password = ""; // Change this to your own password
 
-    public DB_connectie() throws SQLException {
+    public DB_connectie(){
 
     }
 
@@ -30,7 +30,7 @@ public class DB_connectie {
                 int kleurID = rs.getInt(4);
                 int gewicht = rs.getInt(28);
                 int voorraadArtikel = rs1.getInt(2);
-                String artikelID = rs.getString(1);
+                int artikelID = rs.getInt(1);
                 String naam = rs.getString(2);
 
                 if (xwaarde >= 0 && ywaarde >= 0) {
@@ -92,4 +92,5 @@ public class DB_connectie {
             return null;
         }
     }
+
 }

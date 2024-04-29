@@ -41,11 +41,11 @@ public class OrderPickVolgorde extends JPanel {
             int startY = 70;
 
             for (int i = 0; i < stockitemids.size(); i++) {
-                g.drawString("--------------------------------------------------------------------------------",
+                g.drawString("-----------------------------------------------------------------------------------------------------------------------",
                         startX, startY + 10);
 
                 Product product = voorraad.getArtikel(stockitemids.get(i));
-                g.drawString(i+ 1 + ". Artikel " + product.getArtikelID() + ": " + product.getNaam(), startX, startY);
+                g.drawString(i+ 1 + ". Artikel " + product.getArtikelID() + ": " + product.getNaam() + ". Gewicht: " + product.getGewicht() + "kg", startX, startY);
 
                 startY+= 30;
             }

@@ -29,7 +29,12 @@ public class MainFrame extends JFrame implements ActionListener {
 
 
         JPanel jp = new JPanel(); //panel om knoppen in te doen, later voeg je dit aan de scrollbar toe
-        jp.setLayout(new GridLayout(orderButtons.size(), 0)); //grid layout voor de knoppen: lange rij van boven naar beneden.
+        try {
+            jp.setLayout(new GridLayout(orderButtons.size(), 0));
+        } catch (Exception e) {
+            System.out.println("Error mbt geen database connectie. Foutcode: " + e.getMessage());;
+        }
+//        jp.setLayout(new GridLayout(orderButtons.size(), 0)); //grid layout voor de knoppen: lange rij van boven naar beneden.
         jp.setPreferredSize(new Dimension(600, orderButtons.size() * 160)); //grootte van van de panel
 
         for (int i = 0; i < orderButtons.size(); i++) { //for loop om elke knop toe te voegen aan de panel
@@ -59,7 +64,7 @@ public class MainFrame extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
             for (int i = 0; i < orderButtons.size(); i++) {
                 if (e.getSource() == orderButtons.get(i)){
-                    OrderDialoog dialoog = new OrderDialoog(this, true, "Order: " + (orderButtons.get(i).getOrderID()), orderButtons.get(i).getCustomerID(), orderButtons.get(i).getOrderID());
+                    OrderDialoog dialoog = new OrderDialoog(this, true, "Order: " + (orderButtons.get(i).getOrderID()), orderButtons.get(i).getCustomerID(), orderButtons.get(i).getOrderID(), voorraad);
                     if(dialoog.isUitvoerenOK()){
                         panel3.setHuidigeOrder(orderButtons.get(i).getOrderID());
 //                        panel3.setPickvolgordeHeader("Pickvolgorde Order: " + orderButtons.get(i).getOrderID());

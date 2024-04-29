@@ -7,7 +7,9 @@ import java.util.ArrayList;
 public class OrderDialoog extends JDialog implements ActionListener {
 
     private JTextField jtfAantal, jtfTekst;
-    String picklist = "Te pakken artikelnummer(s): ";
+    String picklist = "";
+    private Voorraad voorraad;
+    private int index = 0;
 
     private JButton jbOrderUitvoeren, jbOrderAanpassen, jbOrderVerwijderen, jbAnnuleren;
 
@@ -15,26 +17,61 @@ public class OrderDialoog extends JDialog implements ActionListener {
     private boolean isUitvoerenOK = false;
 
 
-    OrderDialoog(JFrame frame, boolean modal, String ordernaam, int CustomerID, int OrderID){
+    OrderDialoog(JFrame frame, boolean modal, String ordernaam, int CustomerID, int OrderID, Voorraad voorraad){
         super(frame, modal);
         setTitle(ordernaam);
         setSize(500,250);
         setLayout(new GridLayout(3,2));
+        this.voorraad = voorraad;
 
         DB_connectie.getOrderlines(stockitemids, OrderID);
 
         for (Integer stockitem: stockitemids){
             if (stockitem != stockitemids.getLast()){
                 picklist += stockitem + " - ";
-
             }
             else{
                 picklist += stockitem;
 
             }
         }
+
+        JPanel jp = new JPanel();
+        try {
+            jp.setLayout(new GridLayout(index, 0));
+        } catch (Exception e) {
+            System.out.println("Error mbt geen database connectie. Foutcode: " + e.getMessage());;
+        }
+        if (stockitemids.size() == 1){
+            jp.setPreferredSize(new Dimension(315, stockitemids.size()*80)); //grootte van van de panel
+        }else {
+            jp.setPreferredSize(new Dimension(315, stockitemids.size() * 50)); //grootte van van de panel
+        }
+        jp.add(new JLabel("Inhoud van order:"));
+        for (int i = 0; i < stockitemids.size(); i++) {
+//            if (i == 0) {
+//                jp.add(new JLabel("Inhoud van order:"));
+//            }
+            if (i >= 0) {
+                jp.add(new JLabel("------------------------------------------------------"));
+                try {
+                    Product product = voorraad.getArtikel(stockitemids.get(i));
+                    jp.add(new JLabel(stockitemids.get(i).toString() + " - " + product.getNaam()));
+                } catch (Exception e) {
+                    System.out.println("Error mbt geen database connectie. Foutcode: " + e.getMessage());
+                    ;
+                }
+            }
+            index = i + 1;
+        }
+
+
         add(new JLabel(ordernaam));
-        add(new JLabel(picklist));
+        JScrollPane scrollPane = new JScrollPane(jp);
+        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS); // deze 2 regels zorgen dat de scrollbars altijd te zien zijn
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        scrollPane.getVerticalScrollBar().setUnitIncrement(25); //bepaald scrollsnelheid van de scrollbar
+        add(scrollPane);
 
         jbOrderUitvoeren = new JButton("Order Uitvoeren");
         add(jbOrderUitvoeren);

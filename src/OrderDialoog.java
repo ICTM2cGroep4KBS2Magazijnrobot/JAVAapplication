@@ -38,9 +38,9 @@ public class OrderDialoog extends JDialog implements ActionListener {
 
         JPanel jp = new JPanel();
         try {
-            jp.setLayout(new GridLayout(index, 0));
+            jp.setLayout(new GridLayout(index, 1));
         } catch (Exception e) {
-            System.out.println("Error mbt geen database connectie. Foutcode: " + e.getMessage());;
+            System.out.println("Foutcode: " + e.getMessage());;
         }
         if (stockitemids.size() == 1){
             jp.setPreferredSize(new Dimension(315, stockitemids.size()*80)); //grootte van van de panel

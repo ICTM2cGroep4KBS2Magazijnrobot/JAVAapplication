@@ -1,23 +1,12 @@
 import java.util.ArrayList;
 
 public class Doos {
-    private ArrayList<Product> inhoud = new ArrayList<>();
+    private ArrayList<Product> inhoud;
 
 
-    public Doos(Product product) {
-        inhoud.add(product);
-    }
 
-
-    public Doos(Product product, Product product2) {
-        inhoud.add(product);
-        inhoud.add(product2);
-    }
-
-    public Doos(Product product, Product product2, Product product3) {
-        inhoud.add(product);
-        inhoud.add(product2);
-        inhoud.add(product3);
+    public Doos(ArrayList<Product> products) {
+        this.inhoud = products;
     }
 
     public ArrayList<Product> getInhoud() {

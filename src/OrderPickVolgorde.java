@@ -6,7 +6,7 @@ public class OrderPickVolgorde extends JPanel {
 
     private String pickvolgordeHeader = "Geen order geselecteerd ";
     private int huidigeOrder;
-
+    ArrayList<Product> invoer = new ArrayList<Product>();
     private Voorraad voorraad;
     private ArrayList<Integer> stockitemids = new ArrayList<>();
 
@@ -50,15 +50,32 @@ public class OrderPickVolgorde extends JPanel {
             int startX = 10;
             int startY = 70;
 
+
+            ArrayList<Product> ballen = new ArrayList<>(Bi)
+
             for (int i = 0; i < stockitemids.size(); i++) {
                 g.drawString("-----------------------------------------------------------------------------------------------------------------------",
                         startX, startY + 10);
 
                 Product product = voorraad.getArtikel(stockitemids.get(i));
+                ballen.add(product);
                 g.drawString(i+ 1 + ". Artikel " + product.getArtikelID() + ": " + product.getNaam() + ". Gewicht: " + product.getGewicht() + "kg", startX, startY);
 
                 startY+= 30;
             }
+
+            ArrayList<ArrayList<Product>> Dozenlijst = BinPacking.binpacking(ballen);
+            for (ArrayList<Product> doos : Dozenlijst) {
+                System.out.println("DOOS:");
+                for (Product product : doos) {
+                    System.out.println("Name: " + product.getNaam() + ", Weight: " + product.getGewicht());
+                }
+                System.out.println();
+            }
+
+
+
+
         }
     }
     public void setPickvolgordeHeader(String pickvolgordeHeader) {

@@ -8,6 +8,7 @@ public class Doos {
         inhoud.add(product);
     }
 
+
     public Doos(Product product, Product product2) {
         inhoud.add(product);
         inhoud.add(product2);
@@ -29,5 +30,9 @@ public class Doos {
 
     public void setInhoud(int num, Product product) {
         inhoud.set(num,product);
+    }
+
+    public void voegToe(Product product){
+        inhoud.add(product);
     }
 }

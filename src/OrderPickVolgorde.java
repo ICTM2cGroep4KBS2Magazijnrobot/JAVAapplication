@@ -32,46 +32,43 @@ public class OrderPickVolgorde extends JPanel {
         if (huidigeOrder > 0){ //hier alle orderlines printen van een order.
             g.setFont(new Font("default", Font.PLAIN,15));
             DB_connectie.getOrderlines(stockitemids, huidigeOrder);
-            //HIER NU Bin Packing Problem toepassen met gebruik van stockitemids
-            //HIER NU Bin Packing Problem toepassen met gebruik van stockitemids
-            //Hierna wordt namelijk elk product uit stockitemids geprint op het scherm
+
 
             ArrayList<Product> producten = new ArrayList<>();
-            for (int i = 0; i < stockitemids.size(); i++) {
+
+            for (int i = 0; i < stockitemids.size(); i++) { //voeg aan de hand van stockitemid's de producten toe aan producten lijst
                 for (int j = 0; j < voorraad.getGeheleVoorraad().size(); j++) {
                     for (int k = 0; k < voorraad.getGeheleVoorraad().get(j).size(); k++) {
-                        producten.add(voorraad.getRijElement(j,k));
+                        if (stockitemids.get(i) == voorraad.getRijElement(j, k).getArtikelID()){
+                            producten.add(voorraad.getRijElement(j,k));
+                        }
                     }
                 }
             }
+            System.out.println(producten + "\n");
             ArrayList<Doos> Dozenlijst = BinPacking.binpacking(producten);
-            Dozenlijst = TSP.voeruit(Dozenlijst);
+//
+//            for (int i = 0; i < Dozenlijst.size(); i++) {
+//                System.out.println("Doos " + (i+1) + ": \n" + Dozenlijst.get(i));
+//            }
+
 
             int startX = 10;
             int startY = 70;
 
 
-            ArrayList<Product> ballen = new ArrayList<>(Bi)
 
             for (int i = 0; i < stockitemids.size(); i++) {
                 g.drawString("-----------------------------------------------------------------------------------------------------------------------",
                         startX, startY + 10);
 
                 Product product = voorraad.getArtikel(stockitemids.get(i));
-                ballen.add(product);
                 g.drawString(i+ 1 + ". Artikel " + product.getArtikelID() + ": " + product.getNaam() + ". Gewicht: " + product.getGewicht() + "kg", startX, startY);
 
                 startY+= 30;
             }
 
-            ArrayList<ArrayList<Product>> Dozenlijst = BinPacking.binpacking(ballen);
-            for (ArrayList<Product> doos : Dozenlijst) {
-                System.out.println("DOOS:");
-                for (Product product : doos) {
-                    System.out.println("Name: " + product.getNaam() + ", Weight: " + product.getGewicht());
-                }
-                System.out.println();
-            }
+
 
 
 

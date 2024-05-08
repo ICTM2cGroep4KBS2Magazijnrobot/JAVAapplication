@@ -8,12 +8,12 @@ public class BinPacking {
     public static ArrayList<Doos> binpacking(ArrayList<Product> Invoer) {
         Invoer.sort((Product p1, Product p2) -> (Integer.compare(p2.getGewicht(), p1.getGewicht()))); // sorteer descending
         ArrayList<Product> binpacker = new ArrayList<>(Invoer); // dupliceer de arraylist
-        System.out.println(binpacker);
+
         int max = 10; // max in doos
 
         ArrayList<Doos> Dozenlijst = new ArrayList<>(); // Maak nieuwe order arraylist
 
-        while (binpacker.size() > 0) {
+        while (binpacker.size() > 0) { //zolang er nog producten nog in te pakken zijn
             ArrayList<Product> doos = new ArrayList<>();
             int currentWeight = 0;
             for (int i = 0; i < binpacker.size(); i++) {

@@ -55,6 +55,6 @@ public class Product {
 
     @Override
     public String toString() {
-        return "Kleur: " + kleur + " Gewicht: " + gewicht + " Naam: " + naam;
+        return "Artikel: " + artikelID +" Kleur: " + kleur + " Gewicht: " + gewicht + " Naam: " + naam;
     }
 }

@@ -36,6 +36,16 @@ public class OrderPickVolgorde extends JPanel {
             //HIER NU Bin Packing Problem toepassen met gebruik van stockitemids
             //Hierna wordt namelijk elk product uit stockitemids geprint op het scherm
 
+            ArrayList<Product> producten = new ArrayList<>();
+            for (int i = 0; i < stockitemids.size(); i++) {
+                for (int j = 0; j < voorraad.getGeheleVoorraad().size(); j++) {
+                    for (int k = 0; k < voorraad.getGeheleVoorraad().get(j).size(); k++) {
+                        producten.add(voorraad.getRijElement(j,k));
+                    }
+                }
+            }
+            ArrayList<Doos> Dozenlijst = BinPacking.binpacking(producten);
+            Dozenlijst = TSP.voeruit(Dozenlijst);
 
             int startX = 10;
             int startY = 70;

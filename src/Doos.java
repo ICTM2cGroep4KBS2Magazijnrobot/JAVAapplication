@@ -3,10 +3,17 @@ import java.util.ArrayList;
 public class Doos {
     private ArrayList<Product> inhoud;
 
+    public Doos(){
+
+    }
+
 
 
     public Doos(ArrayList<Product> products) {
         this.inhoud = products;
+    }
+
+    public Doos(Product eersteProduct, Product tweedeProduct, Product derdeProduct) {
     }
 
     public ArrayList<Product> getInhoud() {

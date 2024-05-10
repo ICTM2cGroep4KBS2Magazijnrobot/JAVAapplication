@@ -47,6 +47,24 @@ public class OrderPickVolgorde extends JPanel {
             }
             System.out.println(producten + "\n");
             ArrayList<Doos> Dozenlijst = BinPacking.binpacking(producten);
+
+            for (Doos doos : Dozenlijst){
+                System.out.println(doos);
+                System.out.println("\n");
+            }
+            System.out.println("\n\n\n\n\n");
+
+            for (int i = 0; i < Dozenlijst.size(); i++) {
+                Doos oude_doos = new Doos();
+                oude_doos = Dozenlijst.get(i);
+                oude_doos = TravellingSalesManProbleem.TSP(voorraad, oude_doos);
+                Dozenlijst.set(i, oude_doos);
+            }
+
+            for (Doos doos: Dozenlijst){
+                System.out.println(doos + "\n");
+
+            }
 //
 //            for (int i = 0; i < Dozenlijst.size(); i++) {
 //                System.out.println("Doos " + (i+1) + ": \n" + Dozenlijst.get(i));

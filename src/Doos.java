@@ -1,7 +1,7 @@
 import java.util.ArrayList;
 
 public class Doos {
-    private ArrayList<Product> inhoud;
+    private ArrayList<Product> inhoud = new ArrayList<>();
 
     public Doos(){
 

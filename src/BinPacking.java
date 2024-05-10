@@ -16,7 +16,7 @@ public class BinPacking {
         while (binpacker.size() > 0) { //zolang er nog producten nog in te pakken zijn
             ArrayList<Product> doos = new ArrayList<>();
             int currentWeight = 0;
-            for (int i = 0; i < binpacker.size(); i++) {
+            for (int i = 0; i < binpacker.size(); i++  ) {
                 Product product = binpacker.get(i);
                 if (currentWeight + product.getGewicht() <= max) {
                     doos.add(product);

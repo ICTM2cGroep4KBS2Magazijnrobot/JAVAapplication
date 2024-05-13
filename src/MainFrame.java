@@ -29,7 +29,7 @@ public class MainFrame extends JFrame implements ActionListener {
         try {
             jp.setLayout(new GridLayout(orderButtons.size(), 0));
         } catch (Exception e) {
-            System.out.println("Error mbt geen database connectie. Foutcode: " + e.getMessage());;
+            System.out.println("Foutcode: " + e.getMessage());;
         }
 
         jp.setPreferredSize(new Dimension(600, orderButtons.size() * 160)); //grootte van van de panel

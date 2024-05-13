@@ -48,11 +48,12 @@ public class OrderPickVolgorde extends JPanel {
             System.out.println(producten + "\n");
             ArrayList<Doos> Dozenlijst = BinPacking.binpacking(producten);
 
+            System.out.println("dozenlijst na BinPacking: \n");
             for (Doos doos : Dozenlijst){
                 System.out.println(doos);
                 System.out.println("\n");
             }
-            System.out.println("\n\n\n\n\n");
+            System.out.println("\n\n\n\n\n Dozenlijst na TSP: \n");
 
             for (int i = 0; i < Dozenlijst.size(); i++) {
                 Doos oude_doos = new Doos();
@@ -63,7 +64,6 @@ public class OrderPickVolgorde extends JPanel {
 
             for (Doos doos: Dozenlijst){
                 System.out.println(doos + "\n");
-
             }
 //
 //            for (int i = 0; i < Dozenlijst.size(); i++) {

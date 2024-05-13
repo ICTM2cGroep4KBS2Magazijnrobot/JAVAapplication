@@ -20,10 +20,12 @@ public class MagazijnOverzicht extends JPanel{
 
         int xRechtsonder = getWidth() - 20; //coordinaten voor rechtsonder
         int yRechtsonder = getHeight() - 20;
+
         tekenMagazijn(g);
         tekenMagazijnRasters(g, xLinksboven, yLinksboven, xRechtsonder, yRechtsonder);
 
         tekenMagazijnInhoud(g);
+
 //        System.out.println(getWidth() - 20);
 //        System.out.println(getHeight()- 20);
     }

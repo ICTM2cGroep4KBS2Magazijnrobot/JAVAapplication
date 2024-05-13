@@ -46,6 +46,7 @@ public class MainFrame extends JFrame implements ActionListener {
         scrollPane.getVerticalScrollBar().setUnitIncrement(25); //bepaald scrollsnelheid van de scrollbar
         add(scrollPane);
 
+
         panel3 = new OrderPickVolgorde(voorraad);
         add(panel3);
 

@@ -9,6 +9,7 @@ public class MainFrame extends JFrame implements ActionListener {
     private ArrayList<OrderButton> orderButtons = new ArrayList<>(); // index van deze lijst moet overeenkomen met daadwerkelijke orders
     private Voorraad voorraad;
 
+    private MagazijnOverzicht panel;
     private OrderPickVolgorde panel3;
 
     MainFrame() {
@@ -22,7 +23,7 @@ public class MainFrame extends JFrame implements ActionListener {
         DB_connectie.updateMagazijn(voorraad); //update voorraad vanuit database
         DB_connectie.updateOrders(orderButtons); //update orders vanuit database
 
-        MagazijnOverzicht panel = new MagazijnOverzicht(voorraad); //object met waardes meegeven naar panel indien nodig
+        panel = new MagazijnOverzicht(voorraad); //object met waardes meegeven naar panel indien nodig
         add(panel);
 
         JPanel jp = new JPanel(); //panel om knoppen in te doen, later voeg je dit aan de scrollbar toe
@@ -63,6 +64,7 @@ public class MainFrame extends JFrame implements ActionListener {
                     if(dialoog.isUitvoerenOK()){
                         panel3.setHuidigeOrder(orderButtons.get(i).getOrderID());
                     }
+                    panel.setTSP_DozenLijst(panel3.getTSP_Dozenlijst());
                 }
             }
             repaint();

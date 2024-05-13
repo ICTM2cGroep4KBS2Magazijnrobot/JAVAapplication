@@ -10,6 +10,8 @@ public class OrderPickVolgorde extends JPanel {
     private Voorraad voorraad;
     private ArrayList<Integer> stockitemids = new ArrayList<>();
 
+    private ArrayList<Doos> TSP_Dozenlijst = new ArrayList<>();
+
 
 
     OrderPickVolgorde(Voorraad voorraad){ //in constructor object met waardes van dialoog meegeven
@@ -61,7 +63,7 @@ public class OrderPickVolgorde extends JPanel {
                 oude_doos = TravellingSalesManProbleem.TSP(voorraad, oude_doos);
                 Dozenlijst.set(i, oude_doos);
             }
-
+            TSP_Dozenlijst = Dozenlijst;
             for (Doos doos: Dozenlijst){
                 System.out.println(doos + "\n");
             }
@@ -100,6 +102,10 @@ public class OrderPickVolgorde extends JPanel {
     public void setHuidigeOrder(int huidigOrder) {
         setPickvolgordeHeader("Pickvolgorde Order: " + huidigOrder);
         this.huidigeOrder = huidigOrder;
+    }
+
+    public ArrayList<Doos> getTSP_Dozenlijst() {
+        return this.TSP_Dozenlijst;
     }
 }
 

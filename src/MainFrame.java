@@ -3,6 +3,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
 
 public class MainFrame extends JFrame implements ActionListener {
 
@@ -64,6 +65,28 @@ public class MainFrame extends JFrame implements ActionListener {
                     if(dialoog.isUitvoerenOK()){
 
                         panel3.setHuidigeOrder(orderButtons.get(i).getOrderID());
+//                        timeDelay(3);
+                        panel3.setDoosnummer(1);
+
+
+//                        repaint();
+//                        panel3.setDoosnummer(1);
+//                        int counter = 0;
+//                        while(counter < 3) {
+////                            panel3.setHuidigeOrder(orderButtons.get(i).getOrderID());
+////                            panel.setProductInDoosNummer(counter);
+//                            panel3.setDoosnummer(counter);
+//                            System.out.println("Doosnummer is nu: " + counter + "\n");
+//                            repaint();
+//                            try{
+//                                Thread.sleep(1000);
+//                            }
+//                            catch(InterruptedException ex) {
+//                                System.out.println("Sleep niet gelukt");
+//                            }
+//                            counter++;
+//                        }
+//                        panel3.setHuidigeOrder(orderButtons.get(i).getOrderID());
 //                        repaint();
 //                        panel3.updateTSP();
 //                        panel.setTSP_DozenLijst(panel3.getTSP_Dozenlijst());
@@ -73,4 +96,15 @@ public class MainFrame extends JFrame implements ActionListener {
             }
             repaint();
     }
+    public void timeDelay(long t){
+        try{
+            Thread.sleep(t);
+            System.out.println("Gelukt");
+        }
+        catch (InterruptedException e){
+
+        }
+    }
 }
+
+

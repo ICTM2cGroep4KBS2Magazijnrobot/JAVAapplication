@@ -13,6 +13,8 @@ public class OrderPickVolgorde extends JPanel {
 
     private ArrayList<Doos> TSP_Dozenlijst = new ArrayList<>();
 
+    private int Doosnummer;
+
 
 
     OrderPickVolgorde(Voorraad voorraad, MagazijnOverzicht panel){ //in constructor object met waardes van dialoog meegeven
@@ -66,7 +68,8 @@ public class OrderPickVolgorde extends JPanel {
                 Dozenlijst.set(i, oude_doos);
             }
             TSP_Dozenlijst = Dozenlijst;
-            panel.setTSP_DozenLijst(Dozenlijst);
+            panel.setTSP_DozenLijst(Dozenlijst, Doosnummer);
+
             for (Doos doos: Dozenlijst){
                 System.out.println(doos + "\n");
             }
@@ -91,7 +94,9 @@ public class OrderPickVolgorde extends JPanel {
                 startY+= 30;
             }
 
-
+            for (int i = 0; i < 3; i++) {
+                System.out.println("Test: " + i + "\n");
+            }
 
 
 
@@ -107,14 +112,18 @@ public class OrderPickVolgorde extends JPanel {
     public void setHuidigeOrder(int huidigOrder) {
         setPickvolgordeHeader("Pickvolgorde Order: " + huidigOrder);
         this.huidigeOrder = huidigOrder;
+
+
+    }
+
+    public void setDoosnummer(int doosnummer) {
+        Doosnummer = doosnummer;
     }
 
     public ArrayList<Doos> getTSP_Dozenlijst() {
         return this.TSP_Dozenlijst;
     }
 
-    public void updateTSP(){
-        this.panel.setTSP_DozenLijst(this.TSP_Dozenlijst);
-    }
+
 }
 

@@ -51,6 +51,25 @@ public class Voorraad {
         }
         return null;
     }
+
+    public ArrayList<Integer> getCoordinaten(int artikelID){
+        ArrayList<Integer> coordinatenlijst = new ArrayList<>();
+        for (int i = 0; i < geheleVoorraad.size(); i++) {
+            for (int j = 0; j < geheleVoorraad.get(i).size(); j++) {
+                if (geheleVoorraad.get(i).get(j).getArtikelID() == artikelID){
+                    coordinatenlijst.add(j);
+                    coordinatenlijst.add(i);
+                }
+            }
+        }
+        if(coordinatenlijst.size() > 0){
+            return coordinatenlijst;
+        }
+        else{
+            return null;
+        }
+
+    }
     public ArrayList<ArrayList<Product>> getGeheleVoorraad() {
         return geheleVoorraad;
     }

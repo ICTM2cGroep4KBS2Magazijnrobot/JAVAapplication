@@ -3,12 +3,14 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
 
 public class MainFrame extends JFrame implements ActionListener {
 
     private ArrayList<OrderButton> orderButtons = new ArrayList<>(); // index van deze lijst moet overeenkomen met daadwerkelijke orders
     private Voorraad voorraad;
 
+    private MagazijnOverzicht panel;
     private OrderPickVolgorde panel3;
 
     MainFrame() {
@@ -22,7 +24,7 @@ public class MainFrame extends JFrame implements ActionListener {
         DB_connectie.updateMagazijn(voorraad); //update voorraad vanuit database
         DB_connectie.updateOrders(orderButtons); //update orders vanuit database
 
-        MagazijnOverzicht panel = new MagazijnOverzicht(voorraad); //object met waardes meegeven naar panel indien nodig
+        panel = new MagazijnOverzicht(voorraad); //object met waardes meegeven naar panel indien nodig
         add(panel);
 
         JPanel jp = new JPanel(); //panel om knoppen in te doen, later voeg je dit aan de scrollbar toe
@@ -46,7 +48,8 @@ public class MainFrame extends JFrame implements ActionListener {
         scrollPane.getVerticalScrollBar().setUnitIncrement(25); //bepaald scrollsnelheid van de scrollbar
         add(scrollPane);
 
-        panel3 = new OrderPickVolgorde(voorraad);
+
+        panel3 = new OrderPickVolgorde(voorraad, panel);
         add(panel3);
 
         InvoegenVoorraadNoodstopPanel panel2 = new InvoegenVoorraadNoodstopPanel();
@@ -60,10 +63,48 @@ public class MainFrame extends JFrame implements ActionListener {
                 if (e.getSource() == orderButtons.get(i)){
                     OrderDialoog dialoog = new OrderDialoog(this, true, "Order: " + (orderButtons.get(i).getOrderID()), orderButtons.get(i).getCustomerID(), orderButtons.get(i).getOrderID(), voorraad);
                     if(dialoog.isUitvoerenOK()){
+
                         panel3.setHuidigeOrder(orderButtons.get(i).getOrderID());
+//                        timeDelay(3);
+                        panel3.setDoosnummer(1);
+
+
+//                        repaint();
+//                        panel3.setDoosnummer(1);
+//                        int counter = 0;
+//                        while(counter < 3) {
+////                            panel3.setHuidigeOrder(orderButtons.get(i).getOrderID());
+////                            panel.setProductInDoosNummer(counter);
+//                            panel3.setDoosnummer(counter);
+//                            System.out.println("Doosnummer is nu: " + counter + "\n");
+//                            repaint();
+//                            try{
+//                                Thread.sleep(1000);
+//                            }
+//                            catch(InterruptedException ex) {
+//                                System.out.println("Sleep niet gelukt");
+//                            }
+//                            counter++;
+//                        }
+//                        panel3.setHuidigeOrder(orderButtons.get(i).getOrderID());
+//                        repaint();
+//                        panel3.updateTSP();
+//                        panel.setTSP_DozenLijst(panel3.getTSP_Dozenlijst());
+
                     }
                 }
             }
             repaint();
     }
+    public void timeDelay(long t){
+        try{
+            Thread.sleep(t);
+            System.out.println("Gelukt");
+        }
+        catch (InterruptedException e){
+
+        }
+    }
 }
+
+

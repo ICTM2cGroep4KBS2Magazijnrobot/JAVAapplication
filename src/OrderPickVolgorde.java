@@ -65,6 +65,8 @@ public class OrderPickVolgorde extends JPanel {
             for (Doos doos: Dozenlijst){
                 System.out.println(doos + "\n");
             }
+
+
 //
 //            for (int i = 0; i < Dozenlijst.size(); i++) {
 //                System.out.println("Doos " + (i+1) + ": \n" + Dozenlijst.get(i));

@@ -4,6 +4,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.IOException;
+import com.fazecast.jSerialComm.SerialPort;
 
 public class InvoegenVoorraadNoodstopPanel extends JPanel implements ActionListener{
     JButton jbOrderInvoeren, jbVoorraadWeergeven, jbNoodstop;

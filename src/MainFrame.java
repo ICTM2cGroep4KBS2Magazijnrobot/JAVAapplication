@@ -48,7 +48,7 @@ public class MainFrame extends JFrame implements ActionListener {
         add(scrollPane);
 
 
-        panel3 = new OrderPickVolgorde(voorraad);
+        panel3 = new OrderPickVolgorde(voorraad, panel);
         add(panel3);
 
         InvoegenVoorraadNoodstopPanel panel2 = new InvoegenVoorraadNoodstopPanel();
@@ -62,9 +62,13 @@ public class MainFrame extends JFrame implements ActionListener {
                 if (e.getSource() == orderButtons.get(i)){
                     OrderDialoog dialoog = new OrderDialoog(this, true, "Order: " + (orderButtons.get(i).getOrderID()), orderButtons.get(i).getCustomerID(), orderButtons.get(i).getOrderID(), voorraad);
                     if(dialoog.isUitvoerenOK()){
+
                         panel3.setHuidigeOrder(orderButtons.get(i).getOrderID());
+//                        repaint();
+//                        panel3.updateTSP();
+//                        panel.setTSP_DozenLijst(panel3.getTSP_Dozenlijst());
+
                     }
-                    panel.setTSP_DozenLijst(panel3.getTSP_Dozenlijst());
                 }
             }
             repaint();

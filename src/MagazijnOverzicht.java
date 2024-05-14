@@ -12,7 +12,8 @@ public class MagazijnOverzicht extends JPanel{
     private int xCordinateProduct3;
     private int yCordinateProduct3;
     private ArrayList<Doos> TSP_DozenLijst = new ArrayList<>();
-
+    private Doos doos;
+    private int ProductInDoosNummer = 0;
 
     private ArrayList<ArrayList<Product>> geheleVoorraad = new ArrayList<>(5);
 
@@ -38,7 +39,7 @@ public class MagazijnOverzicht extends JPanel{
         tekenMagazijnRasters(g, xLinksboven, yLinksboven, xRechtsonder, yRechtsonder);
 
         tekenMagazijnInhoud(g);
-        tekenRoute(g);
+        tekenRoute(g, ProductInDoosNummer);
 //        System.out.println(getWidth() - 20);
 //        System.out.println(getHeight()- 20);
     }
@@ -103,13 +104,12 @@ public class MagazijnOverzicht extends JPanel{
                 if (voorraad.getRijElement(i, j) != null){
                     String kleur = voorraad.getRijElement(i, j).getKleur();
                     int artikelID = voorraad.getRijElement(i, j).getArtikelID();
-                    if (TSP_DozenLijst != null || !TSP_DozenLijst.isEmpty()){
-                        if (TSP_DozenLijst.size() == 2){
-                            inhoudDoos2(artikelID, startX, startY, i);
-
+                    if (!TSP_DozenLijst.isEmpty()){
+                        if (TSP_DozenLijst.get(ProductInDoosNummer).getInhoud().size() == 2){
+                            inhoudDoos2(artikelID, startX, startY, ProductInDoosNummer);
 
                         } else if (TSP_DozenLijst.size() == 3){
-
+                            inhoudDoos3(artikelID, startX, startY, ProductInDoosNummer);
                         }
                     }
                     tekenBlokje(g, startX, startY, eindX, eindY, kleur, voorraad.getRijElement(i, j).getVoorraadArtikel(), Integer.toString(voorraad.getRijElement(i, j).getArtikelID()));
@@ -132,15 +132,36 @@ public class MagazijnOverzicht extends JPanel{
 
     }
 
-    public void inhoudDoos3 (){
-
+    public void inhoudDoos3 (int artikelID, int startX, int startY, int i){
+        if(TSP_DozenLijst.get(i).getInhoud().get(0).getArtikelID() == artikelID ){
+            xCordinateProduct1 = startX;
+            yCordinateProduct1 = startY;
+        }
+        if(TSP_DozenLijst.get(i).getInhoud().get(1).getArtikelID() == artikelID ){
+            xCordinateProduct2 = startX;
+            yCordinateProduct2 = startY;
+        }
+        if(TSP_DozenLijst.get(i).getInhoud().get(2).getArtikelID() == artikelID){
+            xCordinateProduct3 = startX;
+            yCordinateProduct3 = startY;
+        }
     }
 
-    public void tekenRoute(Graphics g){
-        g.setColor(Color.WHITE);
-        if(TSP_DozenLijst.size() == 2){
-            g.drawLine(xCordinateProduct1, yCordinateProduct1, xCordinateProduct2, yCordinateProduct2);
+    public void tekenRoute(Graphics g, int i){
+        g.setColor(Color.MAGENTA);
+        Graphics2D g2 = (Graphics2D) g;
+        g2.setStroke(new BasicStroke(5));
+
+        if (!TSP_DozenLijst.isEmpty()){
+            if(TSP_DozenLijst.get(i).getInhoud().size() == 2){
+                g2.drawLine(xCordinateProduct1 + 30, yCordinateProduct1 + 20, xCordinateProduct2 + 30, yCordinateProduct2 + 20);
+            }
+            if(TSP_DozenLijst.get(i).getInhoud().size() ==  3){
+                g2.drawLine();
+                g2.drawLine();
+            }
         }
+        repaint();
     }
     public void setTSP_DozenLijst(ArrayList<Doos> TSP_DozenLijst) {
         this.TSP_DozenLijst = TSP_DozenLijst;

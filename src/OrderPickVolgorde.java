@@ -6,6 +6,7 @@ public class OrderPickVolgorde extends JPanel {
 
     private String pickvolgordeHeader = "Geen order geselecteerd ";
     private int huidigeOrder;
+    private MagazijnOverzicht panel;
     ArrayList<Product> invoer = new ArrayList<Product>();
     private Voorraad voorraad;
     private ArrayList<Integer> stockitemids = new ArrayList<>();
@@ -14,8 +15,9 @@ public class OrderPickVolgorde extends JPanel {
 
 
 
-    OrderPickVolgorde(Voorraad voorraad){ //in constructor object met waardes van dialoog meegeven
+    OrderPickVolgorde(Voorraad voorraad, MagazijnOverzicht panel){ //in constructor object met waardes van dialoog meegeven
         setPreferredSize(new Dimension(1900, 780));
+        this.panel = panel;
         setBackground(Color.WHITE);
         this.voorraad = voorraad;
 
@@ -64,6 +66,7 @@ public class OrderPickVolgorde extends JPanel {
                 Dozenlijst.set(i, oude_doos);
             }
             TSP_Dozenlijst = Dozenlijst;
+            panel.setTSP_DozenLijst(Dozenlijst);
             for (Doos doos: Dozenlijst){
                 System.out.println(doos + "\n");
             }
@@ -92,7 +95,9 @@ public class OrderPickVolgorde extends JPanel {
 
 
 
-
+//            if (Dozenlijst.size() > 0){
+//                updateTSP();
+//            }
         }
     }
     public void setPickvolgordeHeader(String pickvolgordeHeader) {
@@ -106,6 +111,10 @@ public class OrderPickVolgorde extends JPanel {
 
     public ArrayList<Doos> getTSP_Dozenlijst() {
         return this.TSP_Dozenlijst;
+    }
+
+    public void updateTSP(){
+        this.panel.setTSP_DozenLijst(this.TSP_Dozenlijst);
     }
 }
 

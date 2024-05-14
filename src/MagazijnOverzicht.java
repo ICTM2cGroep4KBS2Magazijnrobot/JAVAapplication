@@ -114,7 +114,7 @@ public class MagazijnOverzicht extends JPanel{
                         for (int k = 0; k < alleProducten.size(); k++) {
                             if(artikelID == alleProducten.get(k).getArtikelID()){
                                 g.setColor(Color.GREEN);
-                                g.drawString(Integer.toString(k + 1), startX - 5, startY - 3);
+                                g.drawString(Integer.toString(k + 1), startX +25, startY - 5);
                                 Graphics2D g2 = (Graphics2D) g;
                                 g2.setStroke(new BasicStroke(5));
                                 g2.drawRect(startX, startY, eindX, eindY);

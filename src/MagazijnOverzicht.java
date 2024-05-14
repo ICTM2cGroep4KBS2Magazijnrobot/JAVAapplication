@@ -102,7 +102,7 @@ public class MagazijnOverzicht extends JPanel{
                 if (voorraad.getRijElement(i, j) != null){
                     String kleur = voorraad.getRijElement(i, j).getKleur();
                     int artikelID = voorraad.getRijElement(i, j).getArtikelID();
-                    tekenBlokje(g, startX, startY, eindX, eindY, kleur, voorraad.getRijElement(i, j).getVoorraadArtikel(), Integer.toString(voorraad.getRijElement(i, j).getArtikelID()));
+//                    tekenBlokje(g, startX, startY, eindX, eindY, kleur, voorraad.getRijElement(i, j).getVoorraadArtikel(), Integer.toString(voorraad.getRijElement(i, j).getArtikelID()));
 
                     if (!TSP_DozenLijst.isEmpty()){
                         ArrayList<Product> alleProducten = new ArrayList<>();
@@ -114,12 +114,15 @@ public class MagazijnOverzicht extends JPanel{
                         for (int k = 0; k < alleProducten.size(); k++) {
                             if(artikelID == alleProducten.get(k).getArtikelID()){
                                 g.setColor(Color.GREEN);
-                                g.drawString(Integer.toString(k + 1), startX - 10, startY - 5);
+                                g.drawString(Integer.toString(k + 1), startX - 5, startY - 3);
+                                Graphics2D g2 = (Graphics2D) g;
+                                g2.setStroke(new BasicStroke(5));
+                                g2.drawRect(startX, startY, eindX, eindY);
                             }
                         }
 
                     }
-
+                    tekenBlokje(g, startX, startY, eindX, eindY, kleur, voorraad.getRijElement(i, j).getVoorraadArtikel(), Integer.toString(voorraad.getRijElement(i, j).getArtikelID()));
                 }
                 startX += 127;
             }

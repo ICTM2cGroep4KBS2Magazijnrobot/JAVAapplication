@@ -5,12 +5,7 @@ import java.util.ArrayList;
 public class MagazijnOverzicht extends JPanel{
 
     private Voorraad voorraad;
-    private int xCordinateProduct1;
-    private int yCordinateProduct1;
-    private int xCordinateProduct2;
-    private int yCordinateProduct2;
-    private int xCordinateProduct3;
-    private int yCordinateProduct3;
+
     private ArrayList<Doos> TSP_DozenLijst = new ArrayList<>();
     private Doos doos;
     private int ProductInDoosNummer = 2;

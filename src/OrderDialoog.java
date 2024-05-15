@@ -20,7 +20,7 @@ public class OrderDialoog extends JDialog implements ActionListener {
     OrderDialoog(JFrame frame, boolean modal, String ordernaam, int CustomerID, int OrderID, Voorraad voorraad){
         super(frame, modal);
         setTitle(ordernaam);
-        setSize(500,400);
+        setSize(700,600);
         setLayout(new GridLayout(3,2));
         this.voorraad = voorraad;
 

@@ -13,6 +13,7 @@ public class MainFrame extends JFrame implements ActionListener {
     private MagazijnOverzicht panel;
     private OrderPickVolgorde panel3;
 
+
     MainFrame() {
         setTitle("HMI Magazijnrobot");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -43,7 +44,7 @@ public class MainFrame extends JFrame implements ActionListener {
 
         JScrollPane scrollPane = new JScrollPane(jp); //maak scrollbar panel aan met het panel vol knoppen erin
 
-        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS); // deze 2 regels zorgen dat de scrollbars altijd te zien zijn
+        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER); // deze 2 regels zorgen dat de scrollbars altijd te zien zijn
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         scrollPane.getVerticalScrollBar().setUnitIncrement(25); //bepaald scrollsnelheid van de scrollbar
         add(scrollPane);
@@ -52,6 +53,14 @@ public class MainFrame extends JFrame implements ActionListener {
         panel3 = new OrderPickVolgorde(voorraad, panel);
         add(panel3);
 
+        JScrollPane scrolpan3 = new JScrollPane(panel3);
+        scrolpan3.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        scrolpan3.getVerticalScrollBar().setUnitIncrement(25);
+        add(scrolpan3);
+
+
+
+
         InvoegenVoorraadNoodstopPanel panel2 = new InvoegenVoorraadNoodstopPanel();
 
         add(panel2);
@@ -59,6 +68,7 @@ public class MainFrame extends JFrame implements ActionListener {
     }
 
     public void actionPerformed(ActionEvent e) {
+
             for (int i = 0; i < orderButtons.size(); i++) {
                 if (e.getSource() == orderButtons.get(i)){
                     OrderDialoog dialoog = new OrderDialoog(this, true, "Order: " + (orderButtons.get(i).getOrderID()), orderButtons.get(i).getCustomerID(), orderButtons.get(i).getOrderID(), voorraad);
@@ -69,7 +79,7 @@ public class MainFrame extends JFrame implements ActionListener {
                         panel3.setDoosnummer(1);
 
 
-//                        repaint();
+//                       repaint();
 //                        panel3.setDoosnummer(1);
 //                        int counter = 0;
 //                        while(counter < 3) {
@@ -96,6 +106,7 @@ public class MainFrame extends JFrame implements ActionListener {
             }
             repaint();
     }
+
     public void timeDelay(long t){
         try{
             Thread.sleep(t);

@@ -32,7 +32,7 @@ public class OrderPickVolgorde extends JPanel {
         super.paintComponent(g);
         g.setFont(new Font("default", Font.PLAIN, 30));
 
-        g.drawString(pickvolgordeHeader, getWidth() / 2 - 160, 40);
+        g.drawString(pickvolgordeHeader, 100, 40);
         stockitemids.clear();
 
         if (huidigeOrder > 0){ //hier alle orderlines printen van een order.
@@ -74,9 +74,9 @@ public class OrderPickVolgorde extends JPanel {
                 System.out.println(doos + "\n");
             }
 //
-//            for (int i = 0; i < Dozenlijst.size(); i++) {
-//                System.out.println("Doos " + (i+1) + ": \n" + Dozenlijst.get(i));
-//            }
+            for (int i = 0; i < Dozenlijst.size(); i++) {
+                System.out.println("Doos " + (i+1) + ": \n" + Dozenlijst.get(i));
+            }
 
 
             int startX = 10;
@@ -84,15 +84,15 @@ public class OrderPickVolgorde extends JPanel {
 
 
 
-            for (int i = 0; i < stockitemids.size(); i++) {
-                g.drawString("-----------------------------------------------------------------------------------------------------------------------",
-                        startX, startY + 10);
-
-                Product product = voorraad.getArtikel(stockitemids.get(i));
-                g.drawString(i+ 1 + ". Artikel " + product.getArtikelID() + ": " + product.getNaam() + ". Gewicht: " + product.getGewicht() + "kg", startX, startY);
-
-                startY+= 30;
-            }
+//            for (int i = 0; i < stockitemids.size(); i++) {
+//                g.drawString("-----------------------------------------------------------------------------------------------------------------------",
+//                        startX, startY + 10);
+//
+//                Product product = voorraad.getArtikel(stockitemids.get(i));
+//                g.drawString(i+ 1 + ". Artikel " + product.getArtikelID() + ": " + product.getNaam() + ". Gewicht: " + product.getGewicht() + "kg", startX, startY);
+//
+//                startY+= 30;
+//            }
             for (int i = 0; i < Dozenlijst.size(); i++) {
                 g.drawString("Doos " +(i+1) + ":", startX, startY);
                 startY+= 20;

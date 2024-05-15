@@ -34,8 +34,8 @@ public class TravellingSalesManProbleem {
         int scoreProduct1 = 0;
         int scoreProduct2 = 0;
 
-        int huidigeX = 0;
-        int huidigeY = 0;
+        int huidigeX = 4;
+        int huidigeY = 4;
 
         int xWaardeProduct1 = 0;
         int yWaardeProduct1 = 0;
@@ -90,8 +90,8 @@ public class TravellingSalesManProbleem {
         int scoreProduct2 = 0;
         int scoreProduct3 = 0;
 
-        int huidigeX = 0;
-        int huidigeY = 0;
+        int huidigeX = 4;
+        int huidigeY = 4;
 
         int xWaardeProduct1 = 0;
         int yWaardeProduct1 = 0;
@@ -165,14 +165,32 @@ public class TravellingSalesManProbleem {
             huidigeX = xWaardeProduct1;
             huidigeY = yWaardeProduct1;
 
+            scoreProduct2 = xWaardeProduct2 + yWaardeProduct2;
+            scoreProduct3 = xWaardeProduct3 + yWaardeProduct3;
+
+
             scoreProduct2 = (huidigeY - xWaardeProduct2) + (huidigeY - yWaardeProduct2);
             scoreProduct3 = (huidigeX - xWaardeProduct3) + (huidigeY - yWaardeProduct3);
+            int scoreHuidig = huidigeX + huidigeY;
+
+            if(scoreProduct2 < scoreHuidig){
+                scoreProduct2 = scoreHuidig + scoreProduct2;
+            }
+            else{
+                scoreProduct2 = scoreProduct2 - scoreHuidig;
+            }
+            if(scoreProduct3 < scoreHuidig){
+                 scoreProduct3 = scoreHuidig + scoreProduct3;
+            }
+            else{
+                scoreProduct3 = scoreProduct3 - scoreHuidig;
+            }
 
             if (scoreProduct2 <= scoreProduct3) {
                 nieuwe_doos.voegToe(doos.getProduct(1));
-                nieuwe_doos.voegToe(doos.getProduct(0));
+                nieuwe_doos.voegToe(doos.getProduct(2));
             } else if (scoreProduct2 > scoreProduct3) {
-                nieuwe_doos.voegToe(doos.getProduct(0));
+                nieuwe_doos.voegToe(doos.getProduct(2));
                 nieuwe_doos.voegToe(doos.getProduct(1));
             }
 
@@ -183,16 +201,34 @@ public class TravellingSalesManProbleem {
             huidigeY = yWaardeProduct2;
 
 
-            scoreProduct1 = (huidigeY - xWaardeProduct1) + (huidigeY - yWaardeProduct1);
-            scoreProduct3 = (huidigeX - xWaardeProduct3) + (huidigeY - yWaardeProduct3);
+          scoreProduct1 = xWaardeProduct1 + yWaardeProduct1;
+          scoreProduct3 = xWaardeProduct3 + yWaardeProduct3;
+          int scoreHuidig = huidigeX + huidigeY;
+
+            if (scoreProduct1 < scoreHuidig){
+                scoreProduct1 = scoreHuidig + scoreProduct1;
+            }
+            else{
+                scoreProduct1 = scoreProduct1 - scoreHuidig;
+            }
+
+            if (scoreProduct3 < scoreHuidig){
+                scoreProduct3 = scoreHuidig + scoreProduct3;
+            }
+            else{
+                scoreProduct3 = scoreProduct3 - scoreHuidig;
+            }
+//            scoreProduct1 = (huidigeX - xWaardeProduct1) + (huidigeY - yWaardeProduct1);
+//            scoreProduct3 = (huidigeX - xWaardeProduct3) + (huidigeY - yWaardeProduct3);
+
 
             if (scoreProduct1 <= scoreProduct3) {
-                nieuwe_doos.voegToe(doos.getProduct(1));
                 nieuwe_doos.voegToe(doos.getProduct(0));
+                nieuwe_doos.voegToe(doos.getProduct(2));
 
             } else if (scoreProduct1 > scoreProduct3) {
+                nieuwe_doos.voegToe(doos.getProduct(2));
                 nieuwe_doos.voegToe(doos.getProduct(0));
-                nieuwe_doos.voegToe(doos.getProduct(1));
 
             }
         }
@@ -201,16 +237,32 @@ public class TravellingSalesManProbleem {
             huidigeY = yWaardeProduct3;
 
 
-            scoreProduct1 = (huidigeY - xWaardeProduct1) + (huidigeY - yWaardeProduct1);
-            scoreProduct2 = (huidigeX - xWaardeProduct2) + (huidigeY - yWaardeProduct2);
+            scoreProduct1 = xWaardeProduct1 + yWaardeProduct1;
+            scoreProduct2 = xWaardeProduct2 + yWaardeProduct2;
+            int huidigeScore = huidigeX + huidigeY;
 
+//            scoreProduct1 = (huidigeY - xWaardeProduct1) + (huidigeY - yWaardeProduct1);
+//            scoreProduct2 = (huidigeX - xWaardeProduct2) + (huidigeY - yWaardeProduct2);
+
+            if(scoreProduct1 < huidigeScore){
+                scoreProduct1 = scoreProduct1 + huidigeScore;
+            }
+            else{
+                scoreProduct1 = scoreProduct1 - huidigeScore;
+            }
+            if(scoreProduct2 < huidigeScore){
+                scoreProduct2 = scoreProduct2 + huidigeScore;
+            }
+            else{
+                scoreProduct2 = scoreProduct2 - huidigeScore;
+            }
             if (scoreProduct1 <= scoreProduct2) {
-                nieuwe_doos.voegToe(doos.getProduct(1));
                 nieuwe_doos.voegToe(doos.getProduct(0));
+                nieuwe_doos.voegToe(doos.getProduct(1));
 
             } else if (scoreProduct1 > scoreProduct2) {
-                nieuwe_doos.voegToe(doos.getProduct(0));
                 nieuwe_doos.voegToe(doos.getProduct(1));
+                nieuwe_doos.voegToe(doos.getProduct(0));
             }
 
 

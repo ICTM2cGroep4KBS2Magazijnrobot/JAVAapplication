@@ -56,6 +56,7 @@ public class MainFrame extends JFrame implements ActionListener {
         JScrollPane scrolpan3 = new JScrollPane(panel3);
         scrolpan3.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         scrolpan3.getVerticalScrollBar().setUnitIncrement(25);
+        scrolpan3.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         add(scrolpan3);
 
 

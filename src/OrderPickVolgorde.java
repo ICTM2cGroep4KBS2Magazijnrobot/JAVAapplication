@@ -104,16 +104,6 @@ public class OrderPickVolgorde extends JPanel {
                 }
                 startY += 20;
             }
-
-            for (int i = 0; i < 3; i++) {
-                System.out.println("Test: " + i + "\n");
-            }
-
-
-
-//            if (Dozenlijst.size() > 0){
-//                updateTSP();
-//            }
         }
     }
     public void setPickvolgordeHeader(String pickvolgordeHeader) {

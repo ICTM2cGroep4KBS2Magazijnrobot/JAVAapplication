@@ -13,6 +13,7 @@ public class MagazijnOverzicht extends JPanel{
     private ArrayList<ArrayList<Product>> geheleVoorraad = new ArrayList<>(5);
 
 
+
     MagazijnOverzicht(Voorraad voorraad){ //in constructor object met waardes van dialoog meegeven
         setPreferredSize(new Dimension(1900, 780));
         setBackground(Color.BLACK);
@@ -100,13 +101,13 @@ public class MagazijnOverzicht extends JPanel{
 //                    tekenBlokje(g, startX, startY, eindX, eindY, kleur, voorraad.getRijElement(i, j).getVoorraadArtikel(), Integer.toString(voorraad.getRijElement(i, j).getArtikelID()));
 
                     if (!TSP_DozenLijst.isEmpty()){
-                        ArrayList<Product> alleProducten = new ArrayList<>();
+                        ArrayList<Product> alleProducten = new ArrayList<>(); //dit is the definitieve volgorde lijst
                         for (int k = 0; k < TSP_DozenLijst.size(); k++) {
                             for (int l = 0; l < TSP_DozenLijst.get(k).getInhoud().size(); l++) {
                                 alleProducten.add(TSP_DozenLijst.get(k).getInhoud().get(l));
                             }
                         }
-                        for (int k = 0; k < alleProducten.size(); k++) {
+                        for (int k = 0; k < alleProducten.size(); k++) { //hier alle lijntjes tekenen
                             if(artikelID == alleProducten.get(k).getArtikelID()){
                                 g.setColor(Color.GREEN);
                                 g.drawString(Integer.toString(k + 1), startX +25, startY - 5);

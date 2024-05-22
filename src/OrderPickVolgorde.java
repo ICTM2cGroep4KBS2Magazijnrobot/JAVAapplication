@@ -51,15 +51,15 @@ public class OrderPickVolgorde extends JPanel {
                     }
                 }
             }
-            System.out.println(producten + "\n");
+//            System.out.println(producten + "\n");
             ArrayList<Doos> Dozenlijst = BinPacking.binpacking(producten);
 
-            System.out.println("dozenlijst na BinPacking: \n");
-            for (Doos doos : Dozenlijst){
-                System.out.println(doos);
-                System.out.println("\n");
-            }
-            System.out.println("\n\n\n\n\n Dozenlijst na TSP: \n");
+//            System.out.println("dozenlijst na BinPacking: \n");
+//            for (Doos doos : Dozenlijst){
+//                System.out.println(doos);
+//                System.out.println("\n");
+//            }
+//            System.out.println("\n\n\n\n\n Dozenlijst na TSP: \n");
 
             for (int i = 0; i < Dozenlijst.size(); i++) {
                 Doos oude_doos = new Doos();
@@ -70,13 +70,13 @@ public class OrderPickVolgorde extends JPanel {
             TSP_Dozenlijst = Dozenlijst;
             panel.setTSP_DozenLijst(Dozenlijst, Doosnummer);
 
-            for (Doos doos: Dozenlijst){
-                System.out.println(doos + "\n");
-            }
-//
-            for (int i = 0; i < Dozenlijst.size(); i++) {
-                System.out.println("Doos " + (i+1) + ": \n" + Dozenlijst.get(i));
-            }
+//            for (Doos doos: Dozenlijst){
+//                System.out.println(doos + "\n");
+//            }
+////
+//            for (int i = 0; i < Dozenlijst.size(); i++) {
+//                System.out.println("Doos " + (i+1) + ": \n" + Dozenlijst.get(i));
+//            }
 
 
             int startX = 10;

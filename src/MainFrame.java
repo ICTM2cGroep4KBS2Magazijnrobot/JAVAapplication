@@ -10,8 +10,6 @@ import com.fazecast.jSerialComm.SerialPortDataListener;
 import com.fazecast.jSerialComm.SerialPortEvent;
 
 import java.util.Scanner;
-import java.util.concurrent.TimeUnit;
-
 
 
 public class MainFrame extends JFrame implements ActionListener {
@@ -19,16 +17,20 @@ public class MainFrame extends JFrame implements ActionListener {
     private ArrayList<OrderButton> orderButtons = new ArrayList<>(); // index van deze lijst moet overeenkomen met daadwerkelijke orders
     private Voorraad voorraad;
 
-    private MagazijnOverzicht panel;
+    private MagazijnOverzicht magazijnOverzichtPanel;
     private OrderPickVolgorde panel3;
     private static ArrayList<Byte> bytes = new ArrayList<>();
     private static int bytesToRead = -1;
     private String modus;
 
-    int counter = 0; //TIJDELIJK, ALLEEN VOOR TESTEN MET SERIALCOMMUNICATIE IN JAVA
+
 
 
     MainFrame() throws IOException, InterruptedException {
+//        SerialPort serialPort = SerialPort.getCommPort("COM11"); // Replace "COM10" with your port
+//        serialPort.setComPortParameters(115200, 8, 1, 0); // Baud rate, Data bits, Stop bits, Parity
+//        serialPort.setComPortTimeouts(SerialPort.TIMEOUT_NONBLOCKING, 0, 0); // Non-blocking read
+
         SerialPort serialPort = SerialPort.getCommPort("COM10"); // Replace "COM10" with your port
         serialPort.setComPortParameters(9600, 8, 1, 0); // Baud rate, Data bits, Stop bits, Parity
         serialPort.setComPortTimeouts(SerialPort.TIMEOUT_NONBLOCKING, 0, 0); // Non-blocking read
@@ -50,8 +52,8 @@ public class MainFrame extends JFrame implements ActionListener {
         DB_connectie.updateMagazijn(voorraad); //update voorraad vanuit database
         DB_connectie.updateOrders(orderButtons); //update orders vanuit database
 
-        panel = new MagazijnOverzicht(voorraad); //object met waardes meegeven naar panel indien nodig
-        add(panel);
+        magazijnOverzichtPanel = new MagazijnOverzicht(voorraad); //object met waardes meegeven naar panel indien nodig
+        add(magazijnOverzichtPanel);
 
         JPanel jp = new JPanel(); //panel om knoppen in te doen, later voeg je dit aan de scrollbar toe
         try {
@@ -75,7 +77,7 @@ public class MainFrame extends JFrame implements ActionListener {
         add(scrollPane);
 
 
-        panel3 = new OrderPickVolgorde(voorraad, panel);
+        panel3 = new OrderPickVolgorde(voorraad, magazijnOverzichtPanel);
         add(panel3);
 
         JScrollPane scrolpan3 = new JScrollPane(panel3);
@@ -87,10 +89,7 @@ public class MainFrame extends JFrame implements ActionListener {
 
 
 
-        InvoegenVoorraadNoodstopPanel panel2 = new InvoegenVoorraadNoodstopPanel();
 
-        add(panel2);
-        setVisible(true);
 
 
         Scanner input = new Scanner(System.in);
@@ -101,27 +100,41 @@ public class MainFrame extends JFrame implements ActionListener {
                 return SerialPort.LISTENING_EVENT_DATA_RECEIVED;
             }
 
+            public void stuurWaarde(int waarde){
+                try {
+                    Integer getal = 2;
+                    serialPort.getOutputStream().write(getal.byteValue());
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
+            }
+
             @Override
             public void serialEvent(SerialPortEvent serialPortEvent) {
                 if (serialPortEvent.getEventType() == SerialPort.LISTENING_EVENT_DATA_RECEIVED) {
                     byte[] newData = serialPortEvent.getReceivedData();
 
-                    for (byte b : newData) {
+                    loop: for (byte b : newData) {
                         if (bytesToRead == -1) {
                             switch (b){
                                 case 'a': //robot coordinaten
                                     modus = "robotcoordinaten";
+
                                     bytesToRead = 2; //1ste byte is X coordinaat, 2de byte is Y coordinaat
                                     break;
                                 case 'b': //bevestiging product gepakt
                                     modus = "productbevestiging";
                                     bytesToRead = 2;
                                     break;
+                                case 'c':
+                                    modus = "robotstatus";
+                                    bytesToRead = 1;
+                                    break;
+                                default:
+                                    break loop;
                             }
 
-//                            System.out.println(modus);
-//                            bytesToRead = b & 0xFF; // Treat the first byte as an unsigned value
-                            System.out.println("Expecting " + bytesToRead + " bytes.");
+//                            System.out.println("Expecting " + bytesToRead + " bytes.");
                         }
                         else {
                             bytes.add(b);
@@ -130,16 +143,22 @@ public class MainFrame extends JFrame implements ActionListener {
                         if (bytes.size() == bytesToRead) {
                             switch (modus){
                                 case "robotcoordinaten":
-                                    verwerkRobotCoords(bytes);
+                                    magazijnOverzichtPanel.setRobotCords(bytes.get(0), bytes.get(1));
+                                    repaint();
                                     break;
                                 case "productbevestiging":
                                     System.out.println("Product op locatie: " + bytes + " is gepakt");
+                                    break;
+                                case "robotstatus":
+                                    magazijnOverzichtPanel.setRobotstatus(bytes.getFirst());
+                                    System.out.println("Status is nu: " + bytes.getFirst());
+                                    repaint();
                                     break;
                             }
 //                            processBytes();
                             bytes.clear();
                             bytesToRead = -1; // Reset for the next message
-                            counter = 0;
+
                         }
                     }
                 }
@@ -156,21 +175,22 @@ public class MainFrame extends JFrame implements ActionListener {
 
             private void verwerkRobotCoords(ArrayList<Byte> bytes){
                 System.out.println("Robot zijn coordinaten zijn: " + bytes.get(0) + "," + bytes.get(1));
-                int xCoord = bytes.get(0);
             }
 
 
-        });
+        }); // hierin alle code voor seriele data versturing
 
+        InvoegenVoorraadNoodstopPanel panel2 = new InvoegenVoorraadNoodstopPanel(serialPort);
+
+        add(panel2);
+        setVisible(true);
+
+        //hieronder handmatige testterminal
         while (true) {
-            if(counter < 1 ){
-                System.out.println("Stuur getal voor modus 101 is robotcord, 102 is product gepakt cord: ");
-            }
             Integer blinks = input.nextInt();
             if (blinks == 0) break;
             Thread.sleep(50);
             serialPort.getOutputStream().write(blinks.byteValue());
-            counter++;
         }
 
     }
@@ -178,12 +198,14 @@ public class MainFrame extends JFrame implements ActionListener {
 
 
     public void actionPerformed(ActionEvent e) {
-            for (int i = 0; i < orderButtons.size(); i++) {
-                if (e.getSource() == orderButtons.get(i)){
-                    OrderDialoog dialoog = new OrderDialoog(this, true, "Order: " + (orderButtons.get(i).getOrderID()), orderButtons.get(i).getCustomerID(), orderButtons.get(i).getOrderID(), voorraad);
-                    if(dialoog.isUitvoerenOK()){
+            if(magazijnOverzichtPanel.getRobotstatus() != 3){
+                for (int i = 0; i < orderButtons.size(); i++) {
+                    if (e.getSource() == orderButtons.get(i)){
+                        OrderDialoog dialoog = new OrderDialoog(this, true, "Order: " + (orderButtons.get(i).getOrderID()), orderButtons.get(i).getCustomerID(), orderButtons.get(i).getOrderID(), voorraad);
+                        if(dialoog.isUitvoerenOK()){
 
-                        panel3.setHuidigeOrder(orderButtons.get(i).getOrderID());
+                            panel3.setHuidigeOrder(orderButtons.get(i).getOrderID());
+                        }
                     }
                 }
             }

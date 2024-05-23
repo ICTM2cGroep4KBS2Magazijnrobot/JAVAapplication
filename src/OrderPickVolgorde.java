@@ -32,7 +32,7 @@ public class OrderPickVolgorde extends JPanel {
         super.paintComponent(g);
         g.setFont(new Font("default", Font.PLAIN, 30));
 
-        g.drawString(pickvolgordeHeader, getWidth() / 2 - 160, 40);
+        g.drawString(pickvolgordeHeader, 100, 40);
         stockitemids.clear();
 
         if (huidigeOrder > 0){ //hier alle orderlines printen van een order.
@@ -51,15 +51,15 @@ public class OrderPickVolgorde extends JPanel {
                     }
                 }
             }
-            System.out.println(producten + "\n");
+//            System.out.println(producten + "\n");
             ArrayList<Doos> Dozenlijst = BinPacking.binpacking(producten);
 
-            System.out.println("dozenlijst na BinPacking: \n");
-            for (Doos doos : Dozenlijst){
-                System.out.println(doos);
-                System.out.println("\n");
-            }
-            System.out.println("\n\n\n\n\n Dozenlijst na TSP: \n");
+//            System.out.println("dozenlijst na BinPacking: \n");
+//            for (Doos doos : Dozenlijst){
+//                System.out.println(doos);
+//                System.out.println("\n");
+//            }
+//            System.out.println("\n\n\n\n\n Dozenlijst na TSP: \n");
 
             for (int i = 0; i < Dozenlijst.size(); i++) {
                 Doos oude_doos = new Doos();
@@ -70,12 +70,10 @@ public class OrderPickVolgorde extends JPanel {
             TSP_Dozenlijst = Dozenlijst;
             panel.setTSP_DozenLijst(Dozenlijst, Doosnummer);
 
-            for (Doos doos: Dozenlijst){
-                System.out.println(doos + "\n");
-            }
-
-
-//
+//            for (Doos doos: Dozenlijst){
+//                System.out.println(doos + "\n");
+//            }
+////
 //            for (int i = 0; i < Dozenlijst.size(); i++) {
 //                System.out.println("Doos " + (i+1) + ": \n" + Dozenlijst.get(i));
 //            }
@@ -86,25 +84,26 @@ public class OrderPickVolgorde extends JPanel {
 
 
 
-            for (int i = 0; i < stockitemids.size(); i++) {
-                g.drawString("-----------------------------------------------------------------------------------------------------------------------",
-                        startX, startY + 10);
-
-                Product product = voorraad.getArtikel(stockitemids.get(i));
-                g.drawString(i+ 1 + ". Artikel " + product.getArtikelID() + ": " + product.getNaam() + ". Gewicht: " + product.getGewicht() + "kg", startX, startY);
-
-                startY+= 30;
-            }
-
-            for (int i = 0; i < 3; i++) {
-                System.out.println("Test: " + i + "\n");
-            }
-
-
-
-//            if (Dozenlijst.size() > 0){
-//                updateTSP();
+//            for (int i = 0; i < stockitemids.size(); i++) {
+//                g.drawString("-----------------------------------------------------------------------------------------------------------------------",
+//                        startX, startY + 10);
+//
+//                Product product = voorraad.getArtikel(stockitemids.get(i));
+//                g.drawString(i+ 1 + ". Artikel " + product.getArtikelID() + ": " + product.getNaam() + ". Gewicht: " + product.getGewicht() + "kg", startX, startY);
+//
+//                startY+= 30;
 //            }
+            for (int i = 0; i < Dozenlijst.size(); i++) {
+                g.drawString("Doos " +(i+1) + ":", startX, startY);
+                startY+= 20;
+                for (int j = 0; j < Dozenlijst.get(i).getInhoud().size(); j++) {
+                    Product product = Dozenlijst.get(i).getInhoud().get(j);
+                    g.drawString("    " + (j + 1) + ". Artikel " + product.getArtikelID() + ": " + product.getNaam() + ". Gewicht: " + product.getGewicht() + "kg", startX, startY);
+                    startY += 20;
+
+                }
+                startY += 20;
+            }
         }
     }
     public void setPickvolgordeHeader(String pickvolgordeHeader) {

@@ -7,16 +7,15 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" exported="" name="mysql.connector.j" level="project" />
     <orderEntry type="module-library" exported="">
       <library>
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/lib/mysql-connector-j-8.0.33.jar!/" />
+          <root url="jar://$USER_HOME$/Downloads/jSerialComm-2.11.0.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
       </library>
     </orderEntry>
-    <orderEntry type="library" name="mysql.connector.j" level="project" />
-    <orderEntry type="library" name="fazecast.jSerialComm" level="project" />
   </component>
 </module>

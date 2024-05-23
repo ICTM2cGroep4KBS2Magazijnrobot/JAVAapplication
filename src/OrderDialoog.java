@@ -20,7 +20,7 @@ public class OrderDialoog extends JDialog implements ActionListener {
     OrderDialoog(JFrame frame, boolean modal, String ordernaam, int CustomerID, int OrderID, Voorraad voorraad){
         super(frame, modal);
         setTitle(ordernaam);
-        setSize(500,400);
+        setSize(700,600);
         setLayout(new GridLayout(3,2));
         this.voorraad = voorraad;
 
@@ -32,7 +32,6 @@ public class OrderDialoog extends JDialog implements ActionListener {
             }
             else{
                 picklist += stockitem;
-
             }
         }
 
@@ -89,16 +88,7 @@ public class OrderDialoog extends JDialog implements ActionListener {
         add(jbAnnuleren);
         jbAnnuleren.addActionListener(this);
 
-//
-//
-//
-//        jbOk = new JButton("OK");
-//        add(jbOk);
-//        jbOk.addActionListener(this);
-//
-//        jbAnnuleren = new JButton("Annuleren");
-//        add(jbAnnuleren);
-//        jbAnnuleren.addActionListener(this);
+
 
 
         setVisible(true);
@@ -129,12 +119,12 @@ public class OrderDialoog extends JDialog implements ActionListener {
             else if(e.getSource() == jbOrderUitvoeren){
                 isUitvoerenOK = true;
                 setVisible(false);
+            } else if (e.getSource() == jbOrderAanpassen) {
+
             }
         }
         catch(Exception ignored){
         }
-//        if (e.getSource() == jbOrderUitvoeren){
-//            setVisible(false);
         }
     }
 //}

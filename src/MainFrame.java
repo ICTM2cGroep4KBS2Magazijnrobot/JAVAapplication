@@ -31,7 +31,7 @@ public class MainFrame extends JFrame implements ActionListener {
 //        serialPort.setComPortParameters(115200, 8, 1, 0); // Baud rate, Data bits, Stop bits, Parity
 //        serialPort.setComPortTimeouts(SerialPort.TIMEOUT_NONBLOCKING, 0, 0); // Non-blocking read
 
-        SerialPort serialPort = SerialPort.getCommPort("COM10"); // Replace "COM10" with your port
+        SerialPort serialPort = SerialPort.getCommPort("COM3"); // Replace "COM10" with your port
         serialPort.setComPortParameters(9600, 8, 1, 0); // Baud rate, Data bits, Stop bits, Parity
         serialPort.setComPortTimeouts(SerialPort.TIMEOUT_NONBLOCKING, 0, 0); // Non-blocking read
 
@@ -39,7 +39,7 @@ public class MainFrame extends JFrame implements ActionListener {
             System.out.println("Port opened successfully.");
         } else {
             System.out.println("Failed to open the port.");
-            return;
+           // return;
         }
 
         setTitle("HMI Magazijnrobot");

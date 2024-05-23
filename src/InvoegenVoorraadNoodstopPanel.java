@@ -10,15 +10,19 @@ import java.io.IOException;
 
 public class InvoegenVoorraadNoodstopPanel extends JPanel implements ActionListener{
     SerialPort serialPort;
-    JButton jbOrderInvoeren, jbVoorraadWeergeven, jbNoodstop;
+    JButton jbOrderInvoeren, jbVoorraadWeergeven, jbNoodstop, jbOrderAanpassen;
     InvoegenVoorraadNoodstopPanel(SerialPort serialPort) { //in constructor object met waardes van dialoog meegeven
         setPreferredSize(new Dimension(400, 400));
         setBackground(Color.RED);
-        setLayout(new GridLayout(2,1));
+        setLayout(new GridLayout(3,1));
         this.serialPort = serialPort;
 
         jbOrderInvoeren = new JButton("Order Invoeren");
         add(jbOrderInvoeren);
+
+        jbOrderAanpassen = new JButton("Voorraad Aanpassen");
+        add(jbOrderAanpassen);
+        jbOrderAanpassen.addActionListener(this);
 
         jbNoodstop = new JButton("Noodstop");
         jbNoodstop.setBackground(Color.RED);
@@ -47,10 +51,7 @@ public class InvoegenVoorraadNoodstopPanel extends JPanel implements ActionListe
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
             }
-//            JOptionPane.showMessageDialog(frame, "Druk op OK om het systeem vrij te geven", "Noodstop geactiveerd", JOptionPane.WARNING_MESSAGE);
-//            System.out.println("Noodstop geactiveerd");
-//            int num = JOptionPane.OK_OPTION; // Omweg om de noodstop te deactiveren.
-//            boolean bool = num == 0;
+
             int result = JOptionPane.showConfirmDialog(frame, "Druk op OK om het systeem vrij te geven", "Noodstop geactiveerd", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
             System.out.println("Noodstop geactiveerd");
             if (result == JOptionPane.OK_OPTION) {
@@ -62,6 +63,10 @@ public class InvoegenVoorraadNoodstopPanel extends JPanel implements ActionListe
                 }
                 System.out.println("Noodstop gedeactiveerd");
             }
+        }
+        if(e.getSource() == jbOrderAanpassen){
+            System.out.println("Voorraad Aanpassen");
+            VoorraadAanpassenDialoog dialoog = new VoorraadAanpassenDialoog(this, true);
         }
     }
 }

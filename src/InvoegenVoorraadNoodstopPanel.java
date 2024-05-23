@@ -66,7 +66,14 @@ public class InvoegenVoorraadNoodstopPanel extends JPanel implements ActionListe
         }
         if(e.getSource() == jbOrderAanpassen){
             System.out.println("Voorraad Aanpassen");
-            VoorraadAanpassenDialoog dialoog = new VoorraadAanpassenDialoog(this, true);
+            VoorraadAanpassenDialoog dialog = new VoorraadAanpassenDialoog(new Frame(), true);
+            JFrame frame = new JFrame();
+            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            frame.setSize(800, 600);
+            frame.setVisible(true);
+
+            // Toon de dialoog
+            VoorraadAanpassenDialoog dialoog = new VoorraadAanpassenDialoog(frame, true);
         }
     }
 }

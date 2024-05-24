@@ -46,6 +46,14 @@ public class VoorraadAanpassenDialoog  extends JDialog {
                     int artikelID = Integer.parseInt(jtfAanpassenArtikel.getText());
                     int nieuweVoorraad = Integer.parseInt(jtfGewildeVoorraad.getText());
 
+                    if (nieuweVoorraad<0) {
+                        JOptionPane.showMessageDialog(null, "voorraad kan niet negatief zijn. Voer een geldig positief nummer in. " , "fout", JOptionPane.ERROR_MESSAGE);
+                        return;// het stop uitvoering van de methode als het is geen geldige nummer.
+                    }
+                    if (!DB_connectie.artikelBestaat(artikelID)) {
+                        JOptionPane.showMessageDialog(null, "Artikel ID bestaat niet. Voer een geldig artikel ID in.", "Fout", JOptionPane.ERROR_MESSAGE);
+                        return; // Stop de uitvoering van de methode als het artikel ID ongeldig is
+                    }
                     // Roep de updateVoorraadHoeveelheid methode aan
                     DB_connectie.updateQuantityOnHand(artikelID, nieuweVoorraad);
 

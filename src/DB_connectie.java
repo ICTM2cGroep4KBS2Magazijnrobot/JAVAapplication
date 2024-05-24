@@ -4,7 +4,6 @@ import java.util.ArrayList;
 public class DB_connectie {
 //    public static String url = "jdbc:mysql://localhost:3306/nerdygadgetskbs2"; // Change this to your own database
   public static String url = "jdbc:mysql://localhost:3307/nerdygadgets2"; // Change this to your own database
-
     public static String username = "root"; // Change this to your own username
     public static String password = ""; // Change this to your own password
 
@@ -31,6 +30,23 @@ public static void  updateQuantityOnHand(int stockItemID, int newQuantity){
     }
 }
 
+    public static boolean artikelBestaat(int stockItemID) {
+        String checkQuery = "SELECT COUNT(*) FROM stockitemholdings WHERE StockItemID = ?";
+
+        try (Connection connection = DriverManager.getConnection(url, username, password);
+             PreparedStatement preparedStatement = connection.prepareStatement(checkQuery)) {
+
+            preparedStatement.setInt(1, stockItemID);
+            try (ResultSet rs = preparedStatement.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt(1) > 0;
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Check failed: " + e.getMessage());
+        }
+        return false;
+    }
 
     public static Voorraad updateMagazijn(Voorraad voorraad){// Functie voor het updaten van de voorraad en het koppelen van een kleurID
         try {

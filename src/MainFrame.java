@@ -180,7 +180,7 @@ public class MainFrame extends JFrame implements ActionListener {
 
         }); // hierin alle code voor seriele data versturing
 
-        InvoegenVoorraadNoodstopPanel panel2 = new InvoegenVoorraadNoodstopPanel(serialPort);
+        InvoegenVoorraadNoodstopPanel panel2 = new InvoegenVoorraadNoodstopPanel(serialPort, voorraad, this);
 
         add(panel2);
         setVisible(true);
@@ -195,7 +195,10 @@ public class MainFrame extends JFrame implements ActionListener {
 
     }
 
-
+    // om voorraad te updaten en repaint doen.
+    public void updateVoorraad() {
+        repaint();
+    }
 
     public void actionPerformed(ActionEvent e) {
             if(magazijnOverzichtPanel.getRobotstatus() != 3){
@@ -203,9 +206,9 @@ public class MainFrame extends JFrame implements ActionListener {
                     if (e.getSource() == orderButtons.get(i)){
                         OrderDialoog dialoog = new OrderDialoog(this, true, "Order: " + (orderButtons.get(i).getOrderID()), orderButtons.get(i).getCustomerID(), orderButtons.get(i).getOrderID(), voorraad);
                         if(dialoog.isUitvoerenOK()){
-
                             panel3.setHuidigeOrder(orderButtons.get(i).getOrderID());
                         }
+
                     }
                 }
             }

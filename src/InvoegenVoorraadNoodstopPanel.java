@@ -10,12 +10,16 @@ import java.io.IOException;
 
 public class InvoegenVoorraadNoodstopPanel extends JPanel implements ActionListener{
     SerialPort serialPort;
+    Voorraad voorraad;
+    MainFrame mainFrame;
     JButton jbOrderInvoeren, jbVoorraadWeergeven, jbNoodstop, jbOrderAanpassen;
-    InvoegenVoorraadNoodstopPanel(SerialPort serialPort) { //in constructor object met waardes van dialoog meegeven
+    InvoegenVoorraadNoodstopPanel(SerialPort serialPort, Voorraad voorraad, MainFrame mainFrame) { //in constructor object met waardes van dialoog meegeven
         setPreferredSize(new Dimension(400, 400));
         setBackground(Color.RED);
         setLayout(new GridLayout(3,1));
         this.serialPort = serialPort;
+        this.voorraad = voorraad;
+        this.mainFrame = mainFrame;
 
         jbOrderInvoeren = new JButton("Order Invoeren");
         add(jbOrderInvoeren);
@@ -66,14 +70,12 @@ public class InvoegenVoorraadNoodstopPanel extends JPanel implements ActionListe
         }
         if(e.getSource() == jbOrderAanpassen){
             System.out.println("Voorraad Aanpassen");
-            VoorraadAanpassenDialoog dialog = new VoorraadAanpassenDialoog(new Frame(), true);
+            VoorraadAanpassenDialoog dialoog = new VoorraadAanpassenDialoog(new Frame(), true, voorraad, mainFrame);
             JFrame frame = new JFrame();
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            frame.setSize(800, 600);
-            frame.setVisible(true);
+            frame.setSize(500, 250);
 
-            // Toon de dialoog
-            VoorraadAanpassenDialoog dialoog = new VoorraadAanpassenDialoog(frame, true);
+
         }
     }
 }

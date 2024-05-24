@@ -12,6 +12,26 @@ public class DB_connectie {
 
     }
 
+public static void  updateQuantityOnHand(int stockItemID, int newQuantity){
+        String updateQuery = "UPDATE stockitemholdings SET QuantityOnHand = ? WHERE StockItemID = ?";
+
+    try (Connection connection = DriverManager.getConnection(url, username, password);
+         PreparedStatement preparedStatement = connection.prepareStatement(updateQuery)) {
+
+        //  parameters
+        preparedStatement.setInt(1, newQuantity);
+        preparedStatement.setInt(2, stockItemID);
+
+
+        int rowsAffected = preparedStatement.executeUpdate();
+        System.out.println("Rows affected: " + rowsAffected);
+
+    } catch (SQLException e) {
+        System.out.println("Update failed: " + e.getMessage());
+    }
+}
+
+
     public static Voorraad updateMagazijn(Voorraad voorraad){// Functie voor het updaten van de voorraad en het koppelen van een kleurID
         try {
             Connection connection = DriverManager.getConnection(url, username, password);

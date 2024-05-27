@@ -75,7 +75,6 @@ public static void  updateQuantityOnHand(int stockItemID, int newQuantity){
                 double retail = rs.getDouble(15);
 
                 double prijs = retail * (btw/100+1);
-                System.out.println(prijs);
 
                 if (xwaarde >= 0 && ywaarde >= 0) {
                     if (kleurID == 1) {
@@ -163,7 +162,6 @@ public static void  updateQuantityOnHand(int stockItemID, int newQuantity){
     public static ArrayList<String> GetCustomer(ArrayList<String> Customer, int orderid) {
         try {
             Connection connection = DriverManager.getConnection(url, username, password);
-            Statement statement = connection.createStatement();
 
             PreparedStatement preparedStatement = connection.prepareStatement("SELECT CustomerID FROM `orders` WHERE OrderID = ?");
             preparedStatement.setInt(1, orderid);
@@ -188,5 +186,63 @@ public static void  updateQuantityOnHand(int stockItemID, int newQuantity){
             return null;
         }
         return Customer;
+    }
+
+    public static void addItem(int orderID, int productID) {
+        String description = "";
+        int UnitPackageID = 0;
+        int UnitPrice = 0;
+        float Taxrate = 0;
+        try {
+            Connection connection = DriverManager.getConnection(url, username, password);
+
+            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM `stockitems` WHERE StockItemID = ?");
+            preparedStatement.setInt(1, productID);
+            ResultSet rs = preparedStatement.executeQuery();
+
+            while (rs.next()) {
+                description = rs.getString(2);
+                UnitPackageID = rs.getInt(5);
+                UnitPrice = rs.getInt(14);
+                Taxrate = rs.getFloat(13);
+                System.out.println(description + " ; " + UnitPrice + " ; " + UnitPackageID + " ; " + Taxrate);
+            }
+
+                PreparedStatement preparedStatement2 = connection.prepareStatement("INSERT INTO orderlines (`OrderLineID`, `OrderID`, `StockItemID`, `Description`, `PackageTypeID`, `Quantity`, `UnitPrice`, `TaxRate`, `PickedQuantity`, `PickingCompletedWhen`, `LastEditedBy`, `LastEditedWhen`)  VALUES(NULL, ?, ?, ?, ?, 1, ?, ?, 0, NULL, 3, '2024-04-27 13:06:50')");
+                preparedStatement2.setInt(1, orderID);
+                preparedStatement2.setInt(2, productID);
+                preparedStatement2.setString(3, description);
+                preparedStatement2.setInt(4, UnitPackageID);
+                preparedStatement2.setInt(5, UnitPrice);
+                preparedStatement2.setFloat(6, Taxrate);
+
+
+          preparedStatement2.executeUpdate();
+
+          connection.close();
+
+        }catch (SQLException e){
+            System.out.println("Connectie gefaald " + e.getMessage());
+        }
+
+    }
+
+    public static void deleteItem(int orderID, int orderLineID) {
+        try {
+            Connection connection = DriverManager.getConnection(url, username, password);
+
+            PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM `orderlines` WHERE `OrderID` = ? AND `StockItemID` = ? limit 1;");
+            preparedStatement.setInt(1, orderID);
+            preparedStatement.setInt(2, orderLineID);
+
+            int rowsAffected = preparedStatement.executeUpdate();
+
+            System.out.println("Rows affected: " + rowsAffected);
+
+            connection.close();
+
+        } catch (SQLException e) {
+            System.out.println("Connection failed " + e.getMessage());
+        }
     }
 }

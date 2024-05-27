@@ -176,11 +176,10 @@ public class MainFrame extends JFrame implements ActionListener {
 
                                         }
                                     }
-
-
                                     panel3.setHuidigeOrder(0);
-                                    invokeLater(MainFrame.this::revalidate);
-                                    invokeLater(MainFrame.this::repaint);
+                                    scrollPane.updateUI();
+                                    revalidate();
+                                    repaint();
                                     break;
                                 default:
                                     throw new IllegalStateException("Unexpected value: " + modus);
@@ -227,7 +226,7 @@ public class MainFrame extends JFrame implements ActionListener {
 
     // om voorraad te updaten en repaint doen.
     public void updateRepaint() {
-        invokeLater(this::repaint);
+        repaint();
     }
 
 
@@ -244,7 +243,7 @@ public class MainFrame extends JFrame implements ActionListener {
                 }
             }
         // Now schedule a repaint for the entire JFrame
-        invokeLater(this::repaint);
+        repaint();
     }
 }
 

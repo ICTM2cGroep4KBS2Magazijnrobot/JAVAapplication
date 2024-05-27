@@ -73,6 +73,8 @@ public class OrderDialoog extends JDialog implements ActionListener {
         scrollPane.getVerticalScrollBar().setUnitIncrement(25); //bepaald scrollsnelheid van de scrollbar
         add(scrollPane);
 
+        add(new JLabel(""));
+
         jbOrderUitvoeren = new JButton("Order Uitvoeren");
         add(jbOrderUitvoeren);
         jbOrderUitvoeren.addActionListener(this);
@@ -125,7 +127,7 @@ public class OrderDialoog extends JDialog implements ActionListener {
                 isUitvoerenOK = true;
                 setVisible(false);
             } else if (e.getSource() == jbOrderAanpassen) {
-                AanpassenDialoog Aanpassendialoog = new AanpassenDialoog(this,true,OrderID, voorraad);
+                AanpassenDialoog Aanpassendialoog = new AanpassenDialoog(this,true,orderid, voorraad);
                 if(Aanpassendialoog.IsOK()){
                     setVisible(false);
                 }

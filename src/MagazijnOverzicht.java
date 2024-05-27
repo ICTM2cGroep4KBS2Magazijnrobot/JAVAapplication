@@ -135,7 +135,7 @@ public class MagazijnOverzicht extends JPanel{
                         for (int k = 0; k < alleProducten.size(); k++) { //hier alle lijntjes tekenen
                             if(artikelID == alleProducten.get(k).getArtikelID()){
                                 g.setColor(Color.GREEN);
-                                g.drawString(Integer.toString(k + 1), startX +25, startY - 5);
+                                g.drawString(Integer.toString(k + 1), startX +25, startY - 5); // hier de nummers printen
                                 Graphics2D g2 = (Graphics2D) g;
                                 g2.setStroke(new BasicStroke(5));
                                 g2.drawRect(startX, startY, eindX, eindY);

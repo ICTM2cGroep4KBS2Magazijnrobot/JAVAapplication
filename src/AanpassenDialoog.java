@@ -125,17 +125,23 @@ public class AanpassenDialoog extends JDialog implements ActionListener {
         if (e.getSource() == jbAanpassen){
             try {
                 int ProductID = Integer.parseInt(jtfID.getText());
-                System.out.println(java.time.LocalDateTime.now());
 
-                //DB_connectie.addItem(this.OrderID, ProductID);
+                DB_connectie.addItem(this.OrderID, ProductID);
 
             }catch(NumberFormatException nfe) {
                 setTitelFoutmelding(" foute input!");
             }
 
         } else if (e.getSource() == jbVerwijderen){
-            verwijderen = true;
+            try {
+                int ProductID = Integer.parseInt(jtfID.getText());
 
+
+                DB_connectie.deleteItem(this.OrderID, ProductID);
+
+            }catch(NumberFormatException nfe) {
+                setTitelFoutmelding(" foute input!");
+            }
         } else if (e.getSource() == jbAnnuleren) {
             setVisible(false);
         }

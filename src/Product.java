@@ -4,14 +4,18 @@ public class Product {
     private int voorraadArtikel;
     private int artikelID;
     private String naam;
+    private double prijs;
 
-    public Product(String kleur, int gewicht, int voorraadArtikel, int artikelID, String naam) {
+    public Product(String kleur, int gewicht, int voorraadArtikel, int artikelID, String naam, int prijs) {
         setKleur(kleur);
         setGewicht(gewicht);
         setVoorraadArtikel(voorraadArtikel);
         setArtikelID(artikelID);
         setNaam(naam);
+        setPrijs(prijs);
     }
+
+    private void setPrijs(int prijs) {this.prijs = prijs;}
 
     public void setKleur(String kleur) {
         this.kleur = kleur;
@@ -32,6 +36,8 @@ public class Product {
     public void setNaam(String naam) {
         this.naam = naam;
     }
+
+    public double getPrijs(){return  prijs;}
 
 
     public String getKleur() {

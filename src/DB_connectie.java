@@ -71,14 +71,19 @@ public static void  updateQuantityOnHand(int stockItemID, int newQuantity){
                 int voorraadArtikel = rs1.getInt(2);
                 int artikelID = rs.getInt(1);
                 String naam = rs.getString(2);
+                double btw = rs.getDouble(13);
+                double retail = rs.getDouble(15);
+
+                double prijs = retail * (btw/100+1);
+                System.out.println(prijs);
 
                 if (xwaarde >= 0 && ywaarde >= 0) {
                     if (kleurID == 1) {
-                        voorraad.setRijElement(ywaarde, xwaarde, new Product("rood", gewicht, voorraadArtikel, artikelID, naam));
+                        voorraad.setRijElement(ywaarde, xwaarde, new Product("rood", gewicht, voorraadArtikel, artikelID, naam, (int) prijs));
                     } else if (kleurID == 2) {
-                        voorraad.setRijElement(ywaarde, xwaarde, new Product("geel", gewicht, voorraadArtikel, artikelID, naam));
+                        voorraad.setRijElement(ywaarde, xwaarde, new Product("geel", gewicht, voorraadArtikel, artikelID, naam, (int) prijs));
                     } else if (kleurID == 3) {
-                        voorraad.setRijElement(ywaarde, xwaarde, new Product("blauw", gewicht, voorraadArtikel, artikelID, naam));
+                        voorraad.setRijElement(ywaarde, xwaarde, new Product("blauw", gewicht, voorraadArtikel, artikelID, naam, (int) prijs));
                     }
                 }
             }
@@ -133,6 +138,7 @@ public static void  updateQuantityOnHand(int stockItemID, int newQuantity){
         }
     }
 
+
     public static void OrderPickCompleted(int OrderID, Date HuidigeTijd){
         try {
 
@@ -153,5 +159,34 @@ public static void  updateQuantityOnHand(int stockItemID, int newQuantity){
         }catch (SQLException e){
                 System.out.println("Connectie gefaald " + e.getMessage());
             }
+    }
+    public static ArrayList<String> GetCustomer(ArrayList<String> Customer, int orderid) {
+        try {
+            Connection connection = DriverManager.getConnection(url, username, password);
+            Statement statement = connection.createStatement();
+
+            PreparedStatement preparedStatement = connection.prepareStatement("SELECT CustomerID FROM `orders` WHERE OrderID = ?");
+            preparedStatement.setInt(1, orderid);
+            ResultSet rs = preparedStatement.executeQuery();
+            if (rs.next()) {
+                int customerID = rs.getInt("CustomerID");
+                PreparedStatement customerStatement = connection.prepareStatement("SELECT * FROM `customers` WHERE CustomerID = ?");
+                customerStatement.setInt(1, customerID);
+                ResultSet customerRS = customerStatement.executeQuery();
+                while (customerRS.next()) {
+                    String customerName = customerRS.getString("CustomerName");
+                    String customerPO1 = customerRS.getString("PostalAddressLine1");
+                    String customerPO2 = customerRS.getString("PostalAddressLine2");
+
+                    Customer.add(customerName);
+                    Customer.add(customerPO1);
+                    Customer.add(customerPO2);
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Connectie gefaald " + e.getMessage());
+            return null;
+        }
+        return Customer;
     }
 }

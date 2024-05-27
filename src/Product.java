@@ -4,7 +4,7 @@ public class Product {
     private int voorraadArtikel;
     private int artikelID;
     private String naam;
-    private int prijs;
+    private double prijs;
 
     public Product(String kleur, int gewicht, int voorraadArtikel, int artikelID, String naam, int prijs) {
         setKleur(kleur);
@@ -37,7 +37,7 @@ public class Product {
         this.naam = naam;
     }
 
-    public int getPrijs(){return  prijs;}
+    public double getPrijs(){return  prijs;}
 
 
     public String getKleur() {

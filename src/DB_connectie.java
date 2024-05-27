@@ -70,14 +70,19 @@ public static void  updateQuantityOnHand(int stockItemID, int newQuantity){
                 int voorraadArtikel = rs1.getInt(2);
                 int artikelID = rs.getInt(1);
                 String naam = rs.getString(2);
+                double btw = rs.getDouble(13);
+                double retail = rs.getDouble(15);
+
+                double prijs = retail * (btw/100+1);
+                System.out.println(prijs);
 
                 if (xwaarde >= 0 && ywaarde >= 0) {
                     if (kleurID == 1) {
-                        voorraad.setRijElement(ywaarde, xwaarde, new Product("rood", gewicht, voorraadArtikel, artikelID, naam, 1));
+                        voorraad.setRijElement(ywaarde, xwaarde, new Product("rood", gewicht, voorraadArtikel, artikelID, naam, (int) prijs));
                     } else if (kleurID == 2) {
-                        voorraad.setRijElement(ywaarde, xwaarde, new Product("geel", gewicht, voorraadArtikel, artikelID, naam, 1));
+                        voorraad.setRijElement(ywaarde, xwaarde, new Product("geel", gewicht, voorraadArtikel, artikelID, naam, (int) prijs));
                     } else if (kleurID == 3) {
-                        voorraad.setRijElement(ywaarde, xwaarde, new Product("blauw", gewicht, voorraadArtikel, artikelID, naam, 1));
+                        voorraad.setRijElement(ywaarde, xwaarde, new Product("blauw", gewicht, voorraadArtikel, artikelID, naam, (int) prijs));
                     }
                 }
             }

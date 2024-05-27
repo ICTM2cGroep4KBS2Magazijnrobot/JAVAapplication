@@ -213,4 +213,7 @@ public class MagazijnOverzicht extends JPanel{
         this.robotXcord = xCord;
         this.robotYcord = yCord;
     }
+    public void tekenOpnieuw(){
+        repaint();
+    }
 }

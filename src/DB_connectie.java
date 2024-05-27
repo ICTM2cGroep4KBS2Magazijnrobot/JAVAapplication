@@ -3,14 +3,50 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 public class DB_connectie {
-    public static String url = "jdbc:mysql://localhost:3306/nerdygadgetskbs2"; // Change this to your own database
-//   public static String url = "jdbc:mysql://localhost:3307/nerdygadgets2"; // Change this to your own database
-
+//    public static String url = "jdbc:mysql://localhost:3306/nerdygadgetskbs2"; // Change this to your own database
+  public static String url = "jdbc:mysql://localhost:3307/nerdygadgets2"; // Change this to your own database
     public static String username = "root"; // Change this to your own username
     public static String password = "Polka-008"; // Change this to your own password
 
     public DB_connectie(){
 
+    }
+
+public static void  updateQuantityOnHand(int stockItemID, int newQuantity){
+        String updateQuery = "UPDATE stockitemholdings SET QuantityOnHand = ? WHERE StockItemID = ?";
+
+    try (Connection connection = DriverManager.getConnection(url, username, password);
+         PreparedStatement preparedStatement = connection.prepareStatement(updateQuery)) {
+
+        //  parameters
+        preparedStatement.setInt(1, newQuantity);
+        preparedStatement.setInt(2, stockItemID);
+
+
+        int rowsAffected = preparedStatement.executeUpdate();
+        System.out.println("Rows affected: " + rowsAffected);
+
+    } catch (SQLException e) {
+        System.out.println("Update failed: " + e.getMessage());
+    }
+}
+
+    public static boolean artikelBestaat(int stockItemID) {
+        String checkQuery = "SELECT COUNT(*) FROM stockitemholdings WHERE StockItemID = ?";
+
+        try (Connection connection = DriverManager.getConnection(url, username, password);
+             PreparedStatement preparedStatement = connection.prepareStatement(checkQuery)) {
+
+            preparedStatement.setInt(1, stockItemID);
+            try (ResultSet rs = preparedStatement.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt(1) > 0;
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Check failed: " + e.getMessage());
+        }
+        return false;
     }
 
     public static Voorraad updateMagazijn(Voorraad voorraad){// Functie voor het updaten van de voorraad en het koppelen van een kleurID

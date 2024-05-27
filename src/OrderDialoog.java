@@ -1,4 +1,5 @@
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -10,8 +11,8 @@ public class OrderDialoog extends JDialog implements ActionListener {
     String picklist = "";
     private Voorraad voorraad;
     private int index = 0;
-
-    private JButton jbOrderUitvoeren, jbOrderAanpassen, jbOrderVerwijderen, jbAnnuleren;
+    private int orderid;
+    private JButton jbOrderUitvoeren, jbOrderAanpassen, jbOrderVerwijderen, jbAnnuleren, jbPakbon;
 
     private ArrayList<Integer> stockitemids = new ArrayList<>();
     private boolean isUitvoerenOK = false;
@@ -23,7 +24,7 @@ public class OrderDialoog extends JDialog implements ActionListener {
         setSize(700,600);
         setLayout(new GridLayout(3,2));
         this.voorraad = voorraad;
-
+        this.orderid = OrderID;
         DB_connectie.getOrderlines(stockitemids, OrderID);
 
         for (Integer stockitem: stockitemids){
@@ -84,6 +85,10 @@ public class OrderDialoog extends JDialog implements ActionListener {
         add(jbOrderVerwijderen);
         jbOrderVerwijderen.addActionListener(this);
 
+        jbPakbon = new JButton("Pakbon");
+        add(jbPakbon);
+        jbPakbon.addActionListener(this);
+
         jbAnnuleren = new JButton("Annuleren");
         add(jbAnnuleren);
         jbAnnuleren.addActionListener(this);
@@ -119,12 +124,73 @@ public class OrderDialoog extends JDialog implements ActionListener {
             else if(e.getSource() == jbOrderUitvoeren){
                 isUitvoerenOK = true;
                 setVisible(false);
-            } else if (e.getSource() == jbOrderAanpassen) {
+            } else if (e.getSource() == jbPakbon) {
+                showPakbon(stockitemids);
+            }
+            else if (e.getSource() == jbOrderAanpassen) {
 
             }
+
         }
         catch(Exception ignored){
         }
         }
-    }
-//}
+    public void showPakbon(ArrayList<Integer> stockitemids) {
+        ArrayList<String> customerInfo = DB_connectie.GetCustomer(new ArrayList<>(), orderid);
+        JLabel addressL = new JLabel("Adres:");
+        JTextField address = new JTextField();
+        address.setEditable(false);
+        JLabel naamL = new JLabel("Naam:");
+        JTextField naam = new JTextField();
+        naam.setEditable(false);
+        JLabel stadL = new JLabel("Stad:");
+        JTextField stad = new JTextField();
+        stad.setEditable(false);
+
+        if (!customerInfo.isEmpty()) {
+            naam.setText(customerInfo.get(0));
+            stad.setText(customerInfo.get(2));
+            address.setText(customerInfo.get(1));
+        }
+
+        String[] namen = { "ID", "Naam", "Aantal", "Prijs" };
+        DefaultTableModel tableModel = new DefaultTableModel(namen, 0);
+
+        double totaal = 0.0;
+
+        for (int i = 0; i < stockitemids.size(); i++) {
+            try {
+                Product product = voorraad.getArtikel(stockitemids.get(i));
+                int aantal = 1;
+                double prijs = product.getPrijs();
+
+                // Maakt een array aan met de data voor de tabel
+                Object[] rowData = { stockitemids.get(i), product.getNaam(), aantal, prijs };
+                tableModel.addRow(rowData);
+
+                totaal += prijs; // Voegt totaal prijs toe aan de tabel
+
+            } catch (Exception e) {
+                System.out.println("error");
+            }
+        }
+        Object[] totalRow = { "Total Price:", "", "", totaal };
+        tableModel.addRow(totalRow); // extra rij voor de totaal prijs
+
+        JTable table = new JTable(tableModel);
+
+        JPanel inputPanel = new JPanel();
+        inputPanel.setLayout(new GridLayout(3, 2));
+        inputPanel.add(naamL);
+        inputPanel.add(naam);
+        inputPanel.add(stadL);
+        inputPanel.add(stad);
+        inputPanel.add(addressL);
+        inputPanel.add(address);
+
+        JPanel panel = new JPanel();
+        panel.setLayout(new BorderLayout());
+        panel.add(inputPanel, BorderLayout.NORTH);
+        panel.add(new JScrollPane(table), BorderLayout.CENTER);
+        JOptionPane.showMessageDialog(this, panel, "Pakbon", JOptionPane.PLAIN_MESSAGE);
+    }}

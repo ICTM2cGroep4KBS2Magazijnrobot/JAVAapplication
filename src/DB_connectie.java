@@ -3,7 +3,7 @@ import java.util.ArrayList;
 
 public class DB_connectie {
 //    public static String url = "jdbc:mysql://localhost:3306/nerdygadgetskbs2"; // Change this to your own database
-  public static String url = "jdbc:mysql://localhost:3307/nerdygadgets2"; // Change this to your own database
+  public static String url = "jdbc:mysql://localhost:3306/nerdygadgetskbs2"; // Change this to your own database
     public static String username = "root"; // Change this to your own username
     public static String password = ""; // Change this to your own password
 
@@ -73,11 +73,11 @@ public static void  updateQuantityOnHand(int stockItemID, int newQuantity){
 
                 if (xwaarde >= 0 && ywaarde >= 0) {
                     if (kleurID == 1) {
-                        voorraad.setRijElement(ywaarde, xwaarde, new Product("rood", gewicht, voorraadArtikel, artikelID, naam));
+                        voorraad.setRijElement(ywaarde, xwaarde, new Product("rood", gewicht, voorraadArtikel, artikelID, naam, 1));
                     } else if (kleurID == 2) {
-                        voorraad.setRijElement(ywaarde, xwaarde, new Product("geel", gewicht, voorraadArtikel, artikelID, naam));
+                        voorraad.setRijElement(ywaarde, xwaarde, new Product("geel", gewicht, voorraadArtikel, artikelID, naam, 1));
                     } else if (kleurID == 3) {
-                        voorraad.setRijElement(ywaarde, xwaarde, new Product("blauw", gewicht, voorraadArtikel, artikelID, naam));
+                        voorraad.setRijElement(ywaarde, xwaarde, new Product("blauw", gewicht, voorraadArtikel, artikelID, naam, 1));
                     }
                 }
             }
@@ -130,5 +130,34 @@ public static void  updateQuantityOnHand(int stockItemID, int newQuantity){
             return null;
         }
     }
+    public static ArrayList<String> GetCustomer(ArrayList<String> Customer, int orderid) {
+        try {
+            Connection connection = DriverManager.getConnection(url, username, password);
+            Statement statement = connection.createStatement();
 
+            PreparedStatement preparedStatement = connection.prepareStatement("SELECT CustomerID FROM `orders` WHERE OrderID = ?");
+            preparedStatement.setInt(1, orderid);
+            ResultSet rs = preparedStatement.executeQuery();
+            if (rs.next()) {
+                int customerID = rs.getInt("CustomerID");
+                PreparedStatement customerStatement = connection.prepareStatement("SELECT * FROM `customers` WHERE CustomerID = ?");
+                customerStatement.setInt(1, customerID);
+                ResultSet customerRS = customerStatement.executeQuery();
+                while (customerRS.next()) {
+                    String customerName = customerRS.getString("CustomerName");
+                    String customerPO1 = customerRS.getString("PostalAddressLine1");
+                    String customerPO2 = customerRS.getString("PostalAddressLine2");
+
+                    Customer.add(customerName);
+                    Customer.add(customerPO1);
+                    Customer.add(customerPO2);
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Connectie gefaald " + e.getMessage());
+            return null;
+        }
+        return Customer;
+    }
 }
+

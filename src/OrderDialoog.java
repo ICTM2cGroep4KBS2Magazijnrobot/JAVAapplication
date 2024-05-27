@@ -168,24 +168,36 @@ public class OrderDialoog extends JDialog implements ActionListener {
         DefaultTableModel tableModel = new DefaultTableModel(namen, 0);
 
         double totaal = 0.0;
+        ArrayList<Product> productenlijst = new ArrayList<Product>();
 
         for (int i = 0; i < stockitemids.size(); i++) {
             try {
                 Product product = voorraad.getArtikel(stockitemids.get(i));
-                int aantal = 1;
-                double prijs = product.getPrijs();
-
-                // Maakt een array aan met de data voor de tabel
-                Object[] rowData = { stockitemids.get(i), product.getNaam(), aantal, prijs };
-                tableModel.addRow(rowData);
-
-                totaal += prijs; // Voegt totaal prijs toe aan de tabel
-
+                productenlijst.add(product);
             } catch (Exception e) {
                 System.out.println("error");
             }
         }
-        Object[] totalRow = { "Total Price:", "", "", totaal };
+
+        for (int i = 0; i < productenlijst.size(); i++) {
+            int aantal = 1;
+            Product currentProduct = productenlijst.get(i);
+            double prijs = currentProduct.getPrijs();
+            for (int j = i + 1; j < productenlijst.size(); j++) {
+                Product nextProduct = productenlijst.get(j);
+                if (currentProduct.getArtikelID() == nextProduct.getArtikelID()) {
+                    aantal++;
+                    totaal = totaal + nextProduct.getPrijs();
+                    productenlijst.remove(j);
+                    j--;
+                }
+            }
+            totaal = totaal + prijs;
+            Object[] rowData = { currentProduct.getArtikelID(), currentProduct.getNaam(), aantal, prijs };
+            tableModel.addRow(rowData);
+
+        }
+        Object[] totalRow = { "Totaal Prijs:", "", "", totaal };
         tableModel.addRow(totalRow); // extra rij voor de totaal prijs
 
         JTable table = new JTable(tableModel);

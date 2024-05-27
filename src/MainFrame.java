@@ -3,6 +3,8 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
+import java.sql.Date;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 import com.fazecast.jSerialComm.SerialPort;
@@ -22,6 +24,7 @@ public class MainFrame extends JFrame implements ActionListener {
     private static ArrayList<Byte> bytes = new ArrayList<>();
     private static int bytesToRead = -1;
     private String modus;
+    private Date HuidigeTijd;
 
 
 
@@ -31,7 +34,7 @@ public class MainFrame extends JFrame implements ActionListener {
 //        serialPort.setComPortParameters(115200, 8, 1, 0); // Baud rate, Data bits, Stop bits, Parity
 //        serialPort.setComPortTimeouts(SerialPort.TIMEOUT_NONBLOCKING, 0, 0); // Non-blocking read
 
-        SerialPort serialPort = SerialPort.getCommPort("COM10"); // Replace "COM10" with your port
+        SerialPort serialPort = SerialPort.getCommPort("dev/cu.usbmodem1412401"); // Replace "COM10" with your port
         serialPort.setComPortParameters(9600, 8, 1, 0); // Baud rate, Data bits, Stop bits, Parity
         serialPort.setComPortTimeouts(SerialPort.TIMEOUT_NONBLOCKING, 0, 0); // Non-blocking read
 
@@ -39,7 +42,7 @@ public class MainFrame extends JFrame implements ActionListener {
             System.out.println("Port opened successfully.");
         } else {
             System.out.println("Failed to open the port.");
-            return;
+            //return;
         }
 
         setTitle("HMI Magazijnrobot");
@@ -119,7 +122,6 @@ public class MainFrame extends JFrame implements ActionListener {
                             switch (b){
                                 case 'a': //robot coordinaten
                                     modus = "robotcoordinaten";
-
                                     bytesToRead = 2; //1ste byte is X coordinaat, 2de byte is Y coordinaat
                                     break;
                                 case 'b': //bevestiging product gepakt
@@ -128,6 +130,10 @@ public class MainFrame extends JFrame implements ActionListener {
                                     break;
                                 case 'c':
                                     modus = "robotstatus";
+                                    bytesToRead = 1;
+                                    break;
+                                case 'd':
+                                    modus = "eindeorder";
                                     bytesToRead = 1;
                                     break;
                                 default:
@@ -152,6 +158,22 @@ public class MainFrame extends JFrame implements ActionListener {
                                 case "robotstatus":
                                     magazijnOverzichtPanel.setRobotstatus(bytes.getFirst());
                                     System.out.println("Status is nu: " + bytes.getFirst());
+                                    repaint();
+                                    break;
+                                case "eindeorder":
+                                    long millis=System.currentTimeMillis();
+                                    HuidigeTijd = new Date(millis);
+                                    DB_connectie.OrderPickCompleted(panel3.getHuidigeOrder(), HuidigeTijd );
+                                    System.out.println("Order : "+ panel3.getHuidigeOrder()+ "Is compleet");
+                                    //scrolpan3.repaint();
+
+                                    for (int i = 0; i < orderButtons.size(); i++) {
+                                        if(orderButtons.get(i).getOrderID() == panel3.getHuidigeOrder()){
+                                            orderButtons.remove(i);
+
+                                        }
+                                    }
+                                    panel3.setHuidigeOrder(0);
                                     repaint();
                                     break;
                             }

@@ -117,6 +117,10 @@ public class OrderPickVolgorde extends JPanel {
 
     }
 
+    public int getHuidigeOrder() {
+        return huidigeOrder;
+    }
+
     public void setDoosnummer(int doosnummer) {
         Doosnummer = doosnummer;
     }

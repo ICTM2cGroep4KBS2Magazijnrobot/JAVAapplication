@@ -1,4 +1,5 @@
 import java.sql.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 public class DB_connectie {
@@ -6,7 +7,7 @@ public class DB_connectie {
 //   public static String url = "jdbc:mysql://localhost:3307/nerdygadgets2"; // Change this to your own database
 
     public static String username = "root"; // Change this to your own username
-    public static String password = ""; // Change this to your own password
+    public static String password = "Polka-008"; // Change this to your own password
 
     public DB_connectie(){
 
@@ -60,7 +61,8 @@ public class DB_connectie {
 
             Statement statement = connection.createStatement();
 
-            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM orders");
+            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM orders WHERE PickingCompletedWhen IS NULL"); //Check gemaakt waar hij alleen een order inlaad
+                                                                                                                                            // zodra deze nog niet gecompleet is
 //            preparedStatement.setInt(1, 25); // Eerste getal is de index van de vraagteken, tweede getal is de waarde die je wilt invullen.
             ResultSet rs = preparedStatement.executeQuery();
             while (rs.next()) {
@@ -95,4 +97,25 @@ public class DB_connectie {
         }
     }
 
+    public static void OrderPickCompleted(int OrderID, Date HuidigeTijd){
+        try {
+
+            Connection connection = DriverManager.getConnection(url, username, password);
+
+            PreparedStatement preparedStatement = connection.prepareStatement(
+                    "UPDATE `orders` SET `PickingCompletedWhen` = CAST( ? AS DATETIME) WHERE `orders`.`OrderID` = ? ");
+
+
+            preparedStatement.setDate(1, HuidigeTijd);
+            preparedStatement.setInt(2, OrderID);
+
+            int res = preparedStatement.executeUpdate();
+            System.out.println(res + " values updated");
+
+            connection.close();
+
+        }catch (SQLException e){
+                System.out.println("Connectie gefaald odin " + e.getMessage());
+            }
+    }
 }

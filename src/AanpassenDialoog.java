@@ -2,29 +2,33 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 
-public class OrderDialoog extends JDialog implements ActionListener {
 
-    private JTextField jtfAantal, jtfTekst;
-    String picklist = "";
-    private Voorraad voorraad;
-    private int index = 0;
-    private int OrderID;
+public class AanpassenDialoog extends JDialog implements ActionListener {
 
-    private JButton jbOrderUitvoeren, jbOrderAanpassen, jbOrderVerwijderen, jbAnnuleren;
+    private JTextField jtfID;
+    private boolean IsOK = false, verwijderen = false, toevoegen = false;
+
+
+    private JButton jbAanpassen, jbVerwijderen ,jbAnnuleren;
+    private JLabel jlid;
 
     private ArrayList<Integer> stockitemids = new ArrayList<>();
-    private boolean isUitvoerenOK = false;
+    private String picklist = "";
+    private int index = 0;
+    private Voorraad voorraad;
+    private int OrderID;
 
 
-    OrderDialoog(JFrame frame, boolean modal, String ordernaam, int CustomerID, int OrderID, Voorraad voorraad){
-        super(frame, modal);
-        setTitle(ordernaam);
-        setSize(700,600);
-        setLayout(new GridLayout(3,2));
-        this.voorraad = voorraad;
+    AanpassenDialoog(Dialog parent, boolean modal, int OrderID, Voorraad voorraad) {
+        super(parent, modal);
         this.OrderID = OrderID;
+        setTitle("aanpassen order: " + this.OrderID);
+        setTitelFoutmelding("");
+        setSize(700, 300);
+        setLayout(new GridLayout(2,3));
 
 
         DB_connectie.getOrderlines(stockitemids, OrderID);
@@ -67,29 +71,36 @@ public class OrderDialoog extends JDialog implements ActionListener {
             index = i + 1;
         }
 
-
-        add(new JLabel(ordernaam));
         JScrollPane scrollPane = new JScrollPane(jp);
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS); // deze 2 regels zorgen dat de scrollbars altijd te zien zijn
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         scrollPane.getVerticalScrollBar().setUnitIncrement(25); //bepaald scrollsnelheid van de scrollbar
         add(scrollPane);
 
-        jbOrderUitvoeren = new JButton("Order Uitvoeren");
-        add(jbOrderUitvoeren);
-        jbOrderUitvoeren.addActionListener(this);
 
-        jbOrderAanpassen = new JButton("Order Aanpassen");
-        add(jbOrderAanpassen);
-        jbOrderAanpassen.addActionListener(this);
+        add(jlid = new JLabel(
+                "------------|  Id: |------------"));
 
-        jbOrderVerwijderen = new JButton("Order Verwijderen");
-        add(jbOrderVerwijderen);
-        jbOrderVerwijderen.addActionListener(this);
+        jtfID = new JTextField(5);
+        add(jtfID);
 
-        jbAnnuleren = new JButton("Annuleren");
+
+        jbAanpassen = new JButton("Toevoegen Product");
+        add(jbAanpassen);
+        jbAanpassen.addActionListener(this);
+
+        jbVerwijderen = new JButton("verwijderen product");
+        add(jbVerwijderen);
+        jbVerwijderen.addActionListener(this);
+        
+        
+
+        jbAnnuleren = new JButton("Sluiten");
         add(jbAnnuleren);
         jbAnnuleren.addActionListener(this);
+
+
+
 
 
 
@@ -97,48 +108,39 @@ public class OrderDialoog extends JDialog implements ActionListener {
         setVisible(true);
     }
 
-    public boolean isUitvoerenOK() {
-        return isUitvoerenOK;
+    public boolean IsOK() {
+        return IsOK;
     }
 
-    public String getPicklist() {
-        return picklist;
+    private void setTitelFoutmelding(String melding) {
+        setTitle("aanpassen order: " + this.OrderID + melding);
     }
 
-    //getters maken voor invoer ophalen, bij invoer een getal moet je integer.parseint gebruiken
-    public int getJtfAantal() {
-        return Integer.parseInt(jtfAantal.getText());
-    }
 
-    public String getJtfTekst() {
-        return jtfTekst.getText();
-    }
-
+    @Override
     public void actionPerformed(ActionEvent e) {
-        try{
-            if(e.getSource() == jbAnnuleren){
-                setVisible(false);
+
+        setTitelFoutmelding("");
+
+        if (e.getSource() == jbAanpassen){
+            try {
+                int ProductID = Integer.parseInt(jtfID.getText());
+                System.out.println(java.time.LocalDateTime.now());
+
+                //DB_connectie.addItem(this.OrderID, ProductID);
+
+            }catch(NumberFormatException nfe) {
+                setTitelFoutmelding(" foute input!");
             }
-            else if(e.getSource() == jbOrderUitvoeren){
-                isUitvoerenOK = true;
-//                DB_connectie.OrderPickCompleted(OrderID);
-//                System.out.println("Order : "+ OrderID+ "Is compleet");
-                setVisible(false);
-            } else if (e.getSource() == jbOrderAanpassen) {
-                AanpassenDialoog Aanpassendialoog = new AanpassenDialoog(this,true,OrderID, voorraad);
-                if(Aanpassendialoog.IsOK()){
-                    setVisible(false);
-                }
 
+        } else if (e.getSource() == jbVerwijderen){
+            verwijderen = true;
 
-            } else if (e.getSource() == jbOrderVerwijderen) {
-
-            }
+        } else if (e.getSource() == jbAnnuleren) {
+            setVisible(false);
         }
-        catch(Exception ignored){
-        }
+
         repaint();
-        }
 
     }
-//}
+}

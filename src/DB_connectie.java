@@ -3,8 +3,8 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 public class DB_connectie {
-//    public static String url = "jdbc:mysql://localhost:3306/nerdygadgetskbs2"; // Change this to your own database
-  public static String url = "jdbc:mysql://localhost:3307/nerdygadgets2"; // Change this to your own database
+     public static String url = "jdbc:mysql://localhost:3306/nerdygadgetskbs2"; // Change this to your own database
+//     public static String url = "jdbc:mysql://localhost:3307/nerdygadgets2"; // Change this to your own database
     public static String username = "root"; // Change this to your own username
     public static String password = "Polka-008"; // Change this to your own password
 
@@ -151,7 +151,7 @@ public static void  updateQuantityOnHand(int stockItemID, int newQuantity){
             connection.close();
 
         }catch (SQLException e){
-                System.out.println("Connectie gefaald odin " + e.getMessage());
+                System.out.println("Connectie gefaald " + e.getMessage());
             }
     }
 }

@@ -121,8 +121,6 @@ public class OrderDialoog extends JDialog implements ActionListener {
             }
             else if(e.getSource() == jbOrderUitvoeren){
                 isUitvoerenOK = true;
-//                DB_connectie.OrderPickCompleted(OrderID);
-//                System.out.println("Order : "+ OrderID+ "Is compleet");
                 setVisible(false);
             } else if (e.getSource() == jbOrderAanpassen) {
                 AanpassenDialoog Aanpassendialoog = new AanpassenDialoog(this,true,OrderID, voorraad);

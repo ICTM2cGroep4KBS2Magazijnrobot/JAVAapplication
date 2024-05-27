@@ -4,14 +4,16 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.sql.Date;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
+import javax.swing.SwingUtilities;
 
 import com.fazecast.jSerialComm.SerialPort;
 import com.fazecast.jSerialComm.SerialPortDataListener;
 import com.fazecast.jSerialComm.SerialPortEvent;
 
 import java.util.Scanner;
+
+import static javax.swing.SwingUtilities.invokeLater;
 
 
 public class MainFrame extends JFrame implements ActionListener {
@@ -164,18 +166,24 @@ public class MainFrame extends JFrame implements ActionListener {
                                     long millis=System.currentTimeMillis();
                                     HuidigeTijd = new Date(millis);
                                     DB_connectie.OrderPickCompleted(panel3.getHuidigeOrder(), HuidigeTijd );
-                                    System.out.println("Order : "+ panel3.getHuidigeOrder()+ "Is compleet");
+                                    System.out.println("Order : "+ panel3.getHuidigeOrder()+ " Is compleet");
                                     //scrolpan3.repaint();
 
                                     for (int i = 0; i < orderButtons.size(); i++) {
                                         if(orderButtons.get(i).getOrderID() == panel3.getHuidigeOrder()){
                                             orderButtons.remove(i);
 
+
                                         }
                                     }
+
+
                                     panel3.setHuidigeOrder(0);
-                                    repaint();
+                                    invokeLater(MainFrame.this::revalidate);
+                                    invokeLater(MainFrame.this::repaint);
                                     break;
+                                default:
+                                    throw new IllegalStateException("Unexpected value: " + modus);
                             }
 //                            processBytes();
                             bytes.clear();
@@ -218,9 +226,11 @@ public class MainFrame extends JFrame implements ActionListener {
     }
 
     // om voorraad te updaten en repaint doen.
-    public void updateVoorraad() {
-        repaint();
+    public void updateRepaint() {
+        invokeLater(this::repaint);
     }
+
+
 
     public void actionPerformed(ActionEvent e) {
             if(magazijnOverzichtPanel.getRobotstatus() != 3){
@@ -233,8 +243,11 @@ public class MainFrame extends JFrame implements ActionListener {
                     }
                 }
             }
-            repaint();
+        // Now schedule a repaint for the entire JFrame
+        invokeLater(this::repaint);
     }
 }
+
+
 
 

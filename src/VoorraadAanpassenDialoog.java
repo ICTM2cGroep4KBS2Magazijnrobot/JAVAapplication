@@ -60,7 +60,7 @@ public class VoorraadAanpassenDialoog  extends JDialog {
                     DB_connectie.updateMagazijn(voorraad);
                     JOptionPane.showMessageDialog(null, "Voorraad succesvol aangepast.");
                     dispose();
-                    mainFrame.updateVoorraad();
+                    mainFrame.updateRepaint();
                 } catch (NumberFormatException ex) {
                     JOptionPane.showMessageDialog(null, "Ongeldige invoer. Zorg ervoor dat je geldige nummers invoert.", "Fout", JOptionPane.ERROR_MESSAGE);
                 }

@@ -1,6 +1,9 @@
+import java.security.PublicKey;
 import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 public class DB_connectie {
      public static String url = "jdbc:mysql://localhost:3306/nerdygadgetskbs2"; // Change this to your own database
@@ -245,4 +248,62 @@ public static void  updateQuantityOnHand(int stockItemID, int newQuantity){
             System.out.println("Connection failed " + e.getMessage());
         }
     }
+    public static String getExactTijd(){
+        LocalDateTime currentDateTime = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        String exactdatetime = currentDateTime.format(formatter);
+        return exactdatetime;
+    }
+    public static String getDatum(int dag){
+        LocalDate currentDate = LocalDate.now().plusDays(dag);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        String formattedDate = currentDate.format(formatter);
+        return formattedDate;
+    }
+    public static int OrderInvoer(ArrayList<Integer> Producten, int Klantnmr) {
+        try {
+            Connection connection = DriverManager.getConnection(url, username, password);
+            PreparedStatement preparedStatement = connection.prepareStatement("SELECT `CustomerName` FROM `customers` WHERE CustomerID = ?");
+            preparedStatement.setInt(1, Klantnmr);
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            if (resultSet.next()) {
+                String customerName = resultSet.getString("CustomerName");
+                if (customerName != null) {
+                    int newOrderID = 0;
+                    int newOrderNumber = 0;
+                    PreparedStatement preparedStatement2 = connection.prepareStatement("SELECT MAX(orderID) AS maxOrderID, MAX(CustomerPurchaseOrderNumber) AS maxCusOrder FROM orders;");
+                    ResultSet resultSet1 = preparedStatement2.executeQuery();
+
+                    if (resultSet1.next()) {
+                        int maxOrderID = resultSet1.getInt("maxOrderID");
+                        int maxCusOrder = resultSet1.getInt("maxCusOrder");
+                        newOrderID = maxOrderID + 1;
+                        newOrderNumber = maxCusOrder + 1;
+                        String currentDatum = getDatum(0);
+                        String expectedDatum = getDatum(7);
+                        String ExactTime = getExactTijd();
+                        PreparedStatement preparedStatement3 = connection.prepareStatement("INSERT INTO `orders`(`OrderID`, `CustomerID`, `SalespersonPersonID`, `PickedByPersonID`, `ContactPersonID`, `BackorderOrderID`, `OrderDate`, `ExpectedDeliveryDate`, `CustomerPurchaseOrderNumber`, `IsUndersupplyBackordered`, `Comments`, `DeliveryInstructions`, `InternalComments`, `PickingCompletedWhen`, `LastEditedBy`, `LastEditedWhen`) VALUES (?,?,7,0,3003,0,?,?,?,0,NULL,NULL,NULL,NULL,7,?)");
+                        preparedStatement3.setInt(1, newOrderID);
+                        preparedStatement3.setInt(2, Klantnmr);
+                        preparedStatement3.setString(3, currentDatum);
+                        preparedStatement3.setString(4, expectedDatum);
+                        preparedStatement3.setInt(5, newOrderNumber);
+                        preparedStatement3.setString(6, ExactTime);
+
+                    }
+
+
+
+                } else {
+                    return 1;
+                }}
+
+        } catch (SQLException e) {
+            System.out.println("Connection failed " + e.getMessage());
+
+        }
+        return Klantnmr;
+    }
+
 }

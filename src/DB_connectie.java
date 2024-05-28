@@ -6,7 +6,7 @@ public class DB_connectie {
      public static String url = "jdbc:mysql://localhost:3306/nerdygadgetskbs2"; // Change this to your own database
 //     public static String url = "jdbc:mysql://localhost:3307/nerdygadgets2"; // Change this to your own database
     public static String username = "root"; // Change this to your own username
-    public static String password = ""; // Change this to your own password
+    public static String password = "Polka-008"; // Change this to your own password
 
     public DB_connectie(){
 
@@ -34,17 +34,22 @@ public static void  updateQuantityOnHand(int stockItemID, int newQuantity){
     public static boolean artikelBestaat(int stockItemID) {
         String checkQuery = "SELECT COUNT(*) FROM stockitemholdings WHERE StockItemID = ?";
 
-        try (Connection connection = DriverManager.getConnection(url, username, password);
-             PreparedStatement preparedStatement = connection.prepareStatement(checkQuery)) {
+        try {
+
+        Connection connection = DriverManager.getConnection(url, username, password);
+        PreparedStatement preparedStatement = connection.prepareStatement(checkQuery);
 
             preparedStatement.setInt(1, stockItemID);
-            try (ResultSet rs = preparedStatement.executeQuery()) {
+            ResultSet rs = preparedStatement.executeQuery();
                 if (rs.next()) {
-                    return rs.getInt(1) > 0;
+                    if (rs.getInt(1) > 0 && rs.getInt(1) < 26){
+                        return true;
+                    }
                 }
-            }
+
         } catch (SQLException e) {
             System.out.println("Check failed: " + e.getMessage());
+            return false;
         }
         return false;
     }
@@ -205,7 +210,7 @@ public static void  updateQuantityOnHand(int stockItemID, int newQuantity){
                 UnitPackageID = rs.getInt(5);
                 UnitPrice = rs.getInt(14);
                 Taxrate = rs.getFloat(13);
-                System.out.println(description + " ; " + UnitPrice + " ; " + UnitPackageID + " ; " + Taxrate);
+                //System.out.println(description + " ; " + UnitPrice + " ; " + UnitPackageID + " ; " + Taxrate);
             }
 
                 PreparedStatement preparedStatement2 = connection.prepareStatement("INSERT INTO orderlines (`OrderLineID`, `OrderID`, `StockItemID`, `Description`, `PackageTypeID`, `Quantity`, `UnitPrice`, `TaxRate`, `PickedQuantity`, `PickingCompletedWhen`, `LastEditedBy`, `LastEditedWhen`)  VALUES(NULL, ?, ?, ?, ?, 1, ?, ?, 0, NULL, 3, '2024-04-27 13:06:50')");

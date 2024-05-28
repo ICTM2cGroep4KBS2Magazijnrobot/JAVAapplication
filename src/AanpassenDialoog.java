@@ -126,7 +126,7 @@ public class AanpassenDialoog extends JDialog implements ActionListener {
             try {
                 int ProductID = Integer.parseInt(jtfID.getText());
 
-                DB_connectie.addItem(this.OrderID, ProductID);
+                DB_connectie.addItem(this.OrderID, ProductID, true);
 
             }catch(NumberFormatException nfe) {
                 setTitelFoutmelding(" foute input!");

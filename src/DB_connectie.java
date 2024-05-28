@@ -182,6 +182,8 @@ public static void  updateQuantityOnHand(int stockItemID, int newQuantity){
                     Customer.add(customerName);
                     Customer.add(customerPO1);
                     Customer.add(customerPO2);
+
+
                 }
             }
         } catch (SQLException e) {
@@ -191,7 +193,7 @@ public static void  updateQuantityOnHand(int stockItemID, int newQuantity){
         return Customer;
     }
 
-    public static void addItem(int orderID, int productID) {
+    public static void addItem(int orderID, int productID, boolean close) {
         String description = "";
         int UnitPackageID = 0;
         int UnitPrice = 0;
@@ -204,25 +206,29 @@ public static void  updateQuantityOnHand(int stockItemID, int newQuantity){
             ResultSet rs = preparedStatement.executeQuery();
 
             while (rs.next()) {
-                description = rs.getString(2);
-                UnitPackageID = rs.getInt(5);
-                UnitPrice = rs.getInt(14);
-                Taxrate = rs.getFloat(13);
-                System.out.println(description + " ; " + UnitPrice + " ; " + UnitPackageID + " ; " + Taxrate);
+                String X = rs.getString("Xwaarde");
+                if (!(X == null)){
+                    description = rs.getString(2);
+                    UnitPackageID = rs.getInt(5);
+                    UnitPrice = rs.getInt(14);
+                    Taxrate = rs.getFloat(13);
+                    System.out.println(description + " ; " + UnitPrice + " ; " + UnitPackageID + " ; " + Taxrate);
+                    PreparedStatement preparedStatement2 = connection.prepareStatement("INSERT INTO orderlines (`OrderLineID`, `OrderID`, `StockItemID`, `Description`, `PackageTypeID`, `Quantity`, `UnitPrice`, `TaxRate`, `PickedQuantity`, `PickingCompletedWhen`, `LastEditedBy`, `LastEditedWhen`)  VALUES(NULL, ?, ?, ?, ?, 1, ?, ?, 0, NULL, 3, '2024-04-27 13:06:50')");
+                    preparedStatement2.setInt(1, orderID);
+                    preparedStatement2.setInt(2, productID);
+                    preparedStatement2.setString(3, description);
+                    preparedStatement2.setInt(4, UnitPackageID);
+                    preparedStatement2.setInt(5, UnitPrice);
+                    preparedStatement2.setFloat(6, Taxrate);
+                    preparedStatement2.executeUpdate();
+
+                }
+
             }
-
-                PreparedStatement preparedStatement2 = connection.prepareStatement("INSERT INTO orderlines (`OrderLineID`, `OrderID`, `StockItemID`, `Description`, `PackageTypeID`, `Quantity`, `UnitPrice`, `TaxRate`, `PickedQuantity`, `PickingCompletedWhen`, `LastEditedBy`, `LastEditedWhen`)  VALUES(NULL, ?, ?, ?, ?, 1, ?, ?, 0, NULL, 3, '2024-04-27 13:06:50')");
-                preparedStatement2.setInt(1, orderID);
-                preparedStatement2.setInt(2, productID);
-                preparedStatement2.setString(3, description);
-                preparedStatement2.setInt(4, UnitPackageID);
-                preparedStatement2.setInt(5, UnitPrice);
-                preparedStatement2.setFloat(6, Taxrate);
-
-
-          preparedStatement2.executeUpdate();
-
-          connection.close();
+          if (close) {
+              rs.close();
+              connection.close();
+          }
 
         }catch (SQLException e){
             System.out.println("Connectie gefaald " + e.getMessage());
@@ -241,6 +247,7 @@ public static void  updateQuantityOnHand(int stockItemID, int newQuantity){
             int rowsAffected = preparedStatement.executeUpdate();
 
             System.out.println("Rows affected: " + rowsAffected);
+
 
             connection.close();
 
@@ -263,21 +270,23 @@ public static void  updateQuantityOnHand(int stockItemID, int newQuantity){
     public static int OrderInvoer(ArrayList<Integer> Producten, int Klantnmr) {
         try {
             Connection connection = DriverManager.getConnection(url, username, password);
-            PreparedStatement preparedStatement = connection.prepareStatement("SELECT `CustomerName` FROM `customers` WHERE CustomerID = ?");
-            preparedStatement.setInt(1, Klantnmr);
-            ResultSet resultSet = preparedStatement.executeQuery();
+            PreparedStatement preparedStatement1 = connection.prepareStatement("SELECT `CustomerName` FROM `customers` WHERE CustomerID = ?");
+            preparedStatement1.setInt(1, Klantnmr);
+            ResultSet RS1 = preparedStatement1.executeQuery();
+            System.out.println("test1");
 
-            if (resultSet.next()) {
-                String customerName = resultSet.getString("CustomerName");
+            if (RS1.next()) {
+                String customerName = RS1.getString("CustomerName");
                 if (customerName != null) {
                     int newOrderID = 0;
                     int newOrderNumber = 0;
-                    PreparedStatement preparedStatement2 = connection.prepareStatement("SELECT MAX(orderID) AS maxOrderID, MAX(CustomerPurchaseOrderNumber) AS maxCusOrder FROM orders;");
-                    ResultSet resultSet1 = preparedStatement2.executeQuery();
+                    System.out.println("test2");
+                    PreparedStatement preparedStatement2 = connection.prepareStatement("SELECT MAX(orderID) AS maxOrderID, MAX(CustomerPurchaseOrderNumber) AS maxCusOrder FROM orders");
+                    ResultSet RS2 = preparedStatement2.executeQuery();
 
-                    if (resultSet1.next()) {
-                        int maxOrderID = resultSet1.getInt("maxOrderID");
-                        int maxCusOrder = resultSet1.getInt("maxCusOrder");
+                    if (RS2.next()) {
+                        int maxOrderID = RS2.getInt("maxOrderID");
+                        int maxCusOrder = RS2.getInt("maxCusOrder");
                         newOrderID = maxOrderID + 1;
                         newOrderNumber = maxCusOrder + 1;
                         String currentDatum = getDatum(0);
@@ -290,20 +299,21 @@ public static void  updateQuantityOnHand(int stockItemID, int newQuantity){
                         preparedStatement3.setString(4, expectedDatum);
                         preparedStatement3.setInt(5, newOrderNumber);
                         preparedStatement3.setString(6, ExactTime);
+                        preparedStatement3.executeUpdate();
+
+                        for (int productID : Producten) {
+                            addItem(newOrderID, productID, false);
+                        }
+                        connection.close();
 
                     }
-
-
-
                 } else {
                     return 1;
                 }}
-
         } catch (SQLException e) {
             System.out.println("Connection failed " + e.getMessage());
-
         }
-        return Klantnmr;
-    }
 
+        return 2;
+    }
 }

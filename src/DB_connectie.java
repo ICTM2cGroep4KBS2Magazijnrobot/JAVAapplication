@@ -37,17 +37,22 @@ public static void  updateQuantityOnHand(int stockItemID, int newQuantity){
     public static boolean artikelBestaat(int stockItemID) {
         String checkQuery = "SELECT COUNT(*) FROM stockitemholdings WHERE StockItemID = ?";
 
-        try (Connection connection = DriverManager.getConnection(url, username, password);
-             PreparedStatement preparedStatement = connection.prepareStatement(checkQuery)) {
+        try {
+
+        Connection connection = DriverManager.getConnection(url, username, password);
+        PreparedStatement preparedStatement = connection.prepareStatement(checkQuery);
 
             preparedStatement.setInt(1, stockItemID);
-            try (ResultSet rs = preparedStatement.executeQuery()) {
+            ResultSet rs = preparedStatement.executeQuery();
                 if (rs.next()) {
-                    return rs.getInt(1) > 0;
+                    if (rs.getInt(1) > 0 && rs.getInt(1) < 26){
+                        return true;
+                    }
                 }
-            }
+
         } catch (SQLException e) {
             System.out.println("Check failed: " + e.getMessage());
+            return false;
         }
         return false;
     }
@@ -221,9 +226,7 @@ public static void  updateQuantityOnHand(int stockItemID, int newQuantity){
                     preparedStatement2.setInt(5, UnitPrice);
                     preparedStatement2.setFloat(6, Taxrate);
                     preparedStatement2.executeUpdate();
-
                 }
-
             }
           if (close) {
               rs.close();

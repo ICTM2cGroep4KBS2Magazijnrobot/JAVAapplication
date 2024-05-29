@@ -28,6 +28,8 @@ public class InvoegenVoorraadNoodstopPanel extends JPanel implements ActionListe
 
         jbOrderInvoeren = new JButton("Order Invoeren");
         add(jbOrderInvoeren);
+        jbOrderInvoeren.addActionListener(this);
+
 
         jbOrderAanpassen = new JButton("Voorraad Aanpassen");
         add(jbOrderAanpassen);
@@ -49,8 +51,11 @@ public class InvoegenVoorraadNoodstopPanel extends JPanel implements ActionListe
 
     @Override
     public void actionPerformed(ActionEvent e){
-        if(e.getSource() == jbOrderInvoeren){
+        if (e.getSource() == jbOrderInvoeren) {
             System.out.println("Order Invoeren");
+
+            OrderInvoegen orderInvoegenDialog = new OrderInvoegen((Frame) SwingUtilities.getWindowAncestor(this));
+            orderInvoegenDialog.setVisible(true);
         }
         if(e.getSource() == jbNoodstop){ // functie voor noodstop alert. Print tot nu toe alleen het resultaat in de console
             Component frame = null;

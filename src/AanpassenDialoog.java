@@ -126,10 +126,14 @@ public class AanpassenDialoog extends JDialog implements ActionListener {
             try {
                 int ProductID = Integer.parseInt(jtfID.getText());
 
-                DB_connectie.addItem(this.OrderID, ProductID);
+                DB_connectie.addItem(this.OrderID, ProductID, true);
+                if (!DB_connectie.artikelBestaat(ProductID)) {
+                    JOptionPane.showMessageDialog(null, "Artikel ID bestaat niet. Voer een geldig artikel ID in.", "Fout", JOptionPane.ERROR_MESSAGE);
+                    return; // Stop de uitvoering van de methode als het artikel ID ongeldig is
+                }
 
             }catch(NumberFormatException nfe) {
-                setTitelFoutmelding(" foute input!");
+                JOptionPane.showMessageDialog(null, "Ongeldige invoer. Zorg ervoor dat je geldige nummers invoert.", "Fout", JOptionPane.ERROR_MESSAGE);
             }
 
         } else if (e.getSource() == jbVerwijderen){
@@ -140,7 +144,7 @@ public class AanpassenDialoog extends JDialog implements ActionListener {
                 DB_connectie.deleteItem(this.OrderID, ProductID);
 
             }catch(NumberFormatException nfe) {
-                setTitelFoutmelding(" foute input!");
+                JOptionPane.showMessageDialog(null, "Ongeldige invoer. Zorg ervoor dat je geldige nummers invoert.", "Fout", JOptionPane.ERROR_MESSAGE);
             }
         } else if (e.getSource() == jbAnnuleren) {
             setVisible(false);

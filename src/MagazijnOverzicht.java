@@ -42,7 +42,7 @@ public class MagazijnOverzicht extends JPanel{
         tekenMagazijnInhoud(g);
 
         if(robotstatus == 2){
-            tekenRobotPicking(g);
+            tekenRobotAuto(g);
         }
         else if(robotstatus == 1){
             tekenRobot(g);
@@ -52,6 +52,9 @@ public class MagazijnOverzicht extends JPanel{
         }
         else if(robotstatus == 4){
             tekenRobotSlapen(g);
+        }
+        else if(robotstatus == 5){
+            tekenRobotPicking(g);
         }
 
 
@@ -121,6 +124,9 @@ public class MagazijnOverzicht extends JPanel{
             case 4:
                 g.drawString(": Uit", 25, 18);
                 g.setColor(Color.WHITE);
+            case 5:
+                g.drawString(": Picking...", 25, 18);
+                g.setColor(Color.ORANGE);
         }
 
         g.fillOval(5, 3, 20, 20);
@@ -189,19 +195,39 @@ public class MagazijnOverzicht extends JPanel{
         g.drawRect(robotXcord + 50, robotYcord + 10, 7, 15);
         g.drawRect(robotXcord - 7, robotYcord + 10, 7, 15);
 
-//        g.setColor(Color.GRAY); //teken tanden
-//////        for (int i = 0; i < 5; i++) {
-//////            g.drawLine(robotXcord + 15, robotYcord+ 20, robotXcord + 15, robotYcord + 20 + 20);
-//////            robotXcord += 5;
-//////        }
-//        g.drawLine(robotXcord + 15, robotYcord+ 20, robotXcord + 15, robotYcord + 20 + 20);
-//        g.drawLine(robotXcord + 20, robotYcord+ 20, robotXcord + 20, robotYcord + 20 + 20);
-//        g.drawLine(robotXcord + 25, robotYcord+ 20, robotXcord + 25, robotYcord + 20 + 20);
-//        g.drawLine(robotXcord + 30, robotYcord+ 20, robotXcord + 30, robotYcord + 20 + 20);
-//        g.drawLine(robotXcord + 35, robotYcord+ 20, robotXcord + 35, robotYcord + 20 + 20);
 
     }
     private void tekenRobotPicking(Graphics g){
+        g.setColor(Color.GRAY);
+        g.fillRect(robotXcord, robotYcord, 50, 40);//robothoofd
+
+        g.fillRect(robotXcord - 30, robotYcord + 35, 30, 10);//linkerarm
+
+        g.setColor(Color.LIGHT_GRAY);
+        g.fillRect(robotXcord - 45, robotYcord + 35, 20, 3);//linkerarm bovenhand
+        g.fillRect(robotXcord - 45, robotYcord + 40, 20, 3);//linkerarm onderhand
+
+        g.setColor(Color.ORANGE);
+        g.fillRect(robotXcord + 15, robotYcord - 5, 20, 5); //robot hoedje
+
+        g.setColor(Color.ORANGE);
+        g.fillRect(robotXcord + 5, robotYcord + 5, 15, 10); //robot ogen
+        g.fillRect(robotXcord + 30, robotYcord + 5, 15, 10); //robot ogen
+
+        g.setColor(Color.WHITE);//robot mond
+        g.fillRect(robotXcord + 10, robotYcord + 20, 30, 10);
+
+        g.setColor(Color.ORANGE); //teken oren
+        g.fillRect(robotXcord - 7, robotYcord + 10, 7, 15);
+        g.fillRect(robotXcord + 50, robotYcord + 10, 7, 15);
+
+        g.setColor(Color.GRAY);
+        g.drawRect(robotXcord + 50, robotYcord + 10, 7, 15);
+        g.drawRect(robotXcord - 7, robotYcord + 10, 7, 15);
+
+
+    }
+    private void tekenRobotAuto(Graphics g){
         g.setColor(Color.GRAY);
         g.fillRect(robotXcord, robotYcord, 50, 40);//robothoofd
 

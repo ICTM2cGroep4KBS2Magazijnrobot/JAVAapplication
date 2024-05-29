@@ -34,6 +34,7 @@ public class MainFrame extends JFrame implements ActionListener {
     private SerialPort serialPort;
     private Date HuidigeTijd;
 
+    private boolean dropoff = false;
 
 
 
@@ -180,13 +181,21 @@ public class MainFrame extends JFrame implements ActionListener {
 //                                        repaint();
                                         System.out.println("Bevestiging ontvangen!");
                                         if(huidigProductNummer < finalDozenLijst.get(huidigeDoosNummer).getInhoud().size() -1){
-                                            huidigProductNummer++;
+                                            if(!dropoff){
+                                                huidigProductNummer++;
+                                            }
+                                            else{
+                                                dropoff = false;
+                                            }
+
                                         }
                                         else{
                                             huidigeDoosNummer++;
                                             huidigProductNummer = 0;
                                             try {
                                                 goToDropoff();
+                                                dropoff = true;
+                                                System.out.println("Doos is klaar");
                                             } catch (IOException e) {
                                                 throw new RuntimeException(e);
                                             }
@@ -195,10 +204,16 @@ public class MainFrame extends JFrame implements ActionListener {
                                             System.out.println("Order Compleet!");
                                             huidigeDoosNummer = 0;
 
+                                            finalDozenLijst.clear();
                                             break loop2;
                                         }
 
-                                        stuurProduct();
+                                        if (dropoff == false){
+                                            stuurProduct();
+                                        }
+
+
+
                                         //hier nog extra check om huidig doos terug te zetten?
                                     }
 //                                    else{
@@ -288,13 +303,15 @@ public class MainFrame extends JFrame implements ActionListener {
         serialPort.getOutputStream().write(getal.byteValue());
     }
     private void stuurProduct(){
-        ArrayList<Integer> coords = voorraad.getCoordinaten(finalDozenLijst.get(huidigeDoosNummer).getInhoud().get(huidigProductNummer).getArtikelID());
         try {
+            ArrayList<Integer> coords = voorraad.getCoordinaten(finalDozenLijst.get(huidigeDoosNummer).getInhoud().get(huidigProductNummer).getArtikelID());
             serialPort.getOutputStream().write(coords.get(0).byteValue());
             serialPort.getOutputStream().write(coords.get(1).byteValue());
             System.out.println("Gestuurde coordinaten zijn: " + coords.get(0) + "-" + coords.get(1));
         } catch (IOException e) {
             throw new RuntimeException(e);
+        }catch(ArrayIndexOutOfBoundsException e2){
+            System.out.println("Sorry: " + e2);
         }
     }
     public void actionPerformed(ActionEvent e) {

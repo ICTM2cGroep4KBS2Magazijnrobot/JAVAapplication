@@ -62,7 +62,7 @@ public class InvoegenVoorraadNoodstopPanel extends JPanel implements ActionListe
             try {
                 Integer getal = 9; //voor nu het nummer om noodstop aan te zetten
                 serialPort.getOutputStream().write(getal.byteValue());
-                magazijnOverzicht.setRobotstatus(3);
+//                magazijnOverzicht.setRobotstatus(3);
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
             }
@@ -71,13 +71,14 @@ public class InvoegenVoorraadNoodstopPanel extends JPanel implements ActionListe
             System.out.println("Noodstop geactiveerd");
             if (result == JOptionPane.OK_OPTION) {
                 try {
-                    Integer getal = 2;
+                    Integer getal = 8;
                     serialPort.getOutputStream().write(getal.byteValue());
-                    magazijnOverzicht.setRobotstatus(2);
+//                    magazijnOverzicht.setRobotstatus(2);
+                    System.out.println("Noodstop gedeactiveerd");
                 } catch (IOException ex) {
                     throw new RuntimeException(ex);
                 }
-                System.out.println("Noodstop gedeactiveerd");
+
             }
         }
         if(e.getSource() == jbOrderAanpassen){

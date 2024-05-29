@@ -142,6 +142,7 @@ public class OrderDialoog extends JDialog implements ActionListener {
                     DB_connectie.OrderRemove(orderid);
                     JOptionPane.showMessageDialog(null, "Order verwijderd");
                     mainframe.updateRepaint();
+                    mainframe.Removebutton();
                     setVisible(false);
                 }
             } else if (e.getSource() == jbPakbon) {

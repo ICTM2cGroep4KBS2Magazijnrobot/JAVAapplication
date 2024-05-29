@@ -218,13 +218,7 @@ public class MainFrame extends JFrame implements ActionListener {
                                     System.out.println("Order : "+ panel3.getHuidigeOrder()+ " Is compleet");
                                     //scrolpan3.repaint();
 
-                                    for (int i = 0; i < orderButtons.size(); i++) {
-                                        if(orderButtons.get(i).getOrderID() == panel3.getHuidigeOrder()){
-                                            orderButtons.remove(i);
-
-
-                                        }
-                                    }
+                                    Removebutton();
                                     panel3.setHuidigeOrder(0);
                                     scrollPane.updateUI();
                                     revalidate();
@@ -270,7 +264,11 @@ public class MainFrame extends JFrame implements ActionListener {
 
     // om voorraad te updaten en repaint doen.
     public void updateRepaint() {
+        revalidate();
+        repaint();
+    }
 
+    public void Removebutton(){
         for (int i = 0; i < orderButtons.size(); i++) {
             if(orderButtons.get(i).getOrderID() == panel3.getHuidigeOrder()){
                 orderButtons.remove(i);
@@ -278,8 +276,6 @@ public class MainFrame extends JFrame implements ActionListener {
 
             }
         }
-        revalidate();
-        repaint();
     }
 
     public long mapBereken(long x, long in_min, long in_max, long out_min, long out_max){

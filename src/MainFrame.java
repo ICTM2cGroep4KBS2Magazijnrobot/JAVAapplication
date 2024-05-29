@@ -24,21 +24,27 @@ public class MainFrame extends JFrame implements ActionListener {
     private MagazijnOverzicht magazijnOverzichtPanel;
     private OrderPickVolgorde panel3;
     private static ArrayList<Byte> bytes = new ArrayList<>();
+
+    private ArrayList<Doos> finalDozenLijst = new ArrayList<>();
+    private boolean getFinalDozenlijst = true;
+    private int huidigeDoosNummer = 0;
+    private int huidigProductNummer = 0;
     private static int bytesToRead = -1;
     private String modus;
+    private SerialPort serialPort;
     private Date HuidigeTijd;
 
 
 
 
     MainFrame() throws IOException, InterruptedException {
-//        SerialPort serialPort = SerialPort.getCommPort("COM11"); // Replace "COM10" with your port
-//        serialPort.setComPortParameters(115200, 8, 1, 0); // Baud rate, Data bits, Stop bits, Parity
-//        serialPort.setComPortTimeouts(SerialPort.TIMEOUT_NONBLOCKING, 0, 0); // Non-blocking read
-
-        SerialPort serialPort = SerialPort.getCommPort("dev/cu.usbmodem1412401"); // Replace "COM10" with your port
-        serialPort.setComPortParameters(9600, 8, 1, 0); // Baud rate, Data bits, Stop bits, Parity
+        serialPort = SerialPort.getCommPort("COM11"); // Replace "COM10" with your port
+        serialPort.setComPortParameters(115200, 8, 1, 0); // Baud rate, Data bits, Stop bits, Parity
         serialPort.setComPortTimeouts(SerialPort.TIMEOUT_NONBLOCKING, 0, 0); // Non-blocking read
+
+//        SerialPort serialPort = SerialPort.getCommPort("dev/cu.usbmodem1412401"); // Replace "COM10" with your port
+//        serialPort.setComPortParameters(9600, 8, 1, 0); // Baud rate, Data bits, Stop bits, Parity
+//        serialPort.setComPortTimeouts(SerialPort.TIMEOUT_NONBLOCKING, 0, 0); // Non-blocking read
 
         if (serialPort.openPort()) {
             System.out.println("Port opened successfully.");
@@ -138,6 +144,10 @@ public class MainFrame extends JFrame implements ActionListener {
                                     modus = "eindeorder";
                                     bytesToRead = 1;
                                     break;
+                                case 'e':
+                                    modus = "stuurpicking";
+                                    bytesToRead = 1;
+                                    break;
                                 default:
                                     break loop;
                             }
@@ -151,11 +161,50 @@ public class MainFrame extends JFrame implements ActionListener {
                         if (bytes.size() == bytesToRead) {
                             switch (modus){
                                 case "robotcoordinaten":
-                                    magazijnOverzichtPanel.setRobotCords(bytes.get(0), bytes.get(1));
+                                    int Xcord = (bytes.get(0) & 0xff);
+                                    int Ycord = (bytes.get(1) & 0xff);
+                                    long nieuweX = mapBereken(Xcord, 0, 255, 0, 600);
+                                    long nieuweY = mapBereken(Ycord, 0, 255, 0, 351);
+                                    long nieuwenieweY = mapBereken(nieuweY, 0, 351, 351, 0);
+
+                                    int sendX = (int)nieuweX;
+                                    int sendY = (int)nieuwenieweY;
+
+
+                                    magazijnOverzichtPanel.setRobotCords(sendX, sendY);
                                     repaint();
                                     break;
                                 case "productbevestiging":
-                                    System.out.println("Product op locatie: " + bytes + " is gepakt");
+                                    loop2: if(huidigeDoosNummer < finalDozenLijst.size()){
+//                                        finalDozenLijst.get(huidigeDoosNummer).getInhoud().remove(huidigProductNummer);
+//                                        repaint();
+                                        System.out.println("Bevestiging ontvangen!");
+                                        if(huidigProductNummer < finalDozenLijst.get(huidigeDoosNummer).getInhoud().size() -1){
+                                            huidigProductNummer++;
+                                        }
+                                        else{
+                                            huidigeDoosNummer++;
+                                            huidigProductNummer = 0;
+                                            try {
+                                                goToDropoff();
+                                            } catch (IOException e) {
+                                                throw new RuntimeException(e);
+                                            }
+                                        }
+                                        if(huidigeDoosNummer == finalDozenLijst.size()){
+                                            System.out.println("Order Compleet!");
+                                            huidigeDoosNummer = 0;
+
+                                            break loop2;
+                                        }
+
+                                        stuurProduct();
+                                        //hier nog extra check om huidig doos terug te zetten?
+                                    }
+//                                    else{
+//                                        System.out.println("Order Compleet!");
+//                                    }
+
                                     break;
                                 case "robotstatus":
                                     magazijnOverzichtPanel.setRobotstatus(bytes.getFirst());
@@ -181,10 +230,14 @@ public class MainFrame extends JFrame implements ActionListener {
                                     revalidate();
                                     repaint();
                                     break;
+                                case "stuurpicking":
+                                    System.out.println("Begin pakken!");
+                                    stuurProduct();
+                                    break;
                                 default:
                                     throw new IllegalStateException("Unexpected value: " + modus);
                             }
-//                            processBytes();
+
                             bytes.clear();
                             bytesToRead = -1; // Reset for the next message
 
@@ -193,23 +246,14 @@ public class MainFrame extends JFrame implements ActionListener {
                 }
             }
 
-            private void processBytes() {
-                System.out.println("Processing bytes: " + bytes);
-                // Convert bytes to string if needed
-                byte[] byteArray = new byte[bytes.size()];
-                for (int i = 0; i < bytes.size(); i++) {
-                    byteArray[i] = bytes.get(i);
-                }
-            }
 
-            private void verwerkRobotCoords(ArrayList<Byte> bytes){
-                System.out.println("Robot zijn coordinaten zijn: " + bytes.get(0) + "," + bytes.get(1));
-            }
+
+
 
 
         }); // hierin alle code voor seriele data versturing
 
-        InvoegenVoorraadNoodstopPanel panel2 = new InvoegenVoorraadNoodstopPanel(serialPort, voorraad, this);
+        InvoegenVoorraadNoodstopPanel panel2 = new InvoegenVoorraadNoodstopPanel(serialPort, voorraad, this, magazijnOverzichtPanel);
 
         add(panel2);
         setVisible(true);
@@ -217,7 +261,7 @@ public class MainFrame extends JFrame implements ActionListener {
         //hieronder handmatige testterminal
         while (true) {
             Integer blinks = input.nextInt();
-            if (blinks == 0) break;
+            if (blinks == 99) break;
             Thread.sleep(50);
             serialPort.getOutputStream().write(blinks.byteValue());
         }
@@ -229,15 +273,47 @@ public class MainFrame extends JFrame implements ActionListener {
         repaint();
     }
 
+    public long mapBereken(long x, long in_min, long in_max, long out_min, long out_max){
+            return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
 
+    }
 
+    private void startPicking() throws IOException {
+        Integer getal = 9; //commando naar Arduino om startprocedure terug te sturen
+        serialPort.getOutputStream().write(getal.byteValue());
+    }
+    private void goToDropoff() throws IOException {
+        Integer getal = 9; //commando naar Arduino om startprocedure terug te sturen
+        serialPort.getOutputStream().write(getal.byteValue());
+        serialPort.getOutputStream().write(getal.byteValue());
+    }
+    private void stuurProduct(){
+        ArrayList<Integer> coords = voorraad.getCoordinaten(finalDozenLijst.get(huidigeDoosNummer).getInhoud().get(huidigProductNummer).getArtikelID());
+        try {
+            serialPort.getOutputStream().write(coords.get(0).byteValue());
+            serialPort.getOutputStream().write(coords.get(1).byteValue());
+            System.out.println("Gestuurde coordinaten zijn: " + coords.get(0) + "-" + coords.get(1));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
     public void actionPerformed(ActionEvent e) {
             if(magazijnOverzichtPanel.getRobotstatus() != 3){
                 for (int i = 0; i < orderButtons.size(); i++) {
                     if (e.getSource() == orderButtons.get(i)){
                         OrderDialoog dialoog = new OrderDialoog(this, true, "Order: " + (orderButtons.get(i).getOrderID()), orderButtons.get(i).getCustomerID(), orderButtons.get(i).getOrderID(), voorraad);
                         if(dialoog.isUitvoerenOK()){
-                            panel3.setHuidigeOrder(orderButtons.get(i).getOrderID());
+                            finalDozenLijst = panel3.setHuidigeOrder(orderButtons.get(i).getOrderID());
+
+                            stuurProduct();
+//                            try {
+//                                startPicking();
+//                            } catch (IOException ex) {
+//                                System.out.println("Error: " + ex);
+//                                throw new RuntimeException(ex);
+//                            }
+
+
                         }
                     }
                 }

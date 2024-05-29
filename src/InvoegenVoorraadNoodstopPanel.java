@@ -14,14 +14,17 @@ public class InvoegenVoorraadNoodstopPanel extends JPanel implements ActionListe
     SerialPort serialPort;
     Voorraad voorraad;
     MainFrame mainFrame;
+
+    MagazijnOverzicht magazijnOverzicht;
     JButton jbOrderInvoeren, jbVoorraadWeergeven, jbNoodstop, jbOrderAanpassen;
-    InvoegenVoorraadNoodstopPanel(SerialPort serialPort, Voorraad voorraad, MainFrame mainFrame) { //in constructor object met waardes van dialoog meegeven
+    InvoegenVoorraadNoodstopPanel(SerialPort serialPort, Voorraad voorraad, MainFrame mainFrame, MagazijnOverzicht magazijnOverzicht) { //in constructor object met waardes van dialoog meegeven
         setPreferredSize(new Dimension(400, 400));
         setBackground(Color.RED);
         setLayout(new GridLayout(3,1));
         this.serialPort = serialPort;
         this.voorraad = voorraad;
         this.mainFrame = mainFrame;
+        this.magazijnOverzicht = magazijnOverzicht;
 
         jbOrderInvoeren = new JButton("Order Invoeren");
         add(jbOrderInvoeren);
@@ -52,8 +55,9 @@ public class InvoegenVoorraadNoodstopPanel extends JPanel implements ActionListe
         if(e.getSource() == jbNoodstop){ // functie voor noodstop alert. Print tot nu toe alleen het resultaat in de console
             Component frame = null;
             try {
-                Integer getal = 3; //voor nu het nummer om noodstop aan te zetten
+                Integer getal = 9; //voor nu het nummer om noodstop aan te zetten
                 serialPort.getOutputStream().write(getal.byteValue());
+                magazijnOverzicht.setRobotstatus(3);
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
             }
@@ -64,6 +68,7 @@ public class InvoegenVoorraadNoodstopPanel extends JPanel implements ActionListe
                 try {
                     Integer getal = 2;
                     serialPort.getOutputStream().write(getal.byteValue());
+                    magazijnOverzicht.setRobotstatus(2);
                 } catch (IOException ex) {
                     throw new RuntimeException(ex);
                 }

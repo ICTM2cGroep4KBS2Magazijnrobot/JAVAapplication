@@ -37,38 +37,9 @@ public class OrderPickVolgorde extends JPanel {
 
         if (huidigeOrder > 0){ //hier alle orderlines printen van een order.
             g.setFont(new Font("default", Font.PLAIN,15));
-            DB_connectie.getOrderlines(stockitemids, huidigeOrder);
 
 
-            ArrayList<Product> producten = new ArrayList<>();
 
-            for (int i = 0; i < stockitemids.size(); i++) { //voeg aan de hand van stockitemid's de producten toe aan producten lijst
-                for (int j = 0; j < voorraad.getGeheleVoorraad().size(); j++) {
-                    for (int k = 0; k < voorraad.getGeheleVoorraad().get(j).size(); k++) {
-                        if (stockitemids.get(i) == voorraad.getRijElement(j, k).getArtikelID()){
-                            producten.add(voorraad.getRijElement(j,k));
-                        }
-                    }
-                }
-            }
-//            System.out.println(producten + "\n");
-            ArrayList<Doos> Dozenlijst = BinPacking.binpacking(producten);
-
-//            System.out.println("dozenlijst na BinPacking: \n");
-//            for (Doos doos : Dozenlijst){
-//                System.out.println(doos);
-//                System.out.println("\n");
-//            }
-//            System.out.println("\n\n\n\n\n Dozenlijst na TSP: \n");
-
-            for (int i = 0; i < Dozenlijst.size(); i++) {
-                Doos oude_doos = new Doos();
-                oude_doos = Dozenlijst.get(i);
-                oude_doos = TravellingSalesManProbleem.TSP(voorraad, oude_doos);
-                Dozenlijst.set(i, oude_doos);
-            }
-            TSP_Dozenlijst = Dozenlijst;
-            panel.setTSP_DozenLijst(Dozenlijst, Doosnummer);
 
 //            for (Doos doos: Dozenlijst){
 //                System.out.println(doos + "\n");
@@ -93,11 +64,11 @@ public class OrderPickVolgorde extends JPanel {
 //
 //                startY+= 30;
 //            }
-            for (int i = 0; i < Dozenlijst.size(); i++) {
+            for (int i = 0; i < TSP_Dozenlijst.size(); i++) {
                 g.drawString("Doos " +(i+1) + ":", startX, startY);
                 startY+= 20;
-                for (int j = 0; j < Dozenlijst.get(i).getInhoud().size(); j++) {
-                    Product product = Dozenlijst.get(i).getInhoud().get(j);
+                for (int j = 0; j < TSP_Dozenlijst.get(i).getInhoud().size(); j++) {
+                    Product product = TSP_Dozenlijst.get(i).getInhoud().get(j);
                     g.drawString("    " + (j + 1) + ". Artikel " + product.getArtikelID() + ": " + product.getNaam() + ". Gewicht: " + product.getGewicht() + "kg", startX, startY);
                     startY += 20;
 
@@ -110,11 +81,37 @@ public class OrderPickVolgorde extends JPanel {
         this.pickvolgordeHeader = pickvolgordeHeader;
     }
 
-    public void setHuidigeOrder(int huidigOrder) {
+    public ArrayList<Doos> setHuidigeOrder(int huidigOrder) {
         setPickvolgordeHeader("Pickvolgorde Order: " + huidigOrder);
         this.huidigeOrder = huidigOrder;
+        DB_connectie.getOrderlines(stockitemids, huidigeOrder);
+
+        ArrayList<Product> producten = new ArrayList<>();
+
+        for (int i = 0; i < stockitemids.size(); i++) { //voeg aan de hand van stockitemid's de producten toe aan producten lijst
+            for (int j = 0; j < voorraad.getGeheleVoorraad().size(); j++) {
+                for (int k = 0; k < voorraad.getGeheleVoorraad().get(j).size(); k++) {
+                    if (stockitemids.get(i) == voorraad.getRijElement(j, k).getArtikelID()){
+                        producten.add(voorraad.getRijElement(j,k));
+                    }
+                }
+            }
+        }
+        ArrayList<Doos> Dozenlijst = BinPacking.binpacking(producten);
 
 
+
+        for (int i = 0; i < Dozenlijst.size(); i++) {
+            Doos oude_doos = new Doos();
+            oude_doos = Dozenlijst.get(i);
+            oude_doos = TravellingSalesManProbleem.TSP(voorraad, oude_doos);
+            Dozenlijst.set(i, oude_doos);
+        }
+        TSP_Dozenlijst = Dozenlijst;
+
+        panel.setTSP_DozenLijst(Dozenlijst, Doosnummer);
+
+        return TSP_Dozenlijst;
     }
 
     public int getHuidigeOrder() {

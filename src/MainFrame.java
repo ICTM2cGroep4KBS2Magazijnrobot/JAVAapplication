@@ -38,7 +38,7 @@ public class MainFrame extends JFrame implements ActionListener {
 
 
     MainFrame() throws IOException, InterruptedException {
-        serialPort = SerialPort.getCommPort("COM11"); // Replace "COM10" with your port
+        serialPort = SerialPort.getCommPort("/dev/tty.usbmodem1442301"); // Replace "COM10" with your port
         serialPort.setComPortParameters(115200, 8, 1, 0); // Baud rate, Data bits, Stop bits, Parity
         serialPort.setComPortTimeouts(SerialPort.TIMEOUT_NONBLOCKING, 0, 0); // Non-blocking read
 
@@ -270,6 +270,15 @@ public class MainFrame extends JFrame implements ActionListener {
 
     // om voorraad te updaten en repaint doen.
     public void updateRepaint() {
+
+        for (int i = 0; i < orderButtons.size(); i++) {
+            if(orderButtons.get(i).getOrderID() == panel3.getHuidigeOrder()){
+                orderButtons.remove(i);
+
+
+            }
+        }
+        revalidate();
         repaint();
     }
 
@@ -301,7 +310,7 @@ public class MainFrame extends JFrame implements ActionListener {
             if(magazijnOverzichtPanel.getRobotstatus() != 3){
                 for (int i = 0; i < orderButtons.size(); i++) {
                     if (e.getSource() == orderButtons.get(i)){
-                        OrderDialoog dialoog = new OrderDialoog(this, true, "Order: " + (orderButtons.get(i).getOrderID()), orderButtons.get(i).getCustomerID(), orderButtons.get(i).getOrderID(), voorraad);
+                        OrderDialoog dialoog = new OrderDialoog(this, true, "Order: " + (orderButtons.get(i).getOrderID()), orderButtons.get(i).getCustomerID(), orderButtons.get(i).getOrderID(), voorraad, this);
                         if(dialoog.isUitvoerenOK()){
                             finalDozenLijst = panel3.setHuidigeOrder(orderButtons.get(i).getOrderID());
 

@@ -2,7 +2,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 
@@ -20,11 +19,13 @@ public class AanpassenDialoog extends JDialog implements ActionListener {
     private int index = 0;
     private Voorraad voorraad;
     private int OrderID;
+    private OrderDialoog dialoog;
 
 
-    AanpassenDialoog(Dialog parent, boolean modal, int OrderID, Voorraad voorraad) {
+    AanpassenDialoog(Dialog parent, boolean modal, int OrderID, Voorraad voorraad, OrderDialoog dialoog) {
         super(parent, modal);
         this.OrderID = OrderID;
+        this.dialoog = dialoog;
         setTitle("aanpassen order: " + this.OrderID);
         setTitelFoutmelding("");
         setSize(700, 300);
@@ -126,11 +127,13 @@ public class AanpassenDialoog extends JDialog implements ActionListener {
             try {
                 int ProductID = Integer.parseInt(jtfID.getText());
 
-                DB_connectie.addItem(this.OrderID, ProductID, true);
                 if (!DB_connectie.artikelBestaat(ProductID)) {
                     JOptionPane.showMessageDialog(null, "Artikel ID bestaat niet. Voer een geldig artikel ID in.", "Fout", JOptionPane.ERROR_MESSAGE);
                     return; // Stop de uitvoering van de methode als het artikel ID ongeldig is
                 }
+
+                DB_connectie.addItem(this.OrderID, ProductID, true);
+                JOptionPane.showMessageDialog(null, "Artikel toegevoegd aan de order");
 
             }catch(NumberFormatException nfe) {
                 JOptionPane.showMessageDialog(null, "Ongeldige invoer. Zorg ervoor dat je geldige nummers invoert.", "Fout", JOptionPane.ERROR_MESSAGE);
@@ -140,8 +143,13 @@ public class AanpassenDialoog extends JDialog implements ActionListener {
             try {
                 int ProductID = Integer.parseInt(jtfID.getText());
 
+                if (!DB_connectie.artikelBestaat(ProductID)) {
+                    JOptionPane.showMessageDialog(null, "Artikel ID bestaat niet. Voer een geldig artikel ID in.", "Fout", JOptionPane.ERROR_MESSAGE);
+                    return; // Stop de uitvoering van de methode als het artikel ID ongeldig is
+                }
 
                 DB_connectie.deleteItem(this.OrderID, ProductID);
+                JOptionPane.showMessageDialog(null, "Artikel verwijderd");
 
             }catch(NumberFormatException nfe) {
                 JOptionPane.showMessageDialog(null, "Ongeldige invoer. Zorg ervoor dat je geldige nummers invoert.", "Fout", JOptionPane.ERROR_MESSAGE);
@@ -151,6 +159,7 @@ public class AanpassenDialoog extends JDialog implements ActionListener {
         }
 
         repaint();
+        dialoog.updateRepaint();
 
     }
 }

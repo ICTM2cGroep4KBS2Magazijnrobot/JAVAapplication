@@ -16,15 +16,17 @@ public class OrderDialoog extends JDialog implements ActionListener {
 
     private ArrayList<Integer> stockitemids = new ArrayList<>();
     private boolean isUitvoerenOK = false;
+    private MainFrame mainframe;
 
 
-    OrderDialoog(JFrame frame, boolean modal, String ordernaam, int CustomerID, int OrderID, Voorraad voorraad){
+    OrderDialoog(JFrame frame, boolean modal, String ordernaam, int CustomerID, int OrderID, Voorraad voorraad, MainFrame mainframe){
         super(frame, modal);
         setTitle(ordernaam);
         setSize(700,600);
         setLayout(new GridLayout(3,2));
         this.voorraad = voorraad;
         this.orderid = OrderID;
+        this.mainframe = mainframe;
         DB_connectie.getOrderlines(stockitemids, OrderID);
 
         for (Integer stockitem: stockitemids){
@@ -127,25 +129,37 @@ public class OrderDialoog extends JDialog implements ActionListener {
                 isUitvoerenOK = true;
                 setVisible(false);
             } else if (e.getSource() == jbOrderAanpassen) {
-                AanpassenDialoog Aanpassendialoog = new AanpassenDialoog(this,true,orderid, voorraad);
+                AanpassenDialoog Aanpassendialoog = new AanpassenDialoog(this,true,orderid, voorraad, this);
                 if(Aanpassendialoog.IsOK()){
                     setVisible(false);
                 }
 
 
             } else if (e.getSource() == jbOrderVerwijderen) {
+
+                int result = JOptionPane.showConfirmDialog(this, "Druk op OK om de order te verwijderen", "Weet je het zeker?", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
+                if (result == JOptionPane.OK_OPTION) {
+                    DB_connectie.OrderRemove(orderid);
+                    JOptionPane.showMessageDialog(null, "Order verwijderd");
+                    mainframe.updateRepaint();
+                    mainframe.Removebutton();
+                    setVisible(false);
+                }
             } else if (e.getSource() == jbPakbon) {
                 showPakbon(stockitemids);
-            }
-            else if (e.getSource() == jbOrderAanpassen) {
-
             }
 
         }
         catch(Exception ignored){
         }
+        revalidate();
         repaint();
+        mainframe.updateRepaint();
         }
+
+    public void updateRepaint() {
+        repaint();
+    }
     public void showPakbon(ArrayList<Integer> stockitemids) {
         ArrayList<String> customerInfo = DB_connectie.GetCustomer(new ArrayList<>(), orderid);
         JLabel addressL = new JLabel("Adres:");

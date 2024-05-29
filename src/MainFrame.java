@@ -5,15 +5,10 @@ import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.sql.Date;
 import java.util.ArrayList;
-import javax.swing.SwingUtilities;
-
 import com.fazecast.jSerialComm.SerialPort;
 import com.fazecast.jSerialComm.SerialPortDataListener;
 import com.fazecast.jSerialComm.SerialPortEvent;
-
 import java.util.Scanner;
-
-import static javax.swing.SwingUtilities.invokeLater;
 
 
 public class MainFrame extends JFrame implements ActionListener {
@@ -26,7 +21,6 @@ public class MainFrame extends JFrame implements ActionListener {
     private static ArrayList<Byte> bytes = new ArrayList<>();
 
     private ArrayList<Doos> finalDozenLijst = new ArrayList<>();
-    private boolean getFinalDozenlijst = true;
     private int huidigeDoosNummer = 0;
     private int huidigProductNummer = 0;
     private static int bytesToRead = -1;
@@ -39,7 +33,7 @@ public class MainFrame extends JFrame implements ActionListener {
 
 
     MainFrame() throws IOException, InterruptedException {
-        serialPort = SerialPort.getCommPort("COM11"); // Replace "COM10" with your port
+        serialPort = SerialPort.getCommPort("/dev/tty.usbmodem1442301"); // Replace "COM10" with your port
         serialPort.setComPortParameters(115200, 8, 1, 0); // Baud rate, Data bits, Stop bits, Parity
         serialPort.setComPortTimeouts(SerialPort.TIMEOUT_NONBLOCKING, 0, 0); // Non-blocking read
 
@@ -71,14 +65,14 @@ public class MainFrame extends JFrame implements ActionListener {
         try {
             jp.setLayout(new GridLayout(orderButtons.size(), 0));
         } catch (Exception e) {
-            System.out.println("Foutcode: " + e.getMessage());;
+            System.out.println("Foutcode: " + e.getMessage());
         }
 
         jp.setPreferredSize(new Dimension(600, orderButtons.size() * 160)); //grootte van van de panel
 
-        for (int i = 0; i < orderButtons.size(); i++) { //for loop om elke knop toe te voegen aan de panel
-            jp.add(orderButtons.get(i));
-            orderButtons.get(i).addActionListener(this);
+        for (OrderButton orderButton : orderButtons) { //for loop om elke knop toe te voegen aan de panel
+            jp.add(orderButton);
+            orderButton.addActionListener(this);
         }
 
         JScrollPane scrollPane = new JScrollPane(jp); //maak scrollbar panel aan met het panel vol knoppen erin
@@ -233,13 +227,7 @@ public class MainFrame extends JFrame implements ActionListener {
                                     System.out.println("Order : "+ panel3.getHuidigeOrder()+ " Is compleet");
                                     //scrolpan3.repaint();
 
-                                    for (int i = 0; i < orderButtons.size(); i++) {
-                                        if(orderButtons.get(i).getOrderID() == panel3.getHuidigeOrder()){
-                                            orderButtons.remove(i);
-
-
-                                        }
-                                    }
+                                    Removebutton();
                                     panel3.setHuidigeOrder(0);
                                     scrollPane.updateUI();
                                     revalidate();
@@ -285,7 +273,18 @@ public class MainFrame extends JFrame implements ActionListener {
 
     // om voorraad te updaten en repaint doen.
     public void updateRepaint() {
+        revalidate();
         repaint();
+    }
+
+    public void Removebutton(){
+        for (int i = 0; i < orderButtons.size(); i++) {
+            if(orderButtons.get(i).getOrderID() == panel3.getHuidigeOrder()){
+                orderButtons.remove(i);
+
+
+            }
+        }
     }
 
     public long mapBereken(long x, long in_min, long in_max, long out_min, long out_max){
@@ -316,11 +315,11 @@ public class MainFrame extends JFrame implements ActionListener {
     }
     public void actionPerformed(ActionEvent e) {
             if(magazijnOverzichtPanel.getRobotstatus() != 3){
-                for (int i = 0; i < orderButtons.size(); i++) {
-                    if (e.getSource() == orderButtons.get(i)){
-                        OrderDialoog dialoog = new OrderDialoog(this, true, "Order: " + (orderButtons.get(i).getOrderID()), orderButtons.get(i).getCustomerID(), orderButtons.get(i).getOrderID(), voorraad);
-                        if(dialoog.isUitvoerenOK()){
-                            finalDozenLijst = panel3.setHuidigeOrder(orderButtons.get(i).getOrderID());
+                for (OrderButton orderButton : orderButtons) {
+                    if (e.getSource() == orderButton) {
+                        OrderDialoog dialoog = new OrderDialoog(this, true, "Order: " + (orderButton.getOrderID()), orderButton.getCustomerID(), orderButton.getOrderID(), voorraad, this);
+                        if (dialoog.isUitvoerenOK()) {
+                            finalDozenLijst = panel3.setHuidigeOrder(orderButton.getOrderID());
 
                             stuurProduct();
 //                            try {
@@ -336,6 +335,7 @@ public class MainFrame extends JFrame implements ActionListener {
                 }
             }
         // Now schedule a repaint for the entire JFrame
+        revalidate();
         repaint();
     }
 }

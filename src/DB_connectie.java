@@ -319,4 +319,27 @@ public static void  updateQuantityOnHand(int stockItemID, int newQuantity){
 
         return 2;
     }
+
+    public static void OrderRemove(int orderID) {
+        try {
+            Connection connection = DriverManager.getConnection(url, username, password);
+
+            PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM `orders` WHERE `OrderID` = ?");
+            preparedStatement.setInt(1, orderID);
+
+            int rowsAffected = preparedStatement.executeUpdate();
+
+            System.out.println("Rows affected: " + rowsAffected);
+
+            connection.close();
+
+        } catch (SQLException e) {
+            System.out.println("Connection failed " + e.getMessage());
+        }
+
+
+
+
+
+    }
 }

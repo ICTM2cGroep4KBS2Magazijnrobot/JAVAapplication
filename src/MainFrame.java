@@ -286,7 +286,7 @@ public class MainFrame extends JFrame implements ActionListener {
         for (int i = 0; i < orderButtons.size(); i++) {
             if(orderButtons.get(i).getOrderID() == orderID){
                 orderButtonPanel.add(orderButtons.get(i));
-                System.out.println("Button verwijderd");
+                System.out.println("Button toegevoegd");
                 updateRepaint();
 
             }

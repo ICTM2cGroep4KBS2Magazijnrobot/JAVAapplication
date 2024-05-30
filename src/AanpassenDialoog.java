@@ -8,7 +8,7 @@ import java.util.ArrayList;
 public class AanpassenDialoog extends JDialog implements ActionListener {
 
     private JTextField jtfID;
-    private boolean IsOK = false, verwijderen = false, toevoegen = false;
+    private boolean IsOK = false;
 
 
     private JButton jbAanpassen, jbVerwijderen ,jbAnnuleren;
@@ -18,15 +18,16 @@ public class AanpassenDialoog extends JDialog implements ActionListener {
     private String picklist = "";
     private int index = 0;
     private Voorraad voorraad;
-    private int OrderID;
+    private int orderID;
     private OrderDialoog dialoog;
+    private JPanel productPanel;
 
 
     AanpassenDialoog(Dialog parent, boolean modal, int OrderID, Voorraad voorraad, OrderDialoog dialoog) {
         super(parent, modal);
-        this.OrderID = OrderID;
+        this.orderID = OrderID;
         this.dialoog = dialoog;
-        setTitle("aanpassen order: " + this.OrderID);
+        setTitle("aanpassen order: " + this.orderID);
         setTitelFoutmelding("");
         setSize(700, 300);
         setLayout(new GridLayout(2,3));
@@ -43,27 +44,27 @@ public class AanpassenDialoog extends JDialog implements ActionListener {
             }
         }
 
-        JPanel jp = new JPanel();
+        productPanel = new JPanel();
         try {
-            jp.setLayout(new GridLayout(index, 1));
+            productPanel.setLayout(new GridLayout(index, 1));
         } catch (Exception e) {
             System.out.println("Foutcode: " + e.getMessage());;
         }
         if (stockitemids.size() == 1){
-            jp.setPreferredSize(new Dimension(315, stockitemids.size()*80)); //grootte van van de panel
+            productPanel.setPreferredSize(new Dimension(315, stockitemids.size()*80)); //grootte van van de panel
         }else {
-            jp.setPreferredSize(new Dimension(315, stockitemids.size() * 50)); //grootte van van de panel
+            productPanel.setPreferredSize(new Dimension(315, stockitemids.size() * 50)); //grootte van van de panel
         }
-        jp.add(new JLabel("Inhoud van order:"));
+        productPanel.add(new JLabel("Inhoud van order:"));
         for (int i = 0; i < stockitemids.size(); i++) {
 //            if (i == 0) {
 //                jp.add(new JLabel("Inhoud van order:"));
 //            }
             if (i >= 0) {
-                jp.add(new JLabel("------------------------------------------------------"));
+                productPanel.add(new JLabel("------------------------------------------------------"));
                 try {
                     Product product = voorraad.getArtikel(stockitemids.get(i));
-                    jp.add(new JLabel(stockitemids.get(i).toString() + " - " + product.getNaam()));
+                    productPanel.add(new JLabel(stockitemids.get(i).toString() + " - " + product.getNaam()));
                 } catch (Exception e) {
                     System.out.println("Error mbt geen database connectie. Foutcode: " + e.getMessage());
                     ;
@@ -72,7 +73,7 @@ public class AanpassenDialoog extends JDialog implements ActionListener {
             index = i + 1;
         }
 
-        JScrollPane scrollPane = new JScrollPane(jp);
+        JScrollPane scrollPane = new JScrollPane(productPanel);
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS); // deze 2 regels zorgen dat de scrollbars altijd te zien zijn
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         scrollPane.getVerticalScrollBar().setUnitIncrement(25); //bepaald scrollsnelheid van de scrollbar
@@ -114,7 +115,16 @@ public class AanpassenDialoog extends JDialog implements ActionListener {
     }
 
     private void setTitelFoutmelding(String melding) {
-        setTitle("aanpassen order: " + this.OrderID + melding);
+        setTitle("aanpassen order: " + this.orderID + melding);
+    }
+    public void RemoveProduct(int productID){
+        for (int i = 0; i < stockitemids.size(); i++) {
+            if(stockitemids.get(i) == productID){
+                stockitemids.remove(stockitemids.get(i));
+                productPanel.remove(stockitemids.get(i));
+                System.out.println("Product verwijderd");
+            }
+        }
     }
 
 
@@ -132,8 +142,10 @@ public class AanpassenDialoog extends JDialog implements ActionListener {
                     return; // Stop de uitvoering van de methode als het artikel ID ongeldig is
                 }
 
-                DB_connectie.addItem(this.OrderID, ProductID, true);
+                DB_connectie.addItem(this.orderID, ProductID, true);
                 JOptionPane.showMessageDialog(null, "Artikel toegevoegd aan de order");
+
+
 
             }catch(NumberFormatException nfe) {
                 JOptionPane.showMessageDialog(null, "Ongeldige invoer. Zorg ervoor dat je geldige nummers invoert.", "Fout", JOptionPane.ERROR_MESSAGE);
@@ -148,7 +160,8 @@ public class AanpassenDialoog extends JDialog implements ActionListener {
                     return; // Stop de uitvoering van de methode als het artikel ID ongeldig is
                 }
 
-                DB_connectie.deleteItem(this.OrderID, ProductID);
+                DB_connectie.deleteItem(this.orderID, ProductID);
+                RemoveProduct(ProductID);
                 JOptionPane.showMessageDialog(null, "Artikel verwijderd");
 
             }catch(NumberFormatException nfe) {

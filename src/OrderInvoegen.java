@@ -25,7 +25,6 @@ public class OrderInvoegen extends JDialog {
                 String arrayListInput = arrayListTextField.getText();
                 ArrayList<Integer> arrayList = intArray(arrayListInput);
                 DB_connectie.OrderInvoer(arrayList, klantnmr);
-
                 JOptionPane.showMessageDialog(null, "Order toegevoegd");
                 setVisible(false);
             }

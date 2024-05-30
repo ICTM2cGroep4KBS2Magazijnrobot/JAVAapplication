@@ -24,9 +24,15 @@ public class OrderInvoegen extends JDialog {
                 int klantnmr = Integer.parseInt(customerIDTextField.getText());
                 String arrayListInput = arrayListTextField.getText();
                 ArrayList<Integer> arrayList = intArray(arrayListInput);
-                DB_connectie.OrderInvoer(arrayList, klantnmr);
-
-                JOptionPane.showMessageDialog(null, "Order toegevoegd");
+                int Resultaat = 0;
+                Resultaat = DB_connectie.OrderInvoer(arrayList, klantnmr);
+                if (Resultaat == 2) {
+                    JOptionPane.showMessageDialog(null, "Order toegevoegd");
+                } else if (Resultaat == 1) {
+                    JOptionPane.showMessageDialog(null, "Geen bestaande klant");
+                } else if (Resultaat == 3) {
+                    JOptionPane.showMessageDialog(null, "Geen product meegegeven");
+                }
                 setVisible(false);
             }
         });

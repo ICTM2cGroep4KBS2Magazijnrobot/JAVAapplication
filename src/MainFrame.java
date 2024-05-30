@@ -33,7 +33,7 @@ public class MainFrame extends JFrame implements ActionListener {
 
 
     MainFrame() throws IOException, InterruptedException {
-        serialPort = SerialPort.getCommPort("/dev/tty.usbmodem1442301"); // Replace "COM10" with your port
+        serialPort = SerialPort.getCommPort("COM11"); // Replace "COM10" with your port
         serialPort.setComPortParameters(115200, 8, 1, 0); // Baud rate, Data bits, Stop bits, Parity
         serialPort.setComPortTimeouts(SerialPort.TIMEOUT_NONBLOCKING, 0, 0); // Non-blocking read
 
@@ -171,12 +171,12 @@ public class MainFrame extends JFrame implements ActionListener {
                                     break;
                                 case "productbevestiging":
                                     loop2: if(huidigeDoosNummer < finalDozenLijst.size()){
-//                                        finalDozenLijst.get(huidigeDoosNummer).getInhoud().remove(huidigProductNummer);
-//                                        repaint();
+//
                                         System.out.println("Bevestiging ontvangen!");
                                         if(huidigProductNummer < finalDozenLijst.get(huidigeDoosNummer).getInhoud().size() -1){
                                             if(!dropoff){
                                                 huidigProductNummer++;
+                                                System.out.println("Productnummer is nu: " + huidigProductNummer);
                                             }
                                             else{
                                                 dropoff = false;
@@ -186,6 +186,9 @@ public class MainFrame extends JFrame implements ActionListener {
                                         else{
                                             huidigeDoosNummer++;
                                             huidigProductNummer = 0;
+                                            System.out.println("Huidig doos nummer is nu: "+ huidigeDoosNummer);
+
+
                                             try {
                                                 goToDropoff();
                                                 dropoff = true;
@@ -217,7 +220,7 @@ public class MainFrame extends JFrame implements ActionListener {
                                     break;
                                 case "robotstatus":
                                     magazijnOverzichtPanel.setRobotstatus(bytes.getFirst());
-                                    System.out.println("Status is nu: " + bytes.getFirst());
+//                                    System.out.println("Status is nu: " + bytes.getFirst());
                                     repaint();
                                     break;
                                 case "eindeorder":
@@ -334,7 +337,6 @@ public class MainFrame extends JFrame implements ActionListener {
                     }
                 }
             }
-        // Now schedule a repaint for the entire JFrame
         revalidate();
         repaint();
     }

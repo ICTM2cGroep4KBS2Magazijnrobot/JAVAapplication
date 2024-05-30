@@ -140,9 +140,9 @@ public class OrderDialoog extends JDialog implements ActionListener {
                 int result = JOptionPane.showConfirmDialog(this, "Druk op OK om de order te verwijderen", "Weet je het zeker?", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
                 if (result == JOptionPane.OK_OPTION) {
                     DB_connectie.OrderRemove(orderid);
-                    JOptionPane.showMessageDialog(null, "Order verwijderd");
                     mainframe.updateRepaint();
-                    mainframe.Removebutton();
+                    mainframe.RemoveButton(orderid);
+                    JOptionPane.showMessageDialog(null, "Order verwijderd");
                     setVisible(false);
                 }
             } else if (e.getSource() == jbPakbon) {

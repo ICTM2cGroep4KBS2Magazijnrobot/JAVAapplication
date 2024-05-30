@@ -27,13 +27,14 @@ public class MainFrame extends JFrame implements ActionListener {
     private String modus;
     private SerialPort serialPort;
     private Date HuidigeTijd;
+    private JPanel orderButtonPanel;
 
     private boolean dropoff = false;
 
 
 
     MainFrame() throws IOException, InterruptedException {
-        serialPort = SerialPort.getCommPort("/dev/tty.usbmodem1442301"); // Replace "COM10" with your port
+        serialPort = SerialPort.getCommPort("dev/cu.usbmodem1422301"); // Replace "COM10" with your port
         serialPort.setComPortParameters(115200, 8, 1, 0); // Baud rate, Data bits, Stop bits, Parity
         serialPort.setComPortTimeouts(SerialPort.TIMEOUT_NONBLOCKING, 0, 0); // Non-blocking read
 
@@ -45,7 +46,8 @@ public class MainFrame extends JFrame implements ActionListener {
             System.out.println("Port opened successfully.");
         } else {
             System.out.println("Failed to open the port.");
-            //return;
+            JOptionPane.showMessageDialog(null, "Geen port gedetecteerd, sluit een port aan");
+            return;
         }
 
         setTitle("HMI Magazijnrobot");
@@ -61,21 +63,21 @@ public class MainFrame extends JFrame implements ActionListener {
         magazijnOverzichtPanel = new MagazijnOverzicht(voorraad); //object met waardes meegeven naar panel indien nodig
         add(magazijnOverzichtPanel);
 
-        JPanel jp = new JPanel(); //panel om knoppen in te doen, later voeg je dit aan de scrollbar toe
+        orderButtonPanel = new JPanel(); //panel om knoppen in te doen, later voeg je dit aan de scrollbar toe
         try {
-            jp.setLayout(new GridLayout(orderButtons.size(), 0));
+            orderButtonPanel.setLayout(new GridLayout(orderButtons.size(), 0));
         } catch (Exception e) {
             System.out.println("Foutcode: " + e.getMessage());
         }
 
-        jp.setPreferredSize(new Dimension(600, orderButtons.size() * 160)); //grootte van van de panel
+        orderButtonPanel.setPreferredSize(new Dimension(600, orderButtons.size() * 160)); //grootte van van de panel
 
         for (OrderButton orderButton : orderButtons) { //for loop om elke knop toe te voegen aan de panel
-            jp.add(orderButton);
+            orderButtonPanel.add(orderButton);
             orderButton.addActionListener(this);
         }
 
-        JScrollPane scrollPane = new JScrollPane(jp); //maak scrollbar panel aan met het panel vol knoppen erin
+        JScrollPane scrollPane = new JScrollPane(orderButtonPanel); //maak scrollbar panel aan met het panel vol knoppen erin
 
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER); // deze 2 regels zorgen dat de scrollbars altijd te zien zijn
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
@@ -91,10 +93,6 @@ public class MainFrame extends JFrame implements ActionListener {
         scrolpan3.getVerticalScrollBar().setUnitIncrement(25);
         scrolpan3.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         add(scrolpan3);
-
-
-
-
 
 
 
@@ -225,13 +223,10 @@ public class MainFrame extends JFrame implements ActionListener {
                                     HuidigeTijd = new Date(millis);
                                     DB_connectie.OrderPickCompleted(panel3.getHuidigeOrder(), HuidigeTijd );
                                     System.out.println("Order : "+ panel3.getHuidigeOrder()+ " Is compleet");
-                                    //scrolpan3.repaint();
 
-                                    Removebutton();
-                                    panel3.setHuidigeOrder(0);
-                                    scrollPane.updateUI();
-                                    revalidate();
-                                    repaint();
+
+
+                                    updateRepaint();
                                     break;
                                 case "stuurpicking":
                                     System.out.println("Begin pakken!");
@@ -277,15 +272,28 @@ public class MainFrame extends JFrame implements ActionListener {
         repaint();
     }
 
-    public void Removebutton(){
+    public void RemoveButton(int orderID){
         for (int i = 0; i < orderButtons.size(); i++) {
-            if(orderButtons.get(i).getOrderID() == panel3.getHuidigeOrder()){
-                orderButtons.remove(i);
-
+            if(orderButtons.get(i).getOrderID() == orderID){
+                orderButtonPanel.remove(orderButtons.get(i));
+                System.out.println("Button verwijderd");
+                updateRepaint();
 
             }
         }
     }
+    public void AddButton(int orderID){
+        for (int i = 0; i < orderButtons.size(); i++) {
+            if(orderButtons.get(i).getOrderID() == orderID){
+                orderButtonPanel.add(orderButtons.get(i));
+                System.out.println("Button verwijderd");
+                updateRepaint();
+
+            }
+        }
+    }
+
+
 
     public long mapBereken(long x, long in_min, long in_max, long out_min, long out_max){
             return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;

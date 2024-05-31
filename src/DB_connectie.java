@@ -279,14 +279,11 @@ public static void  updateQuantityOnHand(int stockItemID, int newQuantity){
             PreparedStatement preparedStatement1 = connection.prepareStatement("SELECT `CustomerName` FROM `customers` WHERE CustomerID = ?");
             preparedStatement1.setInt(1, Klantnmr);
             ResultSet RS1 = preparedStatement1.executeQuery();
-            System.out.println("test1");
-
             if (RS1.next()) {
                 String customerName = RS1.getString("CustomerName");
                 if (customerName != null) {
                     int newOrderID = 0;
                     int newOrderNumber = 0;
-                    System.out.println("test2");
                     PreparedStatement preparedStatement2 = connection.prepareStatement("SELECT MAX(orderID) AS maxOrderID, MAX(CustomerPurchaseOrderNumber) AS maxCusOrder FROM orders");
                     ResultSet RS2 = preparedStatement2.executeQuery();
 

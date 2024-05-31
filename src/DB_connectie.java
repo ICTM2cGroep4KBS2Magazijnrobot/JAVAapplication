@@ -9,7 +9,7 @@ public class DB_connectie {
      public static String url = "jdbc:mysql://localhost:3306/nerdygadgetskbs2"; // Change this to your own database
 //     public static String url = "jdbc:mysql://localhost:3307/nerdygadgets2"; // Change this to your own database
     public static String username = "root"; // Change this to your own username
-    public static String password = "Polka-008"; // Change this to your own password
+    public static String password = ""; // Change this to your own password
 
     public DB_connectie(){
 

@@ -34,7 +34,7 @@ public class MainFrame extends JFrame implements ActionListener {
 
 
     MainFrame() throws IOException, InterruptedException {
-        serialPort = SerialPort.getCommPort("dev/cu.usbmodem1422301"); // Replace "COM10" with your port
+        serialPort = SerialPort.getCommPort("COM11"); // Replace "COM10" with your port
         serialPort.setComPortParameters(115200, 8, 1, 0); // Baud rate, Data bits, Stop bits, Parity
         serialPort.setComPortTimeouts(SerialPort.TIMEOUT_NONBLOCKING, 0, 0); // Non-blocking read
 
@@ -145,7 +145,6 @@ public class MainFrame extends JFrame implements ActionListener {
                                     break loop;
                             }
 
-//                            System.out.println("Expecting " + bytesToRead + " bytes.");
                         }
                         else {
                             bytes.add(b);
@@ -169,8 +168,7 @@ public class MainFrame extends JFrame implements ActionListener {
                                     break;
                                 case "productbevestiging":
                                     loop2: if(huidigeDoosNummer < finalDozenLijst.size()){
-//                                        finalDozenLijst.get(huidigeDoosNummer).getInhoud().remove(huidigProductNummer);
-//                                        repaint();
+
                                         System.out.println("Bevestiging ontvangen!");
                                         if(huidigProductNummer < finalDozenLijst.get(huidigeDoosNummer).getInhoud().size() -1){
                                             if(!dropoff){
@@ -206,11 +204,8 @@ public class MainFrame extends JFrame implements ActionListener {
 
 
 
-                                        //hier nog extra check om huidig doos terug te zetten?
                                     }
-//                                    else{
-//                                        System.out.println("Order Compleet!");
-//                                    }
+
 
                                     break;
                                 case "robotstatus":
@@ -243,20 +238,13 @@ public class MainFrame extends JFrame implements ActionListener {
                     }
                 }
             }
-
-
-
-
-
-
-        }); // hierin alle code voor seriele data versturing
-
+        });
         InvoegenVoorraadNoodstopPanel panel2 = new InvoegenVoorraadNoodstopPanel(serialPort, voorraad, this, magazijnOverzichtPanel);
 
         add(panel2);
         setVisible(true);
 
-        //hieronder handmatige testterminal
+        //hieronder handmatige testterminal om coordinaten
         while (true) {
             Integer blinks = input.nextInt();
             if (blinks == 99) break;
@@ -305,7 +293,7 @@ public class MainFrame extends JFrame implements ActionListener {
         serialPort.getOutputStream().write(getal.byteValue());
     }
     private void goToDropoff() throws IOException {
-        Integer getal = 9; //commando naar Arduino om startprocedure terug te sturen
+        Integer getal = 9; //commando naar Arduino om naar dropoff punt te gaan
         serialPort.getOutputStream().write(getal.byteValue());
         serialPort.getOutputStream().write(getal.byteValue());
     }
@@ -330,19 +318,10 @@ public class MainFrame extends JFrame implements ActionListener {
                             finalDozenLijst = panel3.setHuidigeOrder(orderButton.getOrderID());
 
                             stuurProduct();
-//                            try {
-//                                startPicking();
-//                            } catch (IOException ex) {
-//                                System.out.println("Error: " + ex);
-//                                throw new RuntimeException(ex);
-//                            }
-
-
                         }
                     }
                 }
             }
-        // Now schedule a repaint for the entire JFrame
         revalidate();
         repaint();
     }

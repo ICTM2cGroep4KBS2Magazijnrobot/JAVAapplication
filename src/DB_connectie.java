@@ -9,7 +9,7 @@ public class DB_connectie {
      public static String url = "jdbc:mysql://localhost:3306/nerdygadgetskbs2"; // Change this to your own database
 //     public static String url = "jdbc:mysql://localhost:3307/nerdygadgets2"; // Change this to your own database
     public static String username = "root"; // Change this to your own username
-    public static String password = "Polka-008"; // Change this to your own password
+    public static String password = ""; // Change this to your own password
 
     public DB_connectie(){
 
@@ -271,6 +271,9 @@ public static void  updateQuantityOnHand(int stockItemID, int newQuantity){
         return formattedDate;
     }
     public static int OrderInvoer(ArrayList<Integer> Producten, int Klantnmr) {
+        if (Producten.isEmpty()){
+            return 3;
+        }
         try {
             Connection connection = DriverManager.getConnection(url, username, password);
             PreparedStatement preparedStatement1 = connection.prepareStatement("SELECT `CustomerName` FROM `customers` WHERE CustomerID = ?");
@@ -308,16 +311,19 @@ public static void  updateQuantityOnHand(int stockItemID, int newQuantity){
                             addItem(newOrderID, productID, false);
                         }
                         connection.close();
+                        return 2;
 
                     }
                 } else {
+                    connection.close();
                     return 1;
                 }}
         } catch (SQLException e) {
             System.out.println("Connection failed " + e.getMessage());
+            return 1;
         }
 
-        return 2;
+        return 1;
     }
 
     public static void OrderRemove(int orderID) {

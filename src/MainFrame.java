@@ -47,7 +47,7 @@ public class MainFrame extends JFrame implements ActionListener {
         } else {
             System.out.println("Failed to open the port.");
             JOptionPane.showMessageDialog(null, "Geen port gedetecteerd, sluit een port aan");
-            return;
+            //return;
         }
 
         setTitle("HMI Magazijnrobot");

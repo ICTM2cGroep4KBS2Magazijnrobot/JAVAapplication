@@ -30,11 +30,15 @@ public class MainFrame extends JFrame implements ActionListener {
     private JPanel orderButtonPanel;
 
     private boolean dropoff = false;
+    private boolean waitingForPing = false;
+    private int lastReceivedPing = -1;
 
-
+    public SerialPort getSerialPort() {
+        return serialPort;
+    }
 
     MainFrame() throws IOException, InterruptedException {
-        serialPort = SerialPort.getCommPort("COM11"); // Replace "COM10" with your port
+        serialPort = SerialPort.getCommPort("COM4"); // Replace "COM10" with your port
         serialPort.setComPortParameters(115200, 8, 1, 0); // Baud rate, Data bits, Stop bits, Parity
         serialPort.setComPortTimeouts(SerialPort.TIMEOUT_NONBLOCKING, 0, 0); // Non-blocking read
 
@@ -117,8 +121,20 @@ public class MainFrame extends JFrame implements ActionListener {
             public void serialEvent(SerialPortEvent serialPortEvent) {
                 if (serialPortEvent.getEventType() == SerialPort.LISTENING_EVENT_DATA_RECEIVED) {
                     byte[] newData = serialPortEvent.getReceivedData();
-
+                    Integer getal = 0;
                     loop: for (byte b : newData) {
+                        if (waitingForPing) {
+                            if (b == 'P') {
+                                try {
+                                    serialPort.getOutputStream().write(getal.byteValue());
+                                    serialPort.getOutputStream().flush();
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+                                waitingForPing = false;
+                            }
+                            continue;
+                        }
                         if (bytesToRead == -1) {
                             switch (b){
                                 case 'a': //robot coordinaten
@@ -140,6 +156,9 @@ public class MainFrame extends JFrame implements ActionListener {
                                 case 'e':
                                     modus = "stuurpicking";
                                     bytesToRead = 1;
+                                    break;
+                                case 'P': // Expected ping from Arduino
+                                    waitingForPing = true;
                                     break;
                                 default:
                                     break loop;
@@ -232,7 +251,7 @@ public class MainFrame extends JFrame implements ActionListener {
                             }
 
                             bytes.clear();
-                            bytesToRead = -1; // Reset for the next message
+                            bytesToRead = -1;
 
                         }
                     }
